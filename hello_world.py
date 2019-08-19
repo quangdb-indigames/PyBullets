@@ -6,6 +6,7 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
+# from cube import Cube
 
 def getRayFromTo(mouseX, mouseY):
     
@@ -37,29 +38,71 @@ def getRayFromTo(mouseX, mouseY):
   return rayFrom, rayTo
 
 
-SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 1000
-physicsClient = p.connect(p.GUI)
+# SCREEN_WIDTH = 480
+# SCREEN_HEIGHT = 1000
+# pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
 
+physicsClient = p.connect(p.GUI)
+p.setAdditionalSearchPath(pybullet_data.getDataPath())
 boxHalfLength = 0.5
 boxHalfWidth = 0.5
 boxHalfHeight = 0.5
 segmentLength = 5
 
+# PYXIE SETTING REGION
+# =============================================================================================================
+# showcase = pyxie.showcase("case01")
+# scale = vmath.vec3(boxHalfLength, boxHalfWidth, boxHalfHeight)
+# position = vmath.vec3(0.0, 0.0, 0.0)
+# cam = pyxie.camera('maincam')
+# cam.lockon = True
+# cam.position = vmath.vec3(0.0, -3.0, 3)
+
+# cube = Cube(position, scale, 'asset/cube', cam, True)
+# cam.target = cube.model.position
+# showcase.add(cube.model)
+
+# Create plane
+# position = vmath.vec3(0.0, 0.0, -3.0)
+# scale = vmath.vec3(100, 100, 0.1)
+# plane = Cube(position, scale, 'asset/cube', cam, True)
+# showcase.add(plane.model)
+
+
 colBoxId = p.createCollisionShape(p.GEOM_BOX,
 								  halfExtents=[boxHalfLength, boxHalfWidth, boxHalfHeight])
 
-p.createMultiBody(baseMass = 10, baseCollisionShapeIndex = colBoxId, basePosition= [0.0, 2.0, 1.0]);
+boxId = p.createMultiBody(baseMass = 1, baseCollisionShapeIndex = colBoxId, basePosition= [0.0, 0.0, 3.0]);
 p.changeVisualShape(colBoxId, -1, rgbaColor=[0.5, 0.1, 0.7, 1])
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -10)
 planeId = p.loadURDF("plane.urdf")
+p.changeDynamics(colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=1.0)
 # cubeStartPos = [0, 0, 1]
 # cubeStartOrientation = p.getQuaternionFromEuler([0,0,0])
 # boxId = p.loadURDF("r2d2.urdf", cubeStartPos, cubeStartOrientation)
+cameraDistance = 10
+cameraYaw = 35
+cameraPitch = -35
 while(1):
+	p.stepSimulation()
+	time.sleep(1. / 240.)
+	# touch = pyxie.singleTouch()
+	# cube.update(touch)
+	# cam.target = cube.model.position
+	# cam.shoot(showcase)
+	# pyxie.swap()
+	pos, orn = p.getBasePositionAndOrientation(colBoxId)
+
+	cameraTargetPosition = pos
+	p.resetDebugVisualizerCamera(cameraDistance, cameraYaw, cameraPitch, cameraTargetPosition)
+
+
+	forward = 0
 	mouseEvents = p.getMouseEvents()
+	camInfo = p.getDebugVisualizerCamera()
+	camForward = camInfo[5]
 	for e in mouseEvents:
 		if ((e[0] == 2) and (e[3] == 0) and (e[4] & p.KEY_WAS_TRIGGERED)):
 			mouseX = e[1]
@@ -72,8 +115,20 @@ while(1):
 				if(objectUid >= 0):
 					p.changeVisualShape(objectUid, -1, rgbaColor=[random.random(), random.random(), random.random(), 1])
 					pos, orn = p.getBasePositionAndOrientation(objectUid)
-					p.applyExternalForce(objectUid, -1, forceObj=[0, 0, 10.0], posObj=pos, flags=p.WORLD_FRAME)
-	p.stepSimulation()
-	time.sleep(1. / 240.)
+					print(pos)
+					p.applyExternalForce(objectUid, -1, forceObj=[0.0, 0.0, 1000.0], posObj=[pos[0], pos[1], pos[2] + 1], flags=p.WORLD_FRAME)
+					break
+	keys = p.getKeyboardEvents()
+	for k, v in keys.items():
+		if(k == p.B3G_UP_ARROW and (v & p.KEY_WAS_TRIGGERED)):
+			forward = 1
+		if(k == p.B3G_UP_ARROW and (v & p.KEY_WAS_RELEASED)):
+				forward = 0
+	force = [camForward[0] * 1000.0, camForward[1] * 1000.0, 2000]
+	if(forward):
+		print(camForward)
+		pos, orn = p.getBasePositionAndOrientation(colBoxId)
+		p.applyExternalForce(colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
+
 
 
