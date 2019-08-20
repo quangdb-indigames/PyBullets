@@ -34,7 +34,7 @@ class Cube():
 		if self.model is None:
 			return
 		self.colBoxId = p.createCollisionShape(p.GEOM_BOX,
-								  halfExtents=self.model.scale)
+								  halfExtents=[self.model.scale.x, self.model.scale.y, self.model.scale.z])
 		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colBoxId, basePosition= self.model.position);
 		p.changeDynamics(self.colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=1.0)
 
