@@ -51,16 +51,19 @@ segmentLength = 5
 
 # PYXIE SETTING REGION
 # =============================================================================================================
-showcase = pyxie.showcase("case01")
-scale = vmath.vec3(1, 1, 1)
-position = vmath.vec3(0.0, 0.0, 0.0)
 cam = pyxie.camera('maincam')
 cam.lockon = True
 cam.position = vmath.vec3(0.0, -3.0, 3)
 cam.target = vmath.vec3(0.0, 0.0, 0.0)
 
-cube = Cube(position, scale, 'asset/Sapphiart', cam, True)
-cam.target = cube.model.position
+showcase = pyxie.showcase("case01")
+scale = vmath.vec3(1, 1, 1)
+position = vmath.vec3(0.0, 0.0, 3)
+cube_col_scale = [1,1,1]
+cube_col_local_pos = [0,0, 1.095]
+
+cube = Cube(position, scale, 'asset/Sapphiart', cam, cube_col_scale, cube_col_local_pos)
+
 showcase.add(cube.model)
 # Rotate
 # dx = -90.0
@@ -76,15 +79,20 @@ print(cube.model.rotation)
 # dz = 0.0
 # vect = vmath.normalize((dx, dy, dz))
 # cube.model.rotation = vmath.normalize(vmath.quat_rotation((1, 0, 0), vect))
-
+# cube2_pos = vmath.vec3(4.0, 5.0, 0.0)
+# cube2_scale = vmath.vec3(1, 1, 1)
+# cube2 = Cube(cube2_pos, cube2_scale, 'asset/plane', cam, True)
+# showcase.add(cube2.model)
 
 # Create plane
-position = vmath.vec3(0.0, 0.0, -3.0)
-scale = vmath.vec3(10, 10, 0.1)
-plane = Cube(position, scale, 'asset/plane', cam, True)
+position = vmath.vec3(0.0, 0.0, -1.0)
+scale = vmath.vec3(10, 10, 1)
+plane_col_scale = [10, 10, 0.1]
+plane = Cube(position, scale, 'asset/plane', cam, plane_col_scale, [0, 0, 0], True)
+plane.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(plane.model)
 
-
+cam.target = plane.model.position
 # colBoxId = p.createCollisionShape(p.GEOM_BOX,
 # 								  halfExtents=[boxHalfLength, boxHalfWidth, boxHalfHeight])
 
@@ -108,49 +116,6 @@ while(1):
 	time.sleep(1. / 240.)
 	touch = pyxie.singleTouch()
 	cube.update(touch)
-	cam.target = vmath.vec3(0.0, 0.0, 1.0)
-	keys = p.getKeyboardEvents()
-	for k, v in keys.items():
-		if(k == p.B3G_UP_ARROW and (v & p.KEY_WAS_TRIGGERED)):
-			dz += 5.0
-			isRotate = True
-		if(k == p.B3G_UP_ARROW and (v & p.KEY_WAS_RELEASED)):
-			isRotate = False
-		# ======================================================
-		if(k == p.B3G_DOWN_ARROW and (v & p.KEY_WAS_TRIGGERED)):
-			dz -= 5.0
-			isRotate = True
-		if(k == p.B3G_DOWN_ARROW and (v & p.KEY_WAS_RELEASED)):
-			isRotate = False
-		# ======================================================
-		if(k == p.B3G_RIGHT_ARROW and (v & p.KEY_WAS_TRIGGERED)):
-			dy += 5.0
-			isRotate = True
-		if(k == p.B3G_RIGHT_ARROW and (v & p.KEY_WAS_RELEASED)):
-			isRotate = False
-		# ======================================================
-		if(k == p.B3G_LEFT_ARROW and (v & p.KEY_WAS_TRIGGERED)):
-			dy -= 5.0
-			isRotate = True
-		if(k == p.B3G_LEFT_ARROW and (v & p.KEY_WAS_TRIGGERED)):
-			isRotate = False
-		# ======================================================
-		if(k == p.B3G_PAGE_UP and (v & p.KEY_WAS_TRIGGERED)):
-			dz += 5.0
-			isRotate = True
-		if(k == p.B3G_PAGE_UP and (v & p.KEY_WAS_TRIGGERED)):
-			isRotate = False
-		# ======================================================
-		if(k == p.B3G_PAGE_DOWN and (v & p.KEY_WAS_TRIGGERED)):
-			dz -= 5.0
-			isRotate = True	
-		if(k == p.B3G_PAGE_DOWN and (v & p.KEY_WAS_TRIGGERED)):
-			isRotate = False
-
-	if isRotate:	
-		vect = vmath.normalize((dx, dy, dz))
-		cube.model.rotation = vmath.normalize(vmath.quat_rotation((1, 0, 0), vect))
-		print(dx, dy, dz)
 	cam.shoot(showcase)
 	pyxie.swap()
 

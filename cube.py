@@ -8,11 +8,13 @@ import math
 import random
 
 class Cube():
-	def __init__(self, pos, scale, modelPath, cam, isPlane = False):
+	def __init__(self, pos, scale,  modelPath, cam, col_scale, col_local_pos = [0,0,0], isPlane = False):
 		self.model = pyxie.figure(modelPath)
 		self.model.position = pos
 		self.model.scale = scale
 		self.colBoxId = 0
+		self.col_scale = col_scale
+		self.col_local_pos = col_local_pos
 		# Create box collider		
 		self.isPlane = isPlane
 		if not self.isPlane:
@@ -33,17 +35,19 @@ class Cube():
 	def createColBox(self, mass):
 		if self.model is None:
 			return
+
+		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
 		self.colBoxId = p.createCollisionShape(p.GEOM_BOX,
-								  halfExtents=[self.model.scale.x, self.model.scale.y, self.model.scale.z])
-		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colBoxId, basePosition= self.model.position);
-		p.changeDynamics(self.colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=1.0)
+								  halfExtents=self.col_scale)
+		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colBoxId, basePosition= col_pos);
+		p.changeDynamics(self.colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
 
 	def onClick(self, touch):
 		if touch:
 			if touch['is_holded'] and not self.tapped:
 				self.tapped = True
 				pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-				force = [0, -self.camDis[1] * 1000, 2000]
+				force = [0, -self.camDis[1] * 100, 500]
 				p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
 			else:
 				self.tapped = False
@@ -52,7 +56,9 @@ class Cube():
 	
 	def autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		self.model.position = vmath.vec3(pos[0], pos[1], pos[2])
+		model_pos = (pos[0] - self.col_local_pos[0], pos[1] - self.col_local_pos[1], pos[2] - self.col_local_pos[2] )
+		self.model.position = vmath.vec3(model_pos)
+		
 		self.cam.position = self.model.position + vmath.vec3(self.camDis)
 		self.cam.target = self.model.position
 
