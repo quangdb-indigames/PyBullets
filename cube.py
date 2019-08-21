@@ -8,31 +8,42 @@ import math
 import random
 
 class Cube():
-	def __init__(self, pos, scale,  modelPath, cam, col_scale, col_local_pos = [0,0,0], isPlane = False):
+	def __init__(self, pos, scale,  modelPath, col_scale, col_local_pos = [0,0,0], isPlane = False, camfollow = False, isIteractable = False):
+		# Create model to display on pyxie
 		self.model = pyxie.figure(modelPath)
 		self.model.position = pos
 		self.model.scale = scale
+
+		# Create collider to simulate physics on bullet physics
 		self.colBoxId = 0
 		self.col_scale = col_scale
 		self.col_local_pos = col_local_pos
+
 		# Create box collider		
 		self.isPlane = isPlane
+		self.isIteractable = isIteractable
+
 		if not self.isPlane:
-			self.createColBox(1)
-			self.tapped = False
-			self.cam = cam
-			self.camDis = [0.0, -3.0, 3]
+			self.__createColBox(1)						
 		else:
-			self.createColBox(0)
+			self.__createColBox(0)
+
+		# Depend on cube type should be iteractable or not
+		if self.isIteractable:
+			self.tapped = False
 	
 	def update(self, touch):
+		# if is plane, object will be static
 		if self.isPlane:
 			return
-		self.autoRePosition()
-		self.onClick(touch)
+		self.__autoRePosition()
+
+		if not self.isIteractable:
+			return
+		self.__onClick(touch)
 		
 
-	def createColBox(self, mass):
+	def __createColBox(self, mass):
 		if self.model is None:
 			return
 
@@ -42,25 +53,20 @@ class Cube():
 		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colBoxId, basePosition= col_pos);
 		p.changeDynamics(self.colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
 
-	def onClick(self, touch):
+	def __onClick(self, touch):
 		if touch:
 			if touch['is_holded'] and not self.tapped:
 				self.tapped = True
-				pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-				force = [0, -self.camDis[1] * 100, 500]
-				p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
+				self.__onClickExcute()
 			else:
 				self.tapped = False
 		else:
 			self.tapped = False
 	
-	def autoRePosition(self):
+	def __autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
 		model_pos = (pos[0] - self.col_local_pos[0], pos[1] - self.col_local_pos[1], pos[2] - self.col_local_pos[2] )
 		self.model.position = vmath.vec3(model_pos)
-		
-		self.cam.position = self.model.position + vmath.vec3(self.camDis)
-		self.cam.target = self.model.position
 
 	def toWorldCoordinate(self, scrx, scry, worldz, cam):
 		invproj = vmath.inverse(cam.projectionMatrix)
@@ -88,3 +94,6 @@ class Cube():
 		dir = vmath.normalize(fpos - npos)
 		print(npos + (dir * (npos.z - worldz)))
 		return npos + (dir * (npos.z - worldz))
+
+	def __onClickExcute(self):
+		pass

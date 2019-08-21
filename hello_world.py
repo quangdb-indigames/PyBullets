@@ -7,6 +7,7 @@ import pyvmath as vmath
 import math
 import random
 from cube import Cube
+from player import Player
 
 def getRayFromTo(mouseX, mouseY):
 	
@@ -59,20 +60,20 @@ cam.target = vmath.vec3(0.0, 0.0, 0.0)
 showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
 position = vmath.vec3(0.0, 0.0, 3)
-cube_col_scale = [1,1,1]
-cube_col_local_pos = [0,0, 1.095]
+player_col_scale = [1,1,1]
+player_col_local_pos = [0,0, 1.095]
 
-cube = Cube(position, scale, 'asset/Sapphiart', cam, cube_col_scale, cube_col_local_pos)
+player = Player(position, scale, 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 
-showcase.add(cube.model)
+showcase.add(player.model)
 # Rotate
 # dx = -90.0
 # dy = 10.0  # -150
 # dz = -10.0	 # 180
 # vect = vmath.normalize((dx, dy, dz))
-# cube.model.rotation = vmath.normalize(vmath.quat_rotation((1, 0, 0), vect))
-cube.model.rotation = vmath.quat([ 0, 0.6427876, 0.7660444, 0 ])
-print(cube.model.rotation)
+# player.model.rotation = vmath.normalize(vmath.quat_rotation((1, 0, 0), vect))
+player.model.rotation = vmath.quat([ 0, 0.6427876, 0.7660444, 0 ])
+print(player.model.rotation)
 
 # dx = 360.0
 # dy = 0.0
@@ -88,7 +89,7 @@ print(cube.model.rotation)
 position = vmath.vec3(0.0, 0.0, -1.0)
 scale = vmath.vec3(10, 10, 1)
 plane_col_scale = [10, 10, 0.1]
-plane = Cube(position, scale, 'asset/plane', cam, plane_col_scale, [0, 0, 0], True)
+plane = Cube(position, scale, 'asset/plane', plane_col_scale, [0, 0, 0], True)
 plane.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(plane.model)
 
@@ -107,7 +108,7 @@ p.setGravity(0, 0, -10)
 # cubeStartOrientation = p.getQuaternionFromEuler([0,0,0])
 # boxId = p.loadURDF("r2d2.urdf", cubeStartPos, cubeStartOrientation)
 cameraDistance = 10
-cameraYaw = 35
+cameraYaw = 0
 cameraPitch = -35
 
 isRotate = False
@@ -115,10 +116,14 @@ while(1):
 	p.stepSimulation()
 	time.sleep(1. / 240.)
 	touch = pyxie.singleTouch()
-	cube.update(touch)
+	player.update(touch)
 	cam.shoot(showcase)
 	pyxie.swap()
 
+	playerPos, orn = p.getBasePositionAndOrientation(player.colBoxId)
+
+	cameraTargetPosition = playerPos
+	p.resetDebugVisualizerCamera(cameraDistance, cameraYaw, cameraPitch, cameraTargetPosition)
 
 
 	# pos, orn = p.getBasePositionAndOrientation(colBoxId)
