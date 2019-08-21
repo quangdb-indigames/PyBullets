@@ -8,6 +8,7 @@ import math
 import random
 from cube import Cube
 from player import Player
+from plane import Plane
 
 def getRayFromTo(mouseX, mouseY):
 	
@@ -40,7 +41,7 @@ def getRayFromTo(mouseX, mouseY):
 
 
 SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 1000
+SCREEN_HEIGHT = 640
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
 
 physicsClient = p.connect(p.GUI)
@@ -61,7 +62,7 @@ showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
 position = vmath.vec3(0.0, 0.0, 3)
 player_col_scale = [1,1,1]
-player_col_local_pos = [0,0, 1.095]
+player_col_local_pos = [0,0, 0.05]
 
 player = Player(position, scale, 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 
@@ -87,13 +88,17 @@ print(player.model.rotation)
 
 # Create plane
 position = vmath.vec3(0.0, 0.0, -1.0)
-scale = vmath.vec3(10, 10, 1)
+scale = vmath.vec3(10, 10, 0.1)
 plane_col_scale = [10, 10, 0.1]
-plane = Cube(position, scale, 'asset/plane', plane_col_scale, [0, 0, 0], True)
-plane.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
-showcase.add(plane.model)
+plane = Plane(position, 'asset/plane', 5, scale, showcase)
 
-cam.target = plane.model.position
+position = vmath.vec3(0.0, 6.0, 0.0)
+scale = vmath.vec3(1, 1, 1)
+cube_col_scale = [1, 1, 1]
+cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0], True)
+cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
+showcase.add(cube.model)
+
 # colBoxId = p.createCollisionShape(p.GEOM_BOX,
 # 								  halfExtents=[boxHalfLength, boxHalfWidth, boxHalfHeight])
 
@@ -108,7 +113,7 @@ p.setGravity(0, 0, -10)
 # cubeStartOrientation = p.getQuaternionFromEuler([0,0,0])
 # boxId = p.loadURDF("r2d2.urdf", cubeStartPos, cubeStartOrientation)
 cameraDistance = 10
-cameraYaw = 0
+cameraYaw = 35
 cameraPitch = -35
 
 isRotate = False

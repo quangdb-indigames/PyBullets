@@ -64,5 +64,5 @@ class Player():
 	
 	def __onClickExcute(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		force = [0, -self.camDis[1] * 100, 500]
+		force = [0, -self.camDis[1] * 500, 1000]
 		p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
