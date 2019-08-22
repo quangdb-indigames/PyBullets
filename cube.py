@@ -67,6 +67,7 @@ class Cube():
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
 		model_pos = (pos[0] - self.col_local_pos[0], pos[1] - self.col_local_pos[1], pos[2] - self.col_local_pos[2] )
 		self.model.position = vmath.vec3(model_pos)
+		self.model.rotation = vmath.quat(orn)
 
 	def toWorldCoordinate(self, scrx, scry, worldz, cam):
 		invproj = vmath.inverse(cam.projectionMatrix)

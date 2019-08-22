@@ -61,10 +61,9 @@ cam.target = vmath.vec3(0.0, 0.0, 0.0)
 showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
 position = vmath.vec3(0.0, 0.0, 3)
-player_col_scale = [1,1,1]
-player_col_local_pos = [0,0, 0.05]
-
-player = Player(position, scale, 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
+player_col_scale = [0.2,0.2,0.8]
+player_col_local_pos = [0, 0, 0.9]
+player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 
 showcase.add(player.model)
 # Rotate
@@ -73,8 +72,8 @@ showcase.add(player.model)
 # dz = -10.0	 # 180
 # vect = vmath.normalize((dx, dy, dz))
 # player.model.rotation = vmath.normalize(vmath.quat_rotation((1, 0, 0), vect))
-player.model.rotation = vmath.quat([ 0, 0.6427876, 0.7660444, 0 ])
-print(player.model.rotation)
+# player.model.rotation = vmath.quat([ 0, 0.6427876, 0.7660444, 0 ])
+# print(player.model.rotation)
 
 # dx = 360.0
 # dy = 0.0
@@ -87,15 +86,16 @@ print(player.model.rotation)
 # showcase.add(cube2.model)
 
 # Create plane
-position = vmath.vec3(0.0, 0.0, -1.0)
+position = vmath.vec3(-10.0, 0.0, 0.0)
 scale = vmath.vec3(10, 10, 0.1)
 plane_col_scale = [10, 10, 0.1]
 plane = Plane(position, 'asset/plane', 5, scale, showcase)
 
-position = vmath.vec3(0.0, 6.0, 0.0)
+# Create cube
+position = vmath.vec3(0.0, 8.0, 2.0)
 scale = vmath.vec3(1, 1, 1)
 cube_col_scale = [1, 1, 1]
-cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0], True)
+cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, -0.4])
 cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(cube.model)
 
@@ -113,7 +113,7 @@ p.setGravity(0, 0, -10)
 # cubeStartOrientation = p.getQuaternionFromEuler([0,0,0])
 # boxId = p.loadURDF("r2d2.urdf", cubeStartPos, cubeStartOrientation)
 cameraDistance = 10
-cameraYaw = 35
+cameraYaw = 0
 cameraPitch = -35
 
 isRotate = False
@@ -123,6 +123,7 @@ while(1):
 	touch = pyxie.singleTouch()
 	player.update(touch)
 	cam.shoot(showcase)
+	cube.update(touch)
 	pyxie.swap()
 
 	playerPos, orn = p.getBasePositionAndOrientation(player.colBoxId)
