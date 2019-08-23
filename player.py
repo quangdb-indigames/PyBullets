@@ -25,6 +25,7 @@ class Player():
 		self.colBoxId = 0
 		self.col_scale = col_scale
 		self.col_local_pos = col_local_pos
+		self.lastContactId = -1
 
 		# Create box collider		
 		self.camFollow = camfollow
@@ -37,12 +38,15 @@ class Player():
 			self.cam = cam
 			self.camDis = [0.0, -3.0, 3]
 	
-	def update(self, touch):
+	def update(self, touch, obj_list):
 		self.__autoRePosition()
+		self.model.step()
 		if not self.camFollow:
 			return
 		self.__onClick(touch)
 		
+		self.checkContact(obj_list)
+
 
 	def __createColBox(self, mass):
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
@@ -88,6 +92,19 @@ class Player():
 		fin_quat = vmath.mul(vmath.quat(rot_quat), vmath.quat(self.base_rotate))
 		return fin_quat
 
-	def onContact(self):
+	def checkContact(self, obj_list):
 		aabbMin, aabbMax = p.getAABB(self.colBoxId, -1)
 		collision_list = p.getOverlappingObjects(aabbMin, aabbMax)
+		if len(collision_list) != 0:		
+			for objId in collision_list:
+				obj = obj_list.get(str(objId[0]))
+				if objId[0] != self.colBoxId and objId[0] != self.lastContactId and obj is not None:
+					self.lastContactId = objId[0]
+					print("Have a contact")
+					self.onContact(obj)
+	
+	def onContact(self, obj):
+		print("Contact with ", obj.colBoxId)
+		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
+		force = [0, -self.camDis[1] * 5000, 50000]
+		p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
