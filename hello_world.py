@@ -48,8 +48,8 @@ plane = Plane(position, 'asset/plane', 10, scale, showcase)
 
 # Create cube
 position = vmath.vec3(0.0, 8.0, 2.0)
-scale = vmath.vec3(1, 1, 1)
-cube_col_scale = [0.4, 0.4, 0.4]
+scale = vmath.vec3(2, 2, 2)
+cube_col_scale = [0.8, 0.8, 0.8]
 cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0])
 cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(cube.model)

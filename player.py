@@ -36,7 +36,7 @@ class Player():
 		# Should this player have camera follow behind?
 		if self.camFollow:
 			self.cam = cam
-			self.camDis = [0.0, -3.0, 3]
+			self.camDis = [0.0, -3.0, 1]
 	
 	def update(self, touch, obj_list):
 		self.__autoRePosition()
@@ -106,5 +106,5 @@ class Player():
 	def onContact(self, obj):
 		print("Contact with ", obj.colBoxId)
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		force = [0, -self.camDis[1] * 5000, 50000]
+		force = [0, -self.camDis[1] * 10000, 80000]
 		p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
