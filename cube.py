@@ -65,9 +65,17 @@ class Cube():
 	
 	def __autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		model_pos = (pos[0] - self.col_local_pos[0], pos[1] - self.col_local_pos[1], pos[2] - self.col_local_pos[2] )
+		
+		# print("Col pos is: ", pos)
+		# print("Model pos is: ", self.model.position)
+		self.model.rotation = vmath.quat(orn)		
+		# quat_normalized = vmath.normalize(vmath.quat(orn))
+		local_v = vmath.rotate(vmath.vec3(self.col_local_pos), vmath.quat(orn))
+		pos_x = pos[0] - local_v.x
+		pos_y = pos[1] - local_v.y
+		pos_z = pos[2] - local_v.z
+		model_pos = (pos_x, pos_y, pos_z)
 		self.model.position = vmath.vec3(model_pos)
-		self.model.rotation = vmath.quat(orn)
 
 	def toWorldCoordinate(self, scrx, scry, worldz, cam):
 		invproj = vmath.inverse(cam.projectionMatrix)
@@ -98,3 +106,7 @@ class Cube():
 
 	def __onClickExcute(self):
 		pass
+	
+	def __autoReRotation(self, rot_quat):
+		fin_quat = vmath.mul(vmath.quat(rot_quat), vmath.quat(self.base_rotate))
+		return fin_quat

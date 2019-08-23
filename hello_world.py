@@ -64,7 +64,7 @@ position = vmath.vec3(0.0, 0.0, 3)
 player_col_scale = [0.2,0.2,0.8]
 player_col_local_pos = [0, 0, 0.9]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
-
+p.changeDynamics(player.colBoxId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 showcase.add(player.model)
 # Rotate
 # dx = -90.0
@@ -89,13 +89,13 @@ showcase.add(player.model)
 position = vmath.vec3(-10.0, 0.0, 0.0)
 scale = vmath.vec3(10, 10, 0.1)
 plane_col_scale = [10, 10, 0.1]
-plane = Plane(position, 'asset/plane', 5, scale, showcase)
+plane = Plane(position, 'asset/plane', 10, scale, showcase)
 
 # Create cube
 position = vmath.vec3(0.0, 8.0, 2.0)
 scale = vmath.vec3(1, 1, 1)
-cube_col_scale = [1, 1, 1]
-cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, -0.4])
+cube_col_scale = [0.4, 0.4, 0.4]
+cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0])
 cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(cube.model)
 
@@ -106,7 +106,7 @@ showcase.add(cube.model)
 # p.changeVisualShape(colBoxId, -1, rgbaColor=[0.5, 0.1, 0.7, 1])
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
-p.setGravity(0, 0, -10)
+p.setGravity(0, 0, -50)
 # planeId = p.loadURDF("plane.urdf")
 # p.changeDynamics(colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
 # cubeStartPos = [0, 0, 1]

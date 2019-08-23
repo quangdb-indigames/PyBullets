@@ -6,6 +6,10 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
+STATUS_STAY = 0
+STATUS_WALK = 1
+STATUS_RUN = 2
+STATE_MOTION = {STATUS_STAY:"Sapphiart@idle", STATUS_WALK:"Sapphiart@walk", STATUS_RUN:"Sapphiart@running"}
 
 class Player():
 	def __init__(self, pos, scale, base_rotate, modelPath, cam, col_scale, col_local_pos = [0,0,0], camfollow = False):
@@ -15,6 +19,8 @@ class Player():
 		self.model.scale = scale
 		self.base_rotate = base_rotate
 		self.model.rotation = vmath.quat(self.base_rotate)
+		self.currentState = STATUS_STAY
+		self.model.connectAnimator(pyxie.ANIMETION_SLOT_A0, STATE_MOTION[self.currentState])
 		# Create collider box to simulate physics on bullet physics
 		self.colBoxId = 0
 		self.col_scale = col_scale
@@ -23,7 +29,7 @@ class Player():
 		# Create box collider		
 		self.camFollow = camfollow
 
-		self.__createColBox(1)
+		self.__createColBox(10)
 		self.tapped = False
 
 		# Should this player have camera follow behind?
@@ -70,12 +76,12 @@ class Player():
 		model_pos = (pos_x, pos_y, pos_z)
 		self.model.position = vmath.vec3(model_pos)
 		if self.camFollow:
-			self.cam.position = self.model.position + vmath.vec3(self.camDis)
-			self.cam.target = self.model.position + vmath.vec3(0, 0, 0)
+			self.cam.position = vmath.vec3(pos) + vmath.vec3(self.camDis)
+			self.cam.target = vmath.vec3(pos)
 	
 	def __onClickExcute(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		force = [0, -self.camDis[1] * 500, 300]
+		force = [0, -self.camDis[1] * 5000, 10000]
 		p.applyExternalForce(self.colBoxId, -1, force, pos, flags = p.WORLD_FRAME)
 
 	def __autoReRotation(self, rot_quat):
