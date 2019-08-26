@@ -6,9 +6,9 @@
       <authoring_tool>FBX COLLADA exporter</authoring_tool>
       <comments/>
     </contributor>
-    <created>2019-08-26T04:06:02Z</created>
+    <created>2019-08-26T10:26:19Z</created>
     <keywords/>
-    <modified>2019-08-26T04:06:02Z</modified>
+    <modified>2019-08-26T10:26:19Z</modified>
     <revision/>
     <subject/>
     <title/>
@@ -17,7 +17,7 @@
   </asset>
   <library_images>
     <image id="file3-image" name="file3">
-      <init_from>file://D:/Betakkuma/PyBullet/asset/grass.png</init_from>
+      <init_from>file://D:/Betakkuma/PyBullet/asset/middle_grass_with_street_02.png</init_from>
     </image>
   </library_images>
   <library_materials>
@@ -60,7 +60,15 @@
               <float sid="reflectivity">0.500000</float>
             </reflectivity>
             <transparent opaque="RGB_ZERO">
-              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+              <texture texture="file3-image" texcoord="CHANNEL0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU sid="wrapU0">TRUE</wrapU>
+                    <wrapV sid="wrapV0">TRUE</wrapV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
             </transparent>
             <transparency>
               <float sid="transparency">1.000000</float>

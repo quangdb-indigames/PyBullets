@@ -27,15 +27,15 @@ class Plane():
         for i in range(0, self.matrix_scale):
             for j in range(0, self.matrix_scale):
                 position = self.__getPositionAndScaleOfCube(i, j)
-                scale = [self.unit_scale.x, self.unit_scale.y, self.unit_scale.z]
+                scale = [self.unit_scale.x / 2, self.unit_scale.y / 2, self.unit_scale.z / 2]
                 pos_v3 = vmath.vec3(position)
-                cube = Cube(pos_v3, self.unit_scale, self.texture_path, scale, position, True)
+                cube = Cube(pos_v3, self.unit_scale, self.texture_path, scale, [0,0,0], True)
                 cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
                 self.showcase.add(cube.model)
                 self.cube_list.append(cube)
     
     def __getPositionAndScaleOfCube(self, i, j): 
-        x_pos = self.root_position.x + i * self.unit_scale.x
+        x_pos = self.root_position.x + i * self.unit_scale.x 
         y_pos = self.root_position.y + j * self.unit_scale.y
         z_pos = self.root_position.z
         position = [x_pos, y_pos, z_pos]

@@ -18,7 +18,7 @@
         {
             "path": "asset/chair_02",
             "name": "chair",
-            "local_pos": [0, 1, 0.5],
+            "local_pos": [1, 0, 0.5],
             "local_scale": [1, 1, 1],
             "local_quaternion": [0, 0, 0, 1],
             "col_pos": [0, 0, 0.2],
