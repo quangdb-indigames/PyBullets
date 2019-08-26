@@ -95,7 +95,7 @@ class Player():
 	def checkContact(self, obj_list):
 		aabbMin, aabbMax = p.getAABB(self.colBoxId, -1)
 		collision_list = p.getOverlappingObjects(aabbMin, aabbMax)
-		if len(collision_list) != 0:		
+		if collision_list is not None and len(collision_list) != 0:		
 			for objId in collision_list:
 				obj = obj_list.get(str(objId[0]))
 				if objId[0] != self.colBoxId and objId[0] != self.lastContactId and obj is not None:

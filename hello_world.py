@@ -9,7 +9,11 @@ import random
 from cube import Cube
 from player import Player
 from plane import Plane
+import json
 
+
+with open('cell_01.json') as f:
+	cell_01 = json.load(f)
 SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 640
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
@@ -33,7 +37,7 @@ cam.target = vmath.vec3(0.0, 0.0, 0.0)
 showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
 position = vmath.vec3(0.0, 0.0, 3)
-player_col_scale = [0.2,0.2,0.8]
+player_col_scale = [0.1,0.1,0.8]
 player_col_local_pos = [0, 0, 0.9]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 p.changeDynamics(player.colBoxId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
@@ -55,6 +59,18 @@ cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
 showcase.add(cube.model)
 obj_list[str(cube.colBoxId)] = cube
 
+maps_objs = []
+# Create chair from json data
+for obj in cell_01['objects']:
+	pos = obj['local_pos']
+	scale = obj['local_scale']
+	model_path = obj['path']
+	obj_col_pos = obj['col_pos']
+	obj_col_scale = obj['col_scale']
+	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos)
+	showcase.add(chair.model)
+	maps_objs.append(chair)
+
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -50)
 
@@ -63,6 +79,7 @@ cameraYaw = 0
 cameraPitch = -35
 
 isRotate = False
+print(len(maps_objs))
 while(1):
 	p.stepSimulation()
 	time.sleep(1. / 240.)
@@ -70,6 +87,8 @@ while(1):
 	player.update(touch, obj_list)
 	cam.shoot(showcase)
 	cube.update(touch)
+	for obj in maps_objs:
+		obj.update(touch)
 	pyxie.swap()
 
 	playerPos, orn = p.getBasePositionAndOrientation(player.colBoxId)
