@@ -44,7 +44,7 @@ obj_list[str(player.colBoxId)] = player
 position = vmath.vec3(-10.0, 0.0, 0.0)
 scale = vmath.vec3(10, 10, 0.1)
 plane_col_scale = [10, 10, 0.1]
-plane = Plane(position, 'asset/plane', 10, scale, showcase)
+plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
 
 # Create cube
 position = vmath.vec3(0.0, 8.0, 2.0)
