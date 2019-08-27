@@ -67,18 +67,16 @@ class Player():
 	
 	def __autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		
-		# print("Col pos is: ", pos)
-		# print("Model pos is: ", self.model.position)
 		quat = self.__autoReRotation(orn)
 		self.model.rotation = quat		
-		# quat_normalized = vmath.normalize(vmath.quat(orn))
 		local_v = vmath.rotate(vmath.vec3(self.col_local_pos), vmath.quat(orn))
 		pos_x = pos[0] - local_v.x
 		pos_y = pos[1] - local_v.y
 		pos_z = pos[2] - local_v.z
 		model_pos = (pos_x, pos_y, pos_z)
 		self.model.position = vmath.vec3(model_pos)
+
+		# If this character have camfollow, make camera follow it
 		if self.camFollow:
 			self.cam.position = vmath.vec3(pos) + vmath.vec3(self.camDis)
 			self.cam.target = vmath.vec3(pos)

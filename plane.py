@@ -29,7 +29,7 @@ class Plane():
                 position = self.__getPositionAndScaleOfCube(i, j)
                 scale = [self.unit_scale.x / 2, self.unit_scale.y / 2, self.unit_scale.z / 2]
                 pos_v3 = vmath.vec3(position)
-                cube = Cube(pos_v3, self.unit_scale, self.texture_path, scale, [0,0,0], True)
+                cube = Cube(pos_v3, self.unit_scale, self.texture_path, scale, [0,0,0], [0, 0, 0, 1],True)
                 cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
                 self.showcase.add(cube.model)
                 self.cube_list.append(cube)

@@ -8,11 +8,13 @@ import math
 import random
 
 class Cube():
-	def __init__(self, pos, scale,  modelPath, col_scale, col_local_pos = [0,0,0], isPlane = False, camfollow = False, isIteractable = False):
+	def __init__(self, pos, scale,  modelPath, col_scale, col_local_pos = [0,0,0], base_quaternion = [0, 0, 0, 1],isPlane = False, camfollow = False, isIteractable = False):
 		# Create model to display on pyxie
 		self.model = pyxie.figure(modelPath)
 		self.model.position = pos
 		self.model.scale = scale
+		self.base_rotate = base_quaternion
+		self.model.rotation = vmath.quat(self.base_rotate)
 
 		# Create collider to simulate physics on bullet physics
 		self.colBoxId = 0
@@ -65,17 +67,18 @@ class Cube():
 	
 	def __autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
-		
-		# print("Col pos is: ", pos)
-		# print("Model pos is: ", self.model.position)
-		self.model.rotation = vmath.quat(orn)		
-		# quat_normalized = vmath.normalize(vmath.quat(orn))
+		quat = self.__autoReRotation(orn)
+		self.model.rotation = quat
 		local_v = vmath.rotate(vmath.vec3(self.col_local_pos), vmath.quat(orn))
 		pos_x = pos[0] - local_v.x
 		pos_y = pos[1] - local_v.y
 		pos_z = pos[2] - local_v.z
 		model_pos = (pos_x, pos_y, pos_z)
 		self.model.position = vmath.vec3(model_pos)
+	
+	def __autoReRotation(self, rot_quat):
+		fin_quat = vmath.mul(vmath.quat(rot_quat), vmath.quat(self.base_rotate))
+		return fin_quat
 
 	def toWorldCoordinate(self, scrx, scry, worldz, cam):
 		invproj = vmath.inverse(cam.projectionMatrix)

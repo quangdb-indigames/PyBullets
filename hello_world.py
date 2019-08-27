@@ -67,7 +67,8 @@ for obj in cell_01['objects']:
 	model_path = obj['path']
 	obj_col_pos = obj['col_pos']
 	obj_col_scale = obj['col_scale']
-	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos)
+	quat = obj['local_quaternion']
+	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
 	showcase.add(chair.model)
 	maps_objs.append(chair)
 
