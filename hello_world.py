@@ -9,6 +9,7 @@ import random
 from cube import Cube
 from player import Player
 from plane import Plane
+from cylinder import Cylinder
 import json
 
 
@@ -40,24 +41,36 @@ position = vmath.vec3(0.0, 0.0, 3)
 player_col_scale = [0.1,0.1,0.8]
 player_col_local_pos = [0, 0, 0.9]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
-p.changeDynamics(player.colBoxId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
+p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 showcase.add(player.model)
-obj_list[str(player.colBoxId)] = player
+obj_list[str(player.colId)] = player
 
 # Create plane
 position = vmath.vec3(-10.0, 0.0, 0.0)
-scale = vmath.vec3(10, 10, 0.1)
+scale = vmath.vec3(50, 50, 0.1)
 plane_col_scale = [10, 10, 0.1]
 plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
 
+# plane_colId = p.createCollisionShape(p.GEOM_PLANE)
+# plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
+
 # Create cube
-position = vmath.vec3(0.0, 8.0, 2.0)
-scale = vmath.vec3(2, 2, 2)
-cube_col_scale = [1, 1, 1]
-cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0])
-cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
-showcase.add(cube.model)
-obj_list[str(cube.colBoxId)] = cube
+# position = vmath.vec3(0.0, 8.0, 2.0)
+# scale = vmath.vec3(2, 2, 2)
+# cube_col_scale = [1, 1, 1]
+# cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0])
+# cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
+# showcase.add(cube.model)
+# obj_list[str(cube.colId)] = cube
+
+# Create cylinder
+position = vmath.vec3(0.0, 8.0, 0.5)
+scale = vmath.vec3(1, 5, 1)
+col_radius = 0.6
+col_height = 1
+bullseye = Cylinder(position, scale, 'asset/bullseye', col_radius, col_height, [0,0,0], [ 0.7071068, 0, 0, 0.7071068 ], True)
+showcase.add(bullseye.model)
+obj_list[str(bullseye.colId)] = bullseye
 
 maps_objs = []
 # Create chair from json data
@@ -87,12 +100,12 @@ while(1):
 	touch = pyxie.singleTouch()
 	player.update(touch, obj_list)
 	cam.shoot(showcase)
-	cube.update(touch)
+	bullseye.update(touch)
 	for obj in maps_objs:
 		obj.update(touch)
 	pyxie.swap()
 
-	playerPos, orn = p.getBasePositionAndOrientation(player.colBoxId)
+	playerPos, orn = p.getBasePositionAndOrientation(player.colId)
 
 	cameraTargetPosition = playerPos
 	p.resetDebugVisualizerCamera(cameraDistance, cameraYaw, cameraPitch, cameraTargetPosition)

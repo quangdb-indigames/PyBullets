@@ -17,7 +17,7 @@ class Cube():
 		self.model.rotation = vmath.quat(self.base_rotate)
 
 		# Create collider to simulate physics on bullet physics
-		self.colBoxId = 0
+		self.colId = 0
 		self.col_scale = col_scale
 		self.col_local_pos = col_local_pos
 
@@ -50,10 +50,10 @@ class Cube():
 			return
 
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
-		self.colBoxId = p.createCollisionShape(p.GEOM_BOX,
+		self.colId = p.createCollisionShape(p.GEOM_BOX,
 								  halfExtents=self.col_scale)
-		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colBoxId, basePosition= col_pos);
-		p.changeDynamics(self.colBoxId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
+		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
+		p.changeDynamics(self.colId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
 
 	def __onClick(self, touch):
 		if touch:
@@ -66,7 +66,7 @@ class Cube():
 			self.tapped = False
 	
 	def __autoRePosition(self):
-		pos, orn = p.getBasePositionAndOrientation(self.colBoxId)
+		pos, orn = p.getBasePositionAndOrientation(self.colId)
 		quat = self.__autoReRotation(orn)
 		self.model.rotation = quat
 		local_v = vmath.rotate(vmath.vec3(self.col_local_pos), vmath.quat(orn))
