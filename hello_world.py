@@ -10,6 +10,7 @@ from cube import Cube
 from player import Player
 from plane import Plane
 from cylinder import Cylinder
+from cell import Cell
 import json
 
 
@@ -38,8 +39,8 @@ cam.target = vmath.vec3(0.0, 0.0, 0.0)
 showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
 position = vmath.vec3(0.0, 0.0, 3)
-player_col_scale = [0.1,0.1,0.8]
-player_col_local_pos = [0, 0, 0.9]
+player_col_scale = [0.1, 0.1, 1]
+player_col_local_pos = [0.0, 0.0, 1.1]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 showcase.add(player.model)
@@ -49,7 +50,8 @@ obj_list[str(player.colId)] = player
 position = vmath.vec3(-10.0, 0.0, 0.0)
 scale = vmath.vec3(50, 50, 0.1)
 plane_col_scale = [10, 10, 0.1]
-plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
+# plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
+cell = Cell('cell_01.json', showcase)
 
 # plane_colId = p.createCollisionShape(p.GEOM_PLANE)
 # plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
