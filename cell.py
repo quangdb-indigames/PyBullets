@@ -15,7 +15,7 @@ class Cell():
 		self.scale = [1,1,1]
 		self.objects = []
 		self.__initialize()
-	
+
 	def update(self, touch):
 		if len(self.objects) > 0:
 			for obj in self.objects:
@@ -25,7 +25,7 @@ class Cell():
 		# Load data from json file
 		with open(self.filePath) as f:
 			data = json.load(f)
-		
+
 		# Create background object
 		self.position = data['position']
 		self.scale = data['scale']
@@ -38,6 +38,8 @@ class Cell():
 		if len(data['objects']) > 0:
 			for obj in data['objects']:
 				actual_obj = self.__spawnDependOnObjectType(obj)
+				if actual_obj is not None:
+					self.objects.append(actual_obj)
 
 		# Create col box for background for check, will delete this part later
 		col_scale = [self.scale[0] / 2, self.scale[1] / 2, self.scale[2] / 2]
@@ -45,4 +47,13 @@ class Cell():
 		p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= self.position);
 
 	def __spawnDependOnObjectType(self, obj):
-		pass
+		if obj['type'] == "BOX":
+			pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
+			scale = obj['local_scale']
+			model_path = obj['path']
+			obj_col_pos = obj['col_pos']
+			obj_col_scale = obj['col_scale']
+			quat = obj['local_quaternion']
+			chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
+			self.showcase.add(chair.model)
+			return chair

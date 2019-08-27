@@ -76,16 +76,16 @@ obj_list[str(bullseye.colId)] = bullseye
 
 maps_objs = []
 # Create chair from json data
-for obj in cell_01['objects']:
-	pos = obj['local_pos']
-	scale = obj['local_scale']
-	model_path = obj['path']
-	obj_col_pos = obj['col_pos']
-	obj_col_scale = obj['col_scale']
-	quat = obj['local_quaternion']
-	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
-	showcase.add(chair.model)
-	maps_objs.append(chair)
+# for obj in cell_01['objects']:
+# 	pos = obj['local_pos']
+# 	scale = obj['local_scale']
+# 	model_path = obj['path']
+# 	obj_col_pos = obj['col_pos']
+# 	obj_col_scale = obj['col_scale']
+# 	quat = obj['local_quaternion']
+# 	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
+# 	showcase.add(chair.model)
+# 	maps_objs.append(chair)
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -50)
@@ -105,6 +105,7 @@ while(1):
 	bullseye.update(touch)
 	for obj in maps_objs:
 		obj.update(touch)
+	cell.update(touch)
 	pyxie.swap()
 
 	playerPos, orn = p.getBasePositionAndOrientation(player.colId)
