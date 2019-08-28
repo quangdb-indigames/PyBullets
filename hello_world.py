@@ -13,9 +13,6 @@ from cylinder import Cylinder
 from cell import Cell
 import json
 
-
-with open('cell_01.json') as f:
-	cell_01 = json.load(f)
 SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 640
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
@@ -27,7 +24,7 @@ boxHalfWidth = 0.5
 boxHalfHeight = 0.5
 segmentLength = 5
 # Create dictionary to store collision
-obj_list = dict()
+collision_objects = dict()
 
 # PYXIE SETTING REGION
 # =============================================================================================================
@@ -44,48 +41,17 @@ player_col_local_pos = [0.0, 0.0, 1.1]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
 p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 showcase.add(player.model)
-obj_list[str(player.colId)] = player
+collision_objects[str(player.colId)] = player
 
 # Create plane
 position = vmath.vec3(-10.0, 0.0, 0.0)
 scale = vmath.vec3(50, 50, 0.1)
 plane_col_scale = [10, 10, 0.1]
 # plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
-cell = Cell('cell_01.json', showcase)
+cell = Cell('mapfiles/cell_01.json', showcase, collision_objects)
 
 # plane_colId = p.createCollisionShape(p.GEOM_PLANE)
 # plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
-
-# Create cube
-# position = vmath.vec3(0.0, 8.0, 2.0)
-# scale = vmath.vec3(2, 2, 2)
-# cube_col_scale = [1, 1, 1]
-# cube = Cube(position, scale, 'asset/cube_02', cube_col_scale, [0, 0, 0])
-# cube.model.rotation = vmath.quat([ 0, 0, 0, 1 ])
-# showcase.add(cube.model)
-# obj_list[str(cube.colId)] = cube
-
-# Create cylinder
-position = vmath.vec3(0.0, 8.0, 0.5)
-scale = vmath.vec3(1, 5, 1)
-col_radius = 0.6
-col_height = 1
-bullseye = Cylinder(position, scale, 'asset/bullseye', col_radius, col_height, [0,0,0], [ 0.7071068, 0, 0, 0.7071068 ], True)
-showcase.add(bullseye.model)
-obj_list[str(bullseye.colId)] = bullseye
-
-maps_objs = []
-# Create chair from json data
-# for obj in cell_01['objects']:
-# 	pos = obj['local_pos']
-# 	scale = obj['local_scale']
-# 	model_path = obj['path']
-# 	obj_col_pos = obj['col_pos']
-# 	obj_col_scale = obj['col_scale']
-# 	quat = obj['local_quaternion']
-# 	chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
-# 	showcase.add(chair.model)
-# 	maps_objs.append(chair)
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -50)
@@ -95,16 +61,12 @@ cameraYaw = 0
 cameraPitch = -35
 
 isRotate = False
-print(len(maps_objs))
 while(1):
 	p.stepSimulation()
 	time.sleep(1. / 240.)
 	touch = pyxie.singleTouch()
-	player.update(touch, obj_list)
+	player.update(touch, collision_objects)
 	cam.shoot(showcase)
-	bullseye.update(touch)
-	for obj in maps_objs:
-		obj.update(touch)
 	cell.update(touch)
 	pyxie.swap()
 

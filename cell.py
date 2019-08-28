@@ -8,12 +8,13 @@ from cube import Cube
 from cylinder import Cylinder
 
 class Cell():
-	def __init__(self, filePath, showcase):
+	def __init__(self, filePath, showcase, collision_objects):
 		self.filePath = filePath
 		self.showcase = showcase
 		self.position = [0,0,0]
 		self.scale = [1,1,1]
 		self.objects = []
+		self.collision_objects = collision_objects
 		self.__initialize()
 
 	def update(self, touch):
@@ -57,3 +58,18 @@ class Cell():
 			chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
 			self.showcase.add(chair.model)
 			return chair
+
+		if obj['type'] == "CYLINDER":
+			pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
+			scale = obj['local_scale']
+			model_path = obj['path']
+			obj_col_pos = obj['col_pos']
+			quat = obj['local_quaternion']
+			col_rad = obj['col_radius']
+			col_height = obj['col_height']
+			isStatic = obj['isStatic']
+			cylinder = Cylinder(pos, scale, model_path, col_rad, col_height, obj_col_pos, quat, isStatic)
+			if obj['canCollider'] == "TRUE":
+				self.collision_objects[str(cylinder.colId)] = cylinder
+			self.showcase.add(cylinder.model)
+			
