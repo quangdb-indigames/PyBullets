@@ -6,11 +6,9 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
-from cube import Cube
+
 from player import Player
-from plane import Plane
-from cylinder import Cylinder
-from cell import Cell
+from mapLevel import MapLevel
 import json
 
 SCREEN_WIDTH = 480
@@ -43,12 +41,8 @@ p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, resti
 showcase.add(player.model)
 collision_objects[str(player.colId)] = player
 
-# Create plane
-position = vmath.vec3(-10.0, 0.0, 0.0)
-scale = vmath.vec3(50, 50, 0.1)
-plane_col_scale = [10, 10, 0.1]
-# plane = Plane(position, 'asset/plane_02', 10, scale, showcase)
-cell = Cell('mapfiles/cell_01.json', showcase, collision_objects)
+# Create map
+level = MapLevel('mapfiles/map.json', showcase, collision_objects)
 
 # plane_colId = p.createCollisionShape(p.GEOM_PLANE)
 # plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
@@ -67,7 +61,7 @@ while(1):
 	touch = pyxie.singleTouch()
 	player.update(touch, collision_objects)
 	cam.shoot(showcase)
-	cell.update(touch)
+	level.update(touch)
 	pyxie.swap()
 
 	playerPos, orn = p.getBasePositionAndOrientation(player.colId)
