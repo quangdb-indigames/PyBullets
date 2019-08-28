@@ -8,36 +8,37 @@ from cube import Cube
 from cylinder import Cylinder
 
 class Cell():
-	def __init__(self, filePath, showcase, collision_objects):
+	def __init__(self, filePath, showcase, collision_objects, base_position = [0, 0, 0]):
 		self.filePath = filePath
 		self.showcase = showcase
 		self.position = [0,0,0]
 		self.scale = [1,1,1]
 		self.objects = []
 		self.collision_objects = collision_objects
+		self.base_position = base_position
 		self.__initialize()
-
+		
 	def update(self, touch):
 		if len(self.objects) > 0:
 			for obj in self.objects:
 				obj.update(touch)
 
 	def __initialize(self):
-		# Load data from json file
+		# Load self.mapData from json file
 		with open(self.filePath) as f:
-			data = json.load(f)
+			self.mapData = json.load(f)
 
 		# Create background object
-		self.position = data['position']
-		self.scale = data['scale']
-		self.background = pyxie.figure(data['background']['path'])
+		self.position = [self.mapData['position'][0] + self.base_position[0], self.mapData['position'][1] + self.base_position[1], self.mapData['position'][2] + self.base_position[2] ]
+		self.scale = self.mapData['scale']
+		self.background = pyxie.figure(self.mapData['background']['path'])
 		self.background.position = vmath.vec3(self.position)
 		self.background.scale = vmath.vec3(self.scale)
 		self.showcase.add(self.background)
 
 		# Spawn all objects inside this cell
-		if len(data['objects']) > 0:
-			for obj in data['objects']:
+		if len(self.mapData['objects']) > 0:
+			for obj in self.mapData['objects']:
 				actual_obj = self.__spawnDependOnObjectType(obj)
 				if actual_obj is not None:
 					self.objects.append(actual_obj)
@@ -47,31 +48,43 @@ class Cell():
 		colId = p.createCollisionShape(p.GEOM_BOX, halfExtents=col_scale)
 		p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= self.position);
 
+	# Spawn region
 	def __spawnDependOnObjectType(self, obj):
 		if obj['type'] == "BOX":
-			pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
-			scale = obj['local_scale']
-			model_path = obj['path']
-			obj_col_pos = obj['col_pos']
-			obj_col_scale = obj['col_scale']
-			quat = obj['local_quaternion']
-			isStatic = obj['isStatic']
-			chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat, isStatic)
-			self.showcase.add(chair.model)
-			return chair
+			actual_obj = self.__spawnBoxTypeObject(obj)
+			return actual_obj
 
 		if obj['type'] == "CYLINDER":
-			pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
-			scale = obj['local_scale']
-			model_path = obj['path']
-			obj_col_pos = obj['col_pos']
-			quat = obj['local_quaternion']
-			col_rad = obj['col_radius']
-			col_height = obj['col_height']
-			isStatic = obj['isStatic']
-			cylinder = Cylinder(pos, scale, model_path, col_rad, col_height, obj_col_pos, quat, isStatic)
-			if obj['canCollider'] == "TRUE":
-				self.collision_objects[str(cylinder.colId)] = cylinder
-			self.showcase.add(cylinder.model)
-			return cylinder
+			actual_obj = self.__spawnCylinderTypeObject(obj)
+			return actual_obj
+			
+	
+	def __spawnBoxTypeObject(self, obj):
+		pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
+		scale = obj['local_scale']
+		model_path = obj['path']
+		obj_col_pos = obj['col_pos']
+		obj_col_scale = obj['col_scale']
+		quat = obj['local_quaternion']
+		isStatic = obj['isStatic']
+		chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat, isStatic)
+		self.showcase.add(chair.model)
+		return chair
+
+	def __spawnCylinderTypeObject(self, obj):
+		pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
+		scale = obj['local_scale']
+		model_path = obj['path']
+		obj_col_pos = obj['col_pos']
+		quat = obj['local_quaternion']
+		col_rad = obj['col_radius']
+		col_height = obj['col_height']
+		isStatic = obj['isStatic']
+		cylinder = Cylinder(pos, scale, model_path, col_rad, col_height, obj_col_pos, quat, isStatic)
+		if obj['canCollider'] == "TRUE":
+			self.collision_objects[str(cylinder.colId)] = cylinder
+		self.showcase.add(cylinder.model)
+		return cylinder
+
+	# End Region
 			

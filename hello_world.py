@@ -15,7 +15,7 @@ SCREEN_WIDTH = 480
 SCREEN_HEIGHT = 640
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
 
-physicsClient = p.connect(p.GUI)
+physicsClient = p.connect(p.DIRECT)
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
 boxHalfLength = 0.5
 boxHalfWidth = 0.5
@@ -62,7 +62,7 @@ while(1):
 	touch = pyxie.singleTouch()
 	player.update(touch, collision_objects)
 	cam.shoot(showcase)
-	level.update(touch)
+	level.update(touch, player)
 	pyxie.swap()
 
 	playerPos, orn = p.getBasePositionAndOrientation(player.colId)

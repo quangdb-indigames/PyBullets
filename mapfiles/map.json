@@ -1,8 +1,19 @@
 [
+    [1, 4],
+
     {
         "cellPath": "mapfiles/cell_01_01.json"
     },
+    
     {
         "cellPath": "mapfiles/cell_01_02.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_03.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_04.json"
     }
 ]
