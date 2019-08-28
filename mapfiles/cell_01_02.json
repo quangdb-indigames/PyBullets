@@ -1,22 +1,19 @@
 {
-    "position" : [0, 50, 0],
-    "scale": [50, 50, 0.1],
+    "position" : [0, 30, 0],
+    "scale": [30, 30, 0.1],
     "background" : {
         "path": "asset/plane_with_street"
     },
     "objects": [
-
         {
-            "path": "asset/bullseye",
-            "name": "bulleye",
-            "type": "CYLINDER",
-            "local_pos": [0.0, 8.0, 0.5],
-            "local_scale": [1, 2.5, 1],
-            "local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
-            "col_pos": [0, 0, 0],
-            "col_radius": 0.6,
-            "col_height": 1,
-            "canCollider": "TRUE",
+            "path": "asset/building_01",
+            "name": "building",
+            "type": "BOX",
+            "local_pos": [0, 0.7, 0.05],
+            "local_scale": [0.3, 0.3, 0.3],
+            "local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
+            "col_pos": [0, 0, 4.5],
+            "col_scale": [3.6, 3.6, 4.5],
             "isStatic": 1
         }
     ]

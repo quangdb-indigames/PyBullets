@@ -30,10 +30,11 @@ cam = pyxie.camera('maincam')
 cam.lockon = True
 cam.position = vmath.vec3(0.0, -3.0, 3)
 cam.target = vmath.vec3(0.0, 0.0, 0.0)
+cam.farPlane = 100.0
 
 showcase = pyxie.showcase("case01")
 scale = vmath.vec3(1, 1, 1)
-position = vmath.vec3(0.0, 0.0, 3)
+position = vmath.vec3(0.0, -10.0, 3)
 player_col_scale = [0.1, 0.1, 1]
 player_col_local_pos = [0.0, 0.0, 1.1]
 player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)

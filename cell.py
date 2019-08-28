@@ -55,7 +55,8 @@ class Cell():
 			obj_col_pos = obj['col_pos']
 			obj_col_scale = obj['col_scale']
 			quat = obj['local_quaternion']
-			chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat)
+			isStatic = obj['isStatic']
+			chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat, isStatic)
 			self.showcase.add(chair.model)
 			return chair
 
@@ -72,4 +73,5 @@ class Cell():
 			if obj['canCollider'] == "TRUE":
 				self.collision_objects[str(cylinder.colId)] = cylinder
 			self.showcase.add(cylinder.model)
+			return cylinder
 			
