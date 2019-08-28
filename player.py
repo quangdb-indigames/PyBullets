@@ -104,5 +104,5 @@ class Player():
 	def onContact(self, obj):
 		print("Contact with ", obj.colId)
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 8000, 30000]
+		force = [0, -self.camDis[1] * 10000, 50000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)

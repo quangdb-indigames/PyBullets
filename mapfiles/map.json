@@ -1,5 +1,8 @@
 [
     {
-        "cellPath": "mapfiles/cell_01.json"
+        "cellPath": "mapfiles/cell_01_01.json"
+    },
+    {
+        "cellPath": "mapfiles/cell_01_02.json"
     }
 ]
