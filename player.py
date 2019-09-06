@@ -53,7 +53,7 @@ class Player():
 		self.colId = p.createCollisionShape(p.GEOM_BOX,
 								  halfExtents=self.col_scale)
 		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
-		p.changeDynamics(self.colId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.4)
+		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=1, restitution=0.4)
 
 	def __onClick(self, touch):
 		if touch:
