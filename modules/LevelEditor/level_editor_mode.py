@@ -39,23 +39,41 @@ while(1):
 	io.font_global_scale = 0.5
 
 	# IMGUI TESTING REGION
-	imgui.set_next_window_size(300, 100)
-	imgui.begin("Example: item groups")
+	imgui.begin("Level Editor")
+	imgui.text("Screen size: w = {}, h = {} ".format(SCREEN_WIDTH, SCREEN_HEIGHT))
+	imgui.text("Camera position: x = {}, y = {}, z = {}".format(cam.position.x, cam.position.y, cam.position.z))
+	imgui.text("x={}:y={}:press={}".format(curX, curY, press))
 
+#region Player setting
 	imgui.begin_group()
-	imgui.text("First group (buttons):")
-	imgui.button("Button A")
-	imgui.button("Button B")
+	player_layer, visible = imgui.collapsing_header("Player", True)
+
+	if player_layer:
+		imgui.text("Create player")
 	imgui.end_group()
+#endregion
 
-	imgui.same_line(spacing=50)
-
+#region Camera setting
 	imgui.begin_group()
-	imgui.text("Second group (text and bullet texts):")
-	imgui.bullet_text("Bullet A")
-	imgui.bullet_text("Bullet B")
-	imgui.end_group()
+	camera_layer, visible = imgui.collapsing_header("Camera", True)
 
+	if camera_layer:
+		imgui.text("Camera position: x = {}, y = {}, z = {}".format(cam.position.x, cam.position.y, cam.position.z))
+		posX = cam.position.x
+		posY = cam.position.y
+		posZ = cam.position.z
+		changed, posX = imgui.drag_float(
+			"x", cam.position.x, format="%.1f"
+		)
+		changed, posY = imgui.drag_float(
+			"y", cam.position.y, format="%.1f"
+		)
+		changed, posZ = imgui.drag_float(
+			"z", cam.position.z, format="%.1f"
+		)
+		cam.position = vmath.vec3(posX, posY, posZ)
+	imgui.end_group()
+#endregion
 	imgui.end()
 
 	# END TESTING REGION
