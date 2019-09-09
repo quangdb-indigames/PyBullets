@@ -9,6 +9,8 @@ import random
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from modules.Helper import define as DEF
+from pyquaternion import Quaternion
+
 class IngameSceneEditor():
 	def __init__(self):
 		self.cam = pyxie.camera('ingame-editor-cam')
@@ -20,6 +22,7 @@ class IngameSceneEditor():
 		self.showcase = pyxie.showcase("ingame-editor-showcase")
 		imgui.create_context()
 		self.impl = ImgiPyxieRenderer()
+		self.currentControlObject = None
 	
 	def update(self, touch):
 		curX, curY, press = self.__processCursorInformation(touch)
@@ -42,17 +45,7 @@ class IngameSceneEditor():
 #endregion
 
 #region Camera setting
-		imgui.begin_group()
-		camera_layer, visible = imgui.collapsing_header("Camera", True)
-
-		if camera_layer:
-			imgui.text("Camera position: x = {}, y = {}, z = {}".format(self.cam.position.x, self.cam.position.y, self.cam.position.z))
-			position = self.cam.position.x, self.cam.position.y, self.cam.position.z
-			changed, position = imgui.drag_float3(
-				"position", *position, format="%.1f"
-			)
-			self.cam.position = vmath.vec3(position)
-		imgui.end_group()
+		self.cameraSetting()
 #endregion
 
 #region New Test
@@ -64,6 +57,29 @@ class IngameSceneEditor():
 		imgui.render()
 		self.impl.render(imgui.get_draw_data())
 
+	def cameraSetting(self):
+		imgui.begin_group()
+		camera_layer, visible = imgui.collapsing_header("Camera", True)
+
+		if camera_layer:
+			# Setting position
+			position = self.cam.position.x, self.cam.position.y, self.cam.position.z
+			changed, position = imgui.drag_float3(
+				"position", *position, format="%.1f"
+			)
+			self.cam.position = vmath.vec3(position)
+
+			# Setting rotation
+			quat =  self.cam.rotation.x, self.cam.rotation.y, self.cam.rotation.z, self.cam.rotation.w
+			pos = [self.cam.position.x, self.cam.position.y, self.cam.position.z]
+			changed, quat = imgui.drag_float4(
+				"rotation", *quat, format="%.2f", change_speed = 0.02
+			)
+			self.cam.rotation = vmath.quat(vmath.normalize(quat))
+			self.cam.position = vmath.vec3(pos)
+		imgui.end_group()
+
+#region Helper function
 	def __processCursorInformation(self, touch):
 		w, h = pyxie.viewSize()
 		curX = 0
@@ -76,3 +92,4 @@ class IngameSceneEditor():
 			press = touch['is_holded'] | touch['is_moved']
 		self.impl.process_inputs()
 		return curX, curY, press
+#endregion
