@@ -10,7 +10,7 @@ import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from modules.Helper import define as DEF
 from modules.Player.player import Player
-from pyquaternion import Quaternion
+from os import walk
 
 class IngameSceneEditor():
 	def __init__(self):
@@ -28,9 +28,16 @@ class IngameSceneEditor():
 		self.model.position = vmath.vec3(0,0,0)
 		self.showcase.add(self.model)
 		self.currentControlObject = None
-		self.player = None
-		self.playerPreviousAngle = [0,0,0]
-	
+		
+
+		f = []
+		for (dirpath, dirnames, filenames) in walk("modules"):
+			f.extend(dirnames)
+			f.extend(filenames)
+			break
+		print(f)
+		
+
 	def update(self, touch):
 		curX, curY, press = self.__processCursorInformation(touch)
 		imgui.new_frame()
@@ -51,6 +58,15 @@ class IngameSceneEditor():
 #region Camera setting
 		self.cameraSetting()
 #endregion
+
+#region Testing
+		imgui.begin_group()
+		current = 1
+		clicked, current = imgui.combo(
+			"combo", current, ["first", "second", "third"]
+		)
+		imgui.end_group()
+#endregion
 		imgui.end()
 
 	def render(self):
@@ -63,31 +79,35 @@ class IngameSceneEditor():
 		player_layer, visible = imgui.collapsing_header("Player", True)
 		if player_layer:
 			if imgui.button("Create"):
-				if self.player is not None:
+				try:
 					self.showcase.remove(self.player.model)
-				self.player = Player([0,0,0], [1,1,1], "asset/Sapphiart", self.showcase, self.cam)
+				except AttributeError:
+					print('Create new player')
+				self.player = Player([0,0,0], [1,1,1], [0,0,0],"asset/Sapphiart", self.showcase, self.cam)
 				self.currentControlObject = self.player
 			
-			if self.player is not None:
+			if hasattr(self, 'player') and self.player is not None:
 				# Setting position
-				position = self.player.model.position.x, self.player.model.position.y, self.player.model.position.z
-				changed, position = imgui.drag_float3(
-					"position", *position, format="%.1f", change_speed = 0.05
+				changed, self.player.position = imgui.drag_float3(
+					"position", *self.player.position, format="%.1f", change_speed = 0.05
 				)
-				self.player.model.position = vmath.vec3(position)
+				if changed:
+					self.player.update()
 
 				# Setting rotation
-				euler = self.playerPreviousAngle[0], self.playerPreviousAngle[1], self.playerPreviousAngle[2]
-				pos = [self.player.model.position.x, self.player.model.position.y, self.player.model.position.z]
-				changed, euler = imgui.drag_float3(
-					"rotation", *euler, format="%.2f", change_speed = 0.5
-				)
-				
+				changed, self.player.rotation = imgui.drag_float3(
+					"rotation", *self.player.rotation, format="%.2f", change_speed = 0.5
+				)				
 				if changed:
-					self.playerPreviousAngle = euler
-					quat = self.__fromEulerToQuaternion(euler)
-					self.player.model.rotation = vmath.quat(quat)
-					self.player.model.position = vmath.vec3(pos)
+					self.player.update()
+
+				# Setting scale
+				changed, self.player.scale = imgui.drag_float3(
+					"scale", *self.player.scale, format="%.1f", change_speed = 0.05
+				)
+				if changed:
+					self.player.update()
+					
 		imgui.end_group()
 			
 
@@ -112,7 +132,6 @@ class IngameSceneEditor():
 			)
 			if changed:
 				self.camPreviousAngle = euler
-				print(euler)
 				quat = self.__fromEulerToQuaternion(euler)
 				self.cam.rotation = vmath.quat(quat)
 				self.cam.position = vmath.vec3(pos)
