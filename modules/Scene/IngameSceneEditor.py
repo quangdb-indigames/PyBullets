@@ -10,10 +10,13 @@ import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from modules.Helper import define as DEF
 from modules.Player.player import Player
+from modules.Object.mesh import Mesh
 from os import walk
 
 class IngameSceneEditor():
 	def __init__(self):
+		self.currentSceneObjects = list()	
+		
 		self.cam = pyxie.camera('ingame-editor-cam')
 		self.cam.lockon = False
 		self.cam.position = vmath.vec3(0.0, -3.0, 3)
@@ -28,15 +31,12 @@ class IngameSceneEditor():
 		self.model.position = vmath.vec3(0,0,0)
 		self.showcase.add(self.model)
 		self.currentControlObject = None
-		
 
 		f = []
 		for (dirpath, dirnames, filenames) in walk("modules"):
 			f.extend(dirnames)
 			f.extend(filenames)
 			break
-		print(f)
-		
 
 	def update(self, touch):
 		curX, curY, press = self.__processCursorInformation(touch)
@@ -74,42 +74,86 @@ class IngameSceneEditor():
 		self.impl.render(imgui.get_draw_data())
 		self.cam.shoot(self.showcase, clearColor=False)
 	
+#region Player Setting implement
 	def playerSetting(self):
 		imgui.begin_group()
 		player_layer, visible = imgui.collapsing_header("Player", True)
 		if player_layer:
+			player = self.getObjectOfType(Player)
+			self.currentControlObject = player
 			if imgui.button("Create"):
-				try:
-					self.showcase.remove(self.player.model)
-				except AttributeError:
-					print('Create new player')
-				self.player = Player([0,0,0], [1,1,1], [0,0,0],"asset/Sapphiart", self.showcase, self.cam)
-				self.currentControlObject = self.player
+				player = self.createNewPlayer()
+				self.currentControlObject = player
 			
-			if hasattr(self, 'player') and self.player is not None:
-				# Setting position
-				changed, self.player.position = imgui.drag_float3(
-					"position", *self.player.position, format="%.1f", change_speed = 0.05
-				)
-				if changed:
-					self.player.update()
-
-				# Setting rotation
-				changed, self.player.rotation = imgui.drag_float3(
-					"rotation", *self.player.rotation, format="%.2f", change_speed = 0.5
-				)				
-				if changed:
-					self.player.update()
-
-				# Setting scale
-				changed, self.player.scale = imgui.drag_float3(
-					"scale", *self.player.scale, format="%.1f", change_speed = 0.05
-				)
-				if changed:
-					self.player.update()
+			if player is not None:
+				self.playerTransformSetting(player)
 					
 		imgui.end_group()
-			
+	
+	def playerTransformSetting(self, player):
+		if player.parent is not None:
+			changed, player.localPosition = imgui.drag_float3(
+				"position", *player.localPosition, format="%.1f", change_speed = 0.05
+			)
+			if changed:
+				player.update()
+
+			# Setting rotation
+			changed, player.localRotation = imgui.drag_float3(
+				"rotation", *player.localRotation, format="%.2f", change_speed = 0.5
+			)				
+			if changed:
+				player.update()
+
+			# Setting scale
+			changed, player.localScale = imgui.drag_float3(
+				"scale", *player.localScale, format="%.1f", change_speed = 0.05
+			)
+			if changed:
+				player.update()
+		else:
+			changed, player.position = imgui.drag_float3(
+				"position", *player.position, format="%.1f", change_speed = 0.05
+			)
+			if changed:
+				player.update()
+
+			# Setting rotation
+			changed, player.rotation = imgui.drag_float3(
+				"rotation", *player.rotation, format="%.2f", change_speed = 0.5
+			)				
+			if changed:
+				player.update()
+
+			# Setting scale
+			changed, player.scale = imgui.drag_float3(
+				"scale", *player.scale, format="%.1f", change_speed = 0.05
+			)
+			if changed:
+				player.update()
+	
+	def createNewPlayer(self):
+		player = self.getObjectOfType(Player)
+		try:
+			self.currentSceneObjects.remove(player)
+			playerMesh = player.getComponent(Mesh)
+			self.showcase.remove(playerMesh.mesh)
+		except:
+			pass
+
+		player = Player("asset/Sapphiart", "Player")
+		self.currentSceneObjects.append(player)
+		playerMesh = player.getComponent(Mesh)
+		self.showcase.add(playerMesh.mesh)
+		return player
+
+	def getObjectOfType(self, objType):
+		for obj in self.currentSceneObjects:
+			if isinstance(obj, objType):
+				return obj
+		
+		return None
+#endregion			
 
 	def cameraSetting(self):
 		imgui.begin_group()

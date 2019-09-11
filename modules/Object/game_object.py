@@ -16,9 +16,6 @@ class GameObject():
 		self.localScale = None
 		self.localRotation = None
 
-		# Type display transform
-		self.displayTransform = [self.position, self.rotation, self.scale]
-
 		# Object components
 		self.components = []
 	 
@@ -27,15 +24,16 @@ class GameObject():
 	
 	def update(self):
 		self.__autoTransformBaseParent()
+		print(self.position)
 
 		for component in self.components:
-    		try:
+			try:
 				component.update()
 			except AttributeError:
 				pass
 		
 		for gameObject in self.childs:
-    		try:
+			try:
 				gameObject.update()
 			except AttributeError:
 				pass
@@ -53,12 +51,11 @@ class GameObject():
 			self.localRotation = localRotation
 			self.localScale = localScale
 
-			self.displayTransform = [self.localPosition, self.localRotation, self.localScale]
 		except AttributeError:
 			print("New parent is not of type GameObject!!!")
 	
 	def removeParent(self):
-    	self.parent.childs.remove(self)
+		self.parent.childs.remove(self)
 		self.parent = None
 
 		# Local transform
@@ -66,9 +63,11 @@ class GameObject():
 		self.localScale = None
 		self.localRotation = None
 
-		# Type display transform
-		self.displayTransform = [self.position, self.rotation, self.scale]
-
+	def getComponent(self, objType):
+		for component in self.components:
+			if isinstance(component, objType):
+				return component
+		return None
 	
 	def __autoTransformBaseParent(self):
 		if self.parent is None:
