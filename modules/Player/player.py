@@ -12,5 +12,5 @@ class Player(GameObject):
 		self.components.append(mesh)
 		self.testAttr = 1
 	
-	def update(self):
-		super().update()
+	def update(self, updateSelf = True):
+		super().update(updateSelf)

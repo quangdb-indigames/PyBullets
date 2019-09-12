@@ -36,7 +36,7 @@ def displayGameObjectTransformSetting(obj, imgui):
 			"rotation", *obj.localRotation, format="%.2f", change_speed = 0.5
 		)				
 		if changed:
-			obj.update()
+			obj.update(False)
 
 		# Setting scale
 		changed, obj.localScale = imgui.drag_float3(
@@ -46,8 +46,8 @@ def displayGameObjectTransformSetting(obj, imgui):
 			obj.update()
 	else:
 		# Else display it global transform
-		changed, obj.__dict__['position'] = imgui.drag_float3(
-			"position", *obj.__dict__['position'], format="%.1f", change_speed = 0.05
+		changed, obj.position = imgui.drag_float3(
+			"position", *obj.position, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update()
@@ -126,9 +126,10 @@ def displayListFloatAttribute(imgui, component, attrName):
 			attrName, *component.__dict__[attrName], format="%.2f", change_speed = 0.05
 		)
 	else:
+		imgui.text(attrName)
 		for i in range(0, len(component.__dict__[attrName])):
 			changed, component.__dict__[attrName][i] = imgui.drag_float(
-				attrName + " - " + str(i+1), component.__dict__[attrName][i], format="%.2f", change_speed = 0.05
+				str(i+1), component.__dict__[attrName][i], format="%.2f", change_speed = 0.05
 			)
 
 			if changed:

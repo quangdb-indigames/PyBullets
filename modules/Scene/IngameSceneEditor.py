@@ -10,6 +10,7 @@ import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from modules.Helper import define as DEF
 from modules.Helper import helperFunction as HELPER
+from modules.Object.game_object import GameObject
 from modules.Player.player import Player
 from modules.Object.mesh import Mesh
 from os import walk
@@ -81,14 +82,18 @@ class IngameSceneEditor():
 		imgui.begin("Hierachy")
 		for obj in self.currentSceneObjects:
 			try:
-				if imgui.selectable(obj.name, True)[0] or self.openInspector:
-					self.openInspector = True
+				if imgui.selectable(obj.name)[1]:
+					self.currentControlObject = obj
 			except:
 				pass
 		imgui.end()
 
-		if self.openInspector:
-			self.displayObjectInspector(obj, imgui)
+		if self.currentControlObject != None and isinstance(self.currentControlObject, GameObject):
+			self.displayObjectInspector(self.currentControlObject, imgui)
+#endregion
+
+#region TEST WINDOW
+		# imgui.show_test_window()
 #endregion
 
 	def render(self):
@@ -188,5 +193,8 @@ class IngameSceneEditor():
 			press = touch['is_holded'] | touch['is_moved']
 		self.impl.process_inputs()
 		return curX, curY, press
+	
+	def __settingWindowStyle(self):
+		pass
 	
 #endregion
