@@ -20,11 +20,10 @@ class GameObject():
 		self.components = []
 	 
 	def __repr__(self):
-		print("Class: ", self.__class__, ", Object's name: ", self.name)
+		return self.__class__.__name__
 	
 	def update(self):
 		self.__autoTransformBaseParent()
-		print(self.position)
 
 		for component in self.components:
 			try:

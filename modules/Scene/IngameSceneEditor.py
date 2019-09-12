@@ -9,6 +9,7 @@ import random
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from modules.Helper import define as DEF
+from modules.Helper import helperFunction as HELPER
 from modules.Player.player import Player
 from modules.Object.mesh import Mesh
 from os import walk
@@ -31,6 +32,7 @@ class IngameSceneEditor():
 		self.model.position = vmath.vec3(0,0,0)
 		self.showcase.add(self.model)
 		self.currentControlObject = None
+		self.openInspector = False
 
 		f = []
 		for (dirpath, dirnames, filenames) in walk("modules"):
@@ -42,14 +44,16 @@ class IngameSceneEditor():
 		curX, curY, press = self.__processCursorInformation(touch)
 		imgui.new_frame()
 		io = imgui.get_io()
-		io.font_global_scale = 0.5
-		# IMGUI TESTING REGION
+		io.font_global_scale = 0.4
+
+#region LEVEL EDITOR WINDOW
+
 		imgui.begin("Level Editor")
 		imgui.text("Screen size: w = {}, h = {} ".format(DEF.SCREEN_WIDTH, DEF.SCREEN_HEIGHT))
-		imgui.text("Camera position: x = {}, y = {}, z = {}".format(self.cam.position.x, self.cam.position.y, self.cam.position.z))
-		imgui.text("x={}:y={}:press={}".format(curX, curY, press))
 		if self.currentControlObject is not None:
-			imgui.text("Current control obj: ".format(self.currentControlObject))
+			imgui.text("Current control obj: {}".format(self.currentControlObject))
+		imgui.text("Camera position: x = {}, y = {}, z = {}".format(self.cam.position.x, self.cam.position.y, self.cam.position.z))
+		imgui.text("x={}:y={}:press={}".format(curX, curY, press))		
 
 #region Player setting
 		self.playerSetting()
@@ -68,72 +72,62 @@ class IngameSceneEditor():
 		imgui.end_group()
 #endregion
 		imgui.end()
+#endregion
+
+#region HIERACHY
+		imgui.set_next_window_size(100, 150)
+		imgui.begin("Hierachy")
+		for obj in self.currentSceneObjects:
+			try:
+				if imgui.selectable(obj.name, True)[0] or self.openInspector:
+					self.openInspector = True
+			except:
+				pass
+		imgui.end()
+
+		if self.openInspector:
+			self.displayObjectInspector(obj, imgui)
+#endregion
 
 	def render(self):
 		imgui.render()
 		self.impl.render(imgui.get_draw_data())
 		self.cam.shoot(self.showcase, clearColor=False)
+
+#region INSPECTOR
+	def displayObjectInspector(self, obj, imgui):
+		imgui.set_next_window_size(150, 100)
+		imgui.set_next_window_position(5, 160)
+		expanded, opened = imgui.begin("Inspector", True)
+		if opened:
+			imgui.begin_group()
+			transform_layer, visible = imgui.collapsing_header("Transform", True)
+			if transform_layer:
+				HELPER.displayGameObjectTransformSetting(obj, imgui)
+			imgui.end_group()
+
+			for component in obj.components:
+				HELPER.displayComponentSetting(imgui, component)
+		else:
+			self.openInspector = False
+		imgui.end()
+#endregion
 	
 #region Player Setting implement
 	def playerSetting(self):
 		imgui.begin_group()
 		player_layer, visible = imgui.collapsing_header("Player", True)
 		if player_layer:
-			player = self.getObjectOfType(Player)
+			player = HELPER.getObjectOfType(Player, self.currentSceneObjects)
 			self.currentControlObject = player
 			if imgui.button("Create"):
 				player = self.createNewPlayer()
 				self.currentControlObject = player
-			
-			if player is not None:
-				self.playerTransformSetting(player)
 					
 		imgui.end_group()
 	
-	def playerTransformSetting(self, player):
-		if player.parent is not None:
-			changed, player.localPosition = imgui.drag_float3(
-				"position", *player.localPosition, format="%.1f", change_speed = 0.05
-			)
-			if changed:
-				player.update()
-
-			# Setting rotation
-			changed, player.localRotation = imgui.drag_float3(
-				"rotation", *player.localRotation, format="%.2f", change_speed = 0.5
-			)				
-			if changed:
-				player.update()
-
-			# Setting scale
-			changed, player.localScale = imgui.drag_float3(
-				"scale", *player.localScale, format="%.1f", change_speed = 0.05
-			)
-			if changed:
-				player.update()
-		else:
-			changed, player.position = imgui.drag_float3(
-				"position", *player.position, format="%.1f", change_speed = 0.05
-			)
-			if changed:
-				player.update()
-
-			# Setting rotation
-			changed, player.rotation = imgui.drag_float3(
-				"rotation", *player.rotation, format="%.2f", change_speed = 0.5
-			)				
-			if changed:
-				player.update()
-
-			# Setting scale
-			changed, player.scale = imgui.drag_float3(
-				"scale", *player.scale, format="%.1f", change_speed = 0.05
-			)
-			if changed:
-				player.update()
-	
 	def createNewPlayer(self):
-		player = self.getObjectOfType(Player)
+		player = HELPER.getObjectOfType(Player, self.currentSceneObjects)
 		try:
 			self.currentSceneObjects.remove(player)
 			playerMesh = player.getComponent(Mesh)
@@ -141,18 +135,13 @@ class IngameSceneEditor():
 		except:
 			pass
 
-		player = Player("asset/Sapphiart", "Player")
+		player = Player("asset/Sapphiart", "Sapphi-chan")
 		self.currentSceneObjects.append(player)
 		playerMesh = player.getComponent(Mesh)
 		self.showcase.add(playerMesh.mesh)
 		return player
 
-	def getObjectOfType(self, objType):
-		for obj in self.currentSceneObjects:
-			if isinstance(obj, objType):
-				return obj
-		
-		return None
+
 #endregion			
 
 	def cameraSetting(self):
@@ -176,7 +165,7 @@ class IngameSceneEditor():
 			)
 			if changed:
 				self.camPreviousAngle = euler
-				quat = self.__fromEulerToQuaternion(euler)
+				quat = HELPER.fromEulerToQuaternion(euler)
 				self.cam.rotation = vmath.quat(quat)
 				self.cam.position = vmath.vec3(pos)
 		imgui.end_group()
@@ -195,64 +184,4 @@ class IngameSceneEditor():
 		self.impl.process_inputs()
 		return curX, curY, press
 	
-	def __fromEulerToQuaternion(self, euler):
-		# XZY
-		x, y, z = math.radians(euler[0] % 360), math.radians(euler[1] % 360), math.radians(euler[2] % 360)
-
-		cz = math.cos(z * 0.5)
-		sz = math.sin(z * 0.5)
-		cy = math.cos(y * 0.5)
-		sy = math.sin(y * 0.5)
-		cx = math.cos(x * 0.5)
-		sx = math.sin(x * 0.5)
-
-		q = list()
-		
-		qx = sx * cy * cz - cx * sy * sz		# x
-		qy = cx * cy * sz + sx * sy * cz		# y
-		qz = cx * sy * cz - sx * cy * sz		# z
-		qw = cx * cy * cz + sx * sy * sz		# w
-		q.append(qx)
-		q.append(qy)
-		q.append(qz)
-		q.append(qw)
-		return q
-	
-	# def __fromQuaternionToEuler(self, q1, previousAngle):
-	# 	# Heading = rotation about y axis
-	# 	# Attitude = rotation about z axis
-	# 	# Bank = rotation about x axis
-	# 	test = q1.x*q1.y + q1.z*q1.w
-	# 	k_epsilon = 0.000001
-	# 	if (test > 0.4995):
-	# 		heading = 2 * math.atan2(q1.x,q1.w)
-	# 		attitude = math.pi/2
-	# 		bank = 0
-	# 		return [math.degrees(bank), math.degrees(heading), math.degrees(attitude)]
-
-	# 	if (test < -0.4995):
-	# 		heading = -2 * math.atan2(q1.x,q1.w)
-	# 		attitude = - math.pi/2
-	# 		bank = 0
-	# 		return [math.degrees(bank), math.degrees(heading), math.degrees(attitude)]
-
-	# 	sqx = q1.x*q1.x;
-	# 	sqy = q1.y*q1.y;
-	# 	sqz = q1.z*q1.z;
-	# 	heading = math.atan2(2*q1.y*q1.w-2*q1.x*q1.z , 1 - 2*sqy - 2*sqz);
-	# 	attitude = math.asin(2*test);
-	# 	bank = math.atan2(2*q1.x*q1.w-2*q1.y*q1.z , 1 - 2*sqx - 2*sqz)
-
-	# 	euler_x = math.degrees(bank) % 360
-	# 	euler_y =  math.degrees(heading) % 360
-	# 	euler_z = math.degrees(attitude) % 360
-		
-	# 	if abs(euler_x - previousAngle[0]) < k_epsilon:
-	# 		euler_x = previousAngle[0]
-	# 	if abs(euler_y - previousAngle[1]) < k_epsilon:
-	# 		euler_y = previousAngle[1]
-	# 	if abs(euler_z - previousAngle[2]) < k_epsilon:
-	# 		euler_z = previousAngle[2]
-
-	# 	return [euler_x,euler_y, euler_z]
 #endregion

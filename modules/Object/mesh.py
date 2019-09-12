@@ -6,6 +6,9 @@ from modules.Helper import helperFunction
 class Mesh(Component):
 	def __init__(self, gameObject, meshData):
 		super().__init__(gameObject)
+		self.meshName = meshData
+		self.showOnInspector("meshName")
+
 		self.mesh = pyxie.figure(meshData)
 		self.mesh.position = vmath.vec3(self.gameObject.position)
 		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
@@ -21,6 +24,7 @@ class Mesh(Component):
 		self.mesh.scale = vmath.vec3(self.gameObject.scale)
 	
 	def replaceMesh(self, meshData):
+		self.meshName = meshData
 		self.mesh = pyxie.figure(meshData)
 		self.mesh.position = vmath.vec3(self.gameObject.position)
 		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))

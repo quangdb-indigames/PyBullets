@@ -10,6 +10,7 @@ class Player(GameObject):
 		super().__init__(name, position, scale, rotation)
 		mesh = Mesh(self, modelPath)
 		self.components.append(mesh)
+		self.testAttr = 1
 	
 	def update(self):
 		super().update()
