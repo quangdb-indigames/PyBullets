@@ -84,6 +84,11 @@ def displayComponentSetting(imgui, component):
 def displayAttributeOnInspector(imgui, component, attrName):
 	if isinstance(component.__dict__[attrName], str):
 		displayTextAttribute(imgui, component, attrName)
+	
+	if isinstance(component.__dict__[attrName], float):
+		displayListFloatAttribute(imgui, component, attrName)
+	elif isinstance(component.__dict__[attrName], (list, tuple)) and isinstance(component.__dict__[attrName][0], (float)):
+		displayListFloatAttribute(imgui, component, attrName)
 
 def displayTextAttribute(imgui, component, attrName):
 	changed, component.__dict__[attrName] = imgui.input_text(
@@ -91,6 +96,46 @@ def displayTextAttribute(imgui, component, attrName):
 		component.__dict__[attrName],
 		256
 	)
+
+	if changed:
+		component.update()
+
+def displayListFloatAttribute(imgui, component, attrName):
+	changed = False
+	if isinstance(component.__dict__[attrName], float):
+		changed, component.__dict__[attrName] = imgui.drag_float(
+			attrName, component.__dict__[attrName], format="%.2f", change_speed = 0.05
+		)
+		if changed:
+			component.update()
+		return
+		
+	if len(component.__dict__[attrName]) == 0:
+		return
+
+	if len(component.__dict__[attrName]) == 2:
+		changed, component.__dict__[attrName] = imgui.drag_float2(
+			attrName, *component.__dict__[attrName], format="%.2f", change_speed = 0.05
+		)
+	elif len(component.__dict__[attrName]) == 3:
+		changed, component.__dict__[attrName] = imgui.drag_float3(
+			attrName, *component.__dict__[attrName], format="%.2f", change_speed = 0.05
+		)
+	elif len(component.__dict__[attrName]) == 4:
+		changed, component.__dict__[attrName] = imgui.drag_float4(
+			attrName, *component.__dict__[attrName], format="%.2f", change_speed = 0.05
+		)
+	else:
+		for i in range(0, len(component.__dict__[attrName])):
+			changed, component.__dict__[attrName][i] = imgui.drag_float(
+				attrName + " - " + str(i+1), component.__dict__[attrName][i], format="%.2f", change_speed = 0.05
+			)
+
+			if changed:
+				component.update()
+	
+	if changed:
+		component.update()
 
 def getObjectOfType(objType, listObjs):
 	for obj in listObjs:

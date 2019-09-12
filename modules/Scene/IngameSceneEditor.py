@@ -47,6 +47,8 @@ class IngameSceneEditor():
 		io.font_global_scale = 0.4
 
 #region LEVEL EDITOR WINDOW
+		self.style = imgui.get_style()
+		self.style.scrollbar_size = 3
 
 		imgui.begin("Level Editor")
 		imgui.text("Screen size: w = {}, h = {} ".format(DEF.SCREEN_WIDTH, DEF.SCREEN_HEIGHT))
@@ -101,6 +103,8 @@ class IngameSceneEditor():
 		expanded, opened = imgui.begin("Inspector", True)
 		if opened:
 			imgui.begin_group()
+			imgui.bullet_text(obj.name)
+
 			transform_layer, visible = imgui.collapsing_header("Transform", True)
 			if transform_layer:
 				HELPER.displayGameObjectTransformSetting(obj, imgui)
@@ -121,6 +125,7 @@ class IngameSceneEditor():
 			player = HELPER.getObjectOfType(Player, self.currentSceneObjects)
 			self.currentControlObject = player
 			if imgui.button("Create"):
+				print(imgui.core.get_style())
 				player = self.createNewPlayer()
 				self.currentControlObject = player
 					

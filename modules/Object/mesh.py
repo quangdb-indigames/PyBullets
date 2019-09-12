@@ -8,6 +8,8 @@ class Mesh(Component):
 		super().__init__(gameObject)
 		self.meshName = meshData
 		self.showOnInspector("meshName")
+		self.testAttr = [5.89, 81.19, 12.12, 89.12, 99.12]
+		self.showOnInspector("testAttr")
 
 		self.mesh = pyxie.figure(meshData)
 		self.mesh.position = vmath.vec3(self.gameObject.position)
