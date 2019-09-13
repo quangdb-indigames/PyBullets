@@ -29,7 +29,7 @@ def displayGameObjectTransformSetting(obj, imgui):
 			"position", *obj.localPosition, format="%.1f", change_speed = 0.05
 		)
 		if changed:
-			obj.update()
+			obj.update(False)
 
 		# Setting rotation
 		changed, obj.localRotation = imgui.drag_float3(
@@ -89,6 +89,18 @@ def displayAttributeOnInspector(imgui, component, attrName):
 		displayListFloatAttribute(imgui, component, attrName)
 	elif isinstance(component.__dict__[attrName], (list, tuple)) and isinstance(component.__dict__[attrName][0], (float)):
 		displayListFloatAttribute(imgui, component, attrName)
+	
+	if isinstance(component.__dict__[attrName], bool):
+		displayBoolAttribute(imgui, component, attrName)
+
+def displayBoolAttribute(imgui, component, attrName):
+	changed, component.__dict__[attrName] = imgui.checkbox(
+		attrName.capitalize(),
+		component.__dict__[attrName]
+	)
+
+	if changed:
+		component.update()
 
 def displayTextAttribute(imgui, component, attrName):
 	changed, component.__dict__[attrName] = imgui.input_text(

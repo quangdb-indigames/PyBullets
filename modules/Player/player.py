@@ -5,6 +5,7 @@ import math
 from modules.Helper import helperFunction
 from modules.Object.game_object import GameObject
 from modules.Object.mesh import Mesh
+from modules.Object.box_collider import BoxCollider
 class Player(GameObject):
 	def __init__(self, modelPath, name = "GameObject", position = [0,0,0], scale  = [1,1,1], rotation = [0,0,0]):
 		super().__init__(name, position, scale, rotation)
@@ -14,3 +15,7 @@ class Player(GameObject):
 	
 	def update(self, updateSelf = True):
 		super().update(updateSelf)
+	
+	def addColider(self, colPath, showcase):
+		col = BoxCollider(self, colPath, showcase)
+		self.components.append(col)

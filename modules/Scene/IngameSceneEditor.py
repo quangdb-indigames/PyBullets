@@ -133,7 +133,6 @@ class IngameSceneEditor():
 				print(imgui.core.get_style())
 				player = self.createNewPlayer()
 				self.currentControlObject = player
-					
 		imgui.end_group()
 	
 	def createNewPlayer(self):
@@ -149,6 +148,9 @@ class IngameSceneEditor():
 		self.currentSceneObjects.append(player)
 		playerMesh = player.getComponent(Mesh)
 		self.showcase.add(playerMesh.mesh)
+
+		player.addColider("asset/cube_02", self.showcase)
+
 		return player
 
 
