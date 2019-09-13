@@ -1,4 +1,5 @@
 import math
+import pyvmath as vmath
 def fromEulerToQuaternion(euler):
 	# XZY
 	x, y, z = math.radians(euler[0] % 360), math.radians(euler[1] % 360), math.radians(euler[2] % 360)
