@@ -7,7 +7,7 @@ from modules.Object.game_object import GameObject
 from modules.Object.mesh import Mesh
 from modules.Object.box_collider import BoxCollider
 class Player(GameObject):
-	def __init__(self, modelPath, name = "GameObject", position = [0,0,0], scale  = [1,1,1], rotation = [0,0,0]):
+	def __init__(self, modelPath, name = "GameObject", position = [0.0,0.0,0.0], scale  = [1.0,1.0,1.0], rotation = [0.0,0.0,0.0]):
 		super().__init__(name, position, scale, rotation)
 		mesh = Mesh(self, modelPath)
 		self.components.append(mesh)

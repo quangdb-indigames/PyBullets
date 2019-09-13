@@ -84,14 +84,27 @@ def displayComponentSetting(imgui, component):
 def displayAttributeOnInspector(imgui, component, attrName):
 	if isinstance(component.__dict__[attrName], str):
 		displayTextAttribute(imgui, component, attrName)
+		return
+		
+	if isinstance(component.__dict__[attrName], bool):
+		displayBoolAttribute(imgui, component, attrName)
+		return
 	
 	if isinstance(component.__dict__[attrName], float):
 		displayListFloatAttribute(imgui, component, attrName)
+		return
 	elif isinstance(component.__dict__[attrName], (list, tuple)) and isinstance(component.__dict__[attrName][0], (float)):
 		displayListFloatAttribute(imgui, component, attrName)
+		return
 	
-	if isinstance(component.__dict__[attrName], bool):
-		displayBoolAttribute(imgui, component, attrName)
+	if isinstance(component.__dict__[attrName], int):
+		displayListIntAttribute(imgui, component, attrName)
+		return
+	elif isinstance(component.__dict__[attrName], (list, tuple)) and isinstance(component.__dict__[attrName][0], (int)):
+		displayListIntAttribute(imgui, component, attrName)
+		return
+
+	
 
 def displayBoolAttribute(imgui, component, attrName):
 	changed, component.__dict__[attrName] = imgui.checkbox(
@@ -142,6 +155,44 @@ def displayListFloatAttribute(imgui, component, attrName):
 		for i in range(0, len(component.__dict__[attrName])):
 			changed, component.__dict__[attrName][i] = imgui.drag_float(
 				str(i+1), component.__dict__[attrName][i], format="%.2f", change_speed = 0.05
+			)
+
+			if changed:
+				component.update()
+	
+	if changed:
+		component.update()
+
+def displayListIntAttribute(imgui, component, attrName):
+	changed = False
+	if isinstance(component.__dict__[attrName], int):
+		changed, component.__dict__[attrName] = imgui.drag_int(
+			attrName, component.__dict__[attrName]
+		)
+		if changed:
+			component.update()
+		return
+		
+	if len(component.__dict__[attrName]) == 0:
+		return
+
+	if len(component.__dict__[attrName]) == 2:
+		changed, component.__dict__[attrName] = imgui.drag_int2(
+			attrName, *component.__dict__[attrName]
+		)
+	elif len(component.__dict__[attrName]) == 3:
+		changed, component.__dict__[attrName] = imgui.drag_int3(
+			attrName, *component.__dict__[attrName]
+		)
+	elif len(component.__dict__[attrName]) == 4:
+		changed, component.__dict__[attrName] = imgui.drag_int4(
+			attrName, *component.__dict__[attrName]
+		)
+	else:
+		imgui.text(attrName)
+		for i in range(0, len(component.__dict__[attrName])):
+			changed, component.__dict__[attrName][i] = imgui.drag_int(
+				str(i+1), component.__dict__[attrName][i]
 			)
 
 			if changed:
