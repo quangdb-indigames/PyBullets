@@ -9,16 +9,16 @@ class BoxCollider(Collider):
 		self.colType = "BOX COLLIDER"
 		self.showOnInspector("colType")
 
-		self.scale = self.gameObject.scale		
+		self.scale = self.gameObject.transform.scale		
 		self.showOnInspector("scale")
 		self.isDisplay = True
 		self.showOnInspector("isDisplay")
 		self.showcase = showcase
 
 		self.mesh = pyxie.figure(colliderPath)
-		self.mesh.position = vmath.vec3(self.gameObject.position)
-		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
-		self.mesh.scale = vmath.vec3(self.gameObject.scale)
+		self.mesh.position = vmath.vec3(self.gameObject.transform.position)
+		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.transform.rotation))
+		self.mesh.scale = vmath.vec3(self.gameObject.transform.scale)
 		self.showcase.add(self.mesh)
 	
 	def update(self):
@@ -36,6 +36,6 @@ class BoxCollider(Collider):
 			self.showcase.add(self.mesh)
 	
 	def __autoReTransform(self):
-		self.mesh.position = vmath.vec3(self.gameObject.position)
-		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
+		self.mesh.position = vmath.vec3(self.gameObject.transform.position)
+		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.transform.rotation))
 		self.mesh.scale = vmath.vec3(self.scale)

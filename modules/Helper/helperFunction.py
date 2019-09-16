@@ -26,43 +26,43 @@ def fromEulerToQuaternion(euler):
 def displayGameObjectTransformSetting(obj, imgui):
 	if obj.parent is not None:
 		# If this object is child of other game object, display it local transform
-		changed, obj.localPosition = imgui.drag_float3(
-			"position", *obj.localPosition, format="%.1f", change_speed = 0.05
+		changed, obj.transform.localPosition = imgui.drag_float3(
+			"position", *obj.transform.localPosition, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update(False)
 
 		# Setting rotation
-		changed, obj.localRotation = imgui.drag_float3(
-			"rotation", *obj.localRotation, format="%.2f", change_speed = 0.5
+		changed, obj.transform.localRotation = imgui.drag_float3(
+			"rotation", *obj.transform.localRotation, format="%.2f", change_speed = 0.5
 		)				
 		if changed:
 			obj.update(False)
 
 		# Setting scale
-		changed, obj.localScale = imgui.drag_float3(
-			"scale", *obj.localScale, format="%.1f", change_speed = 0.05
+		changed, obj.transform.localScale = imgui.drag_float3(
+			"scale", *obj.transform.localScale, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update()
 	else:
 		# Else display it global transform
-		changed, obj.position = imgui.drag_float3(
-			"position", *obj.position, format="%.1f", change_speed = 0.05
+		changed, obj.transform.position = imgui.drag_float3(
+			"position", *obj.transform.position, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update()
 
 			# Setting rotation
-		changed, obj.rotation = imgui.drag_float3(
-			"rotation", *obj.rotation, format="%.2f", change_speed = 0.5
+		changed, obj.transform.rotation = imgui.drag_float3(
+			"rotation", *obj.transform.rotation, format="%.2f", change_speed = 0.5
 		)				
 		if changed:
 			obj.update()
 
 			# Setting scale
-		changed, obj.scale = imgui.drag_float3(
-			"scale", *obj.scale, format="%.1f", change_speed = 0.05
+		changed, obj.transform.scale = imgui.drag_float3(
+			"scale", *obj.transform.scale, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update()

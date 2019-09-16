@@ -12,22 +12,22 @@ class Mesh(Component):
 		self.showOnInspector("testAttr")
 
 		self.mesh = pyxie.figure(meshData)
-		self.mesh.position = vmath.vec3(self.gameObject.position)
-		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
-		self.mesh.scale = vmath.vec3(self.gameObject.scale)
+		self.mesh.position = vmath.vec3(self.gameObject.transform.position)
+		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.transform.rotation))
+		self.mesh.scale = vmath.vec3(self.gameObject.transform.scale)
 	
 	def update(self):
 		super().update()
 		self.__autoReTransform()
 	
 	def __autoReTransform(self):
-		self.mesh.position = vmath.vec3(self.gameObject.position)
-		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
-		self.mesh.scale = vmath.vec3(self.gameObject.scale)
+		self.mesh.position = vmath.vec3(self.gameObject.transform.position)
+		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.transform.rotation))
+		self.mesh.scale = vmath.vec3(self.gameObject.transform.scale)
 	
 	def replaceMesh(self, meshData):
 		self.meshName = meshData
 		self.mesh = pyxie.figure(meshData)
-		self.mesh.position = vmath.vec3(self.gameObject.position)
-		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.rotation))
-		self.mesh.scale = vmath.vec3(self.gameObject.scale)
+		self.mesh.position = vmath.vec3(self.gameObject.transform.position)
+		self.mesh.rotation = vmath.quat(helperFunction.fromEulerToQuaternion(self.gameObject.transform.rotation))
+		self.mesh.scale = vmath.vec3(self.gameObject.transform.scale)
