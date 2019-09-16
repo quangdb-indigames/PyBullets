@@ -112,7 +112,7 @@ class IngameSceneEditor():
 			imgui.end_group()
 
 			for component in obj.components:
-				HELPER.displayComponentSetting(imgui, component)
+				HELPER.displayComponentSetting(imgui, component, obj)
 		else:
 			self.openInspector = False
 		imgui.end()
@@ -168,7 +168,6 @@ class IngameSceneEditor():
 		childMesh = childObj.getComponent(Mesh)
 		self.showcase.add(childMesh.mesh)
 		childObj.setParent(player)
-		print("Child of child object: ", len(childObj.childs))
 		return player
 
 

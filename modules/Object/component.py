@@ -20,3 +20,6 @@ class Component():
 		"""
 		self.listAttrToShow.append(attr)
 		
+	def removeSelf(self):
+		del self.gameObject
+		del self.listAttrToShow

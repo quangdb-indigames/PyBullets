@@ -53,26 +53,32 @@ def displayGameObjectTransformSetting(obj, imgui):
 		if changed:
 			obj.update()
 
-			# Setting rotation
+		# Setting rotation
 		changed, obj.transform.rotation = imgui.drag_float3(
 			"rotation", *obj.transform.rotation, format="%.2f", change_speed = 0.5
 		)				
 		if changed:
 			obj.update()
 
-			# Setting scale
+		# Setting scale
 		changed, obj.transform.scale = imgui.drag_float3(
 			"scale", *obj.transform.scale, format="%.1f", change_speed = 0.05
 		)
 		if changed:
 			obj.update()
 
-def displayComponentSetting(imgui, component):
+def displayComponentSetting(imgui, component, obj):
 	imgui.begin_group()
 	try:
 		component_layer, visible = imgui.collapsing_header(component.__class__.__name__, True)
 	except:
 		print("Layer creating failed!")
+	imgui.same_line(spacing=100)
+	if imgui.begin_menu('*', True):
+		if imgui.menu_item("Remove component")[0]:
+			obj.removeComponent(component)
+		imgui.end_menu()
+
 	if component_layer:
 		for displayAttr in component.listAttrToShow:
 			try:

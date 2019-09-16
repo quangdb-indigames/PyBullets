@@ -60,6 +60,13 @@ class GameObject():
 				return component
 		return None
 	
+	def removeComponent(self, component):
+		if isinstance(component, Transform):
+			print("You can't remove transform of game object")
+		else:
+			component.removeSelf()
+			self.components.remove(component)
+	
 	def __autoTransformBaseParent(self, updateSelf):
 		if self.parent is None:
 			return
