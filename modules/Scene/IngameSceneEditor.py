@@ -122,15 +122,18 @@ class IngameSceneEditor():
 
 	def displayGameObjectOnHierarchy(self, imgui, obj):
 		if len(obj.childs) <= 0:
+			imgui.indent(5)
 			if imgui.selectable(obj.name)[1]:
 				self.currentControlObject = obj
+			imgui.unindent(5)
 		elif len(obj.childs) > 0:
+			imgui.unindent(5)
 			object_layer = imgui.tree_node(obj.name, flags= imgui.TREE_NODE_OPEN_ON_ARROW)
 			clicked = imgui.is_item_clicked()
-
-			if object_layer:
-				if clicked:
-					self.currentControlObject = obj
+			if clicked:
+				self.currentControlObject = obj
+			
+			if object_layer:			
 				for childObj in obj.childs:
 					self.displayGameObjectOnHierarchy(imgui, childObj)
 				imgui.tree_pop()
@@ -168,6 +171,15 @@ class IngameSceneEditor():
 		childMesh = childObj.getComponent(Mesh)
 		self.showcase.add(childMesh.mesh)
 		childObj.setParent(player)
+
+		# Testing
+		childObj2 = Player("asset/cube_02", "ChildObj_2")
+		childObj2.setParent(player)
+
+		child_depth2 = Player("asset/cube_02", "Child_depth2_01")
+		child_depth2.setParent(childObj2)
+		child_depth2 = Player("asset/cube_02", "Child_depth2_02")
+		child_depth2.setParent(childObj2)
 		return player
 
 
