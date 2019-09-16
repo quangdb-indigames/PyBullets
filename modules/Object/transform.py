@@ -22,12 +22,12 @@ class Transform(Component):
 	def update(self):
 		super().update()
 	
-	def fromWorldToLocalTransform(self, childWorldTransform):
+	def fromWorldToLocalTransform(self, childTransform):
 		"""
 		Calculate local transform relate to this transform
 			Parameters
 			----------
-			childWorldTransform: Transform
+			childTransform: Transform
 				transform of the object need to calculate
 			Returns
 			-------
@@ -35,7 +35,7 @@ class Transform(Component):
 		"""
 		# From global transform -> local transform
 		# Local<T> = inverse.Global<T, Parent> * Global<T, Child>
-		childWorldMatrix = self.constructMatrixTransform(childWorldTransform.position, childWorldTransform.rotation, childWorldTransform.scale)
+		childWorldMatrix = self.constructMatrixTransform(childTransform.position, childTransform.rotation, childTransform.scale)
 
 		parentWorldInverseMatrix = self.constructMatrixTransform(self.position, self.rotation, self.scale)
 		parentWorldInverseMatrix = vmath.inverse(parentWorldInverseMatrix)

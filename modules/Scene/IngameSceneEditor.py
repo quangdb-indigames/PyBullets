@@ -81,11 +81,7 @@ class IngameSceneEditor():
 		imgui.set_next_window_size(100, 150)
 		imgui.begin("Hierachy")
 		for obj in self.currentSceneObjects:
-			try:
-				if imgui.selectable(obj.name)[1]:
-					self.currentControlObject = obj
-			except:
-				pass
+			self.displayGameObjectOnHierarchy(imgui, obj)
 		imgui.end()
 
 		if self.currentControlObject != None and isinstance(self.currentControlObject, GameObject):
@@ -121,6 +117,24 @@ class IngameSceneEditor():
 			self.openInspector = False
 		imgui.end()
 #endregion
+
+#region HIERARCHY implement
+
+	def displayGameObjectOnHierarchy(self, imgui, obj):
+		if len(obj.childs) <= 0:
+			if imgui.selectable(obj.name)[1]:
+				self.currentControlObject = obj
+		elif len(obj.childs) > 0:
+			object_layer = imgui.tree_node(obj.name, flags= imgui.TREE_NODE_OPEN_ON_ARROW)
+			clicked = imgui.is_item_clicked()
+
+			if object_layer:
+				if clicked:
+					self.currentControlObject = obj
+				for childObj in obj.childs:
+					self.displayGameObjectOnHierarchy(imgui, childObj)
+				imgui.tree_pop()
+#endregion
 	
 #region Player Setting implement
 	def playerSetting(self):
@@ -151,10 +165,10 @@ class IngameSceneEditor():
 
 		# player.addColider("asset/cube_02", self.showcase)
 		childObj = Player("asset/cube_02", "ChildObj", [1.0, 1.0, 0.0])
-		self.currentSceneObjects.append(childObj)
 		childMesh = childObj.getComponent(Mesh)
 		self.showcase.add(childMesh.mesh)
 		childObj.setParent(player)
+		print("Child of child object: ", len(childObj.childs))
 		return player
 
 

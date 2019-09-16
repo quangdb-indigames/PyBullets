@@ -34,7 +34,7 @@ class GameObject():
 				pass
 
 	def setParent(self, newParent):
-		# try:
+		try:
 			newParent.childs.append(self)
 			self.parent = newParent
 
@@ -42,8 +42,8 @@ class GameObject():
 			self.transform.localPosition = localPosition
 			self.transform.localRotation = localRotation
 			self.transform.localScale = localScale
-		# except AttributeError:
-		# 	print("New parent is not of type GameObject!!!")
+		except AttributeError:
+			print("New parent is not of type GameObject!!!")
 	
 	def removeParent(self):
 		self.parent.childs.remove(self)
@@ -68,11 +68,6 @@ class GameObject():
 		self.transform.position = position
 		self.transform.rotation = rotation
 		self.transform.scale = scale
-
-		print("This child global transform is: \n")
-		print("Position: ", position)
-		print("Rotation: ", rotation)
-		print("Scale: ", scale)
 		
 
 		
