@@ -4,19 +4,19 @@ def fromEulerToQuaternion(euler):
 	# XZY
 	x, y, z = math.radians(euler[0] % 360), math.radians(euler[1] % 360), math.radians(euler[2] % 360)
 
-	cz = math.cos(z * 0.5)
-	sz = math.sin(z * 0.5)
-	cy = math.cos(y * 0.5)
-	sy = math.sin(y * 0.5)
-	cx = math.cos(x * 0.5)
-	sx = math.sin(x * 0.5)
+	cy = math.cos(z * 0.5)
+	sy = math.sin(z * 0.5)
+	cp = math.cos(y * 0.5)
+	sp = math.sin(y * 0.5)
+	cr = math.cos(x * 0.5)
+	sr = math.sin(x * 0.5)
 
 	q = list()
-		
-	qx = sx * cy * cz - cx * sy * sz		# x
-	qy = cx * cy * sz + sx * sy * cz		# y
-	qz = cx * sy * cz - sx * cy * sz		# z
-	qw = cx * cy * cz + sx * sy * sz		# w
+	qw = cy * cp * cr + sy * sp * sr
+	qx = cy * cp * sr - sy * sp * cr
+	qy = sy * cp * sr + cy * sp * cr
+	qz = sy * cp * cr - cy * sp * sr
+
 	q.append(qx)
 	q.append(qy)
 	q.append(qz)
@@ -30,14 +30,14 @@ def displayGameObjectTransformSetting(obj, imgui):
 			"position", *obj.transform.localPosition, format="%.1f", change_speed = 0.05
 		)
 		if changed:
-			obj.update(False)
+			obj.update()
 
 		# Setting rotation
 		changed, obj.transform.localRotation = imgui.drag_float3(
 			"rotation", *obj.transform.localRotation, format="%.2f", change_speed = 0.5
 		)				
 		if changed:
-			obj.update(False)
+			obj.update()
 
 		# Setting scale
 		changed, obj.transform.localScale = imgui.drag_float3(

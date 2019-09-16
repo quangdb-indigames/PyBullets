@@ -42,10 +42,6 @@ class GameObject():
 			self.transform.localPosition = localPosition
 			self.transform.localRotation = localRotation
 			self.transform.localScale = localScale
-
-			print("Child object local position: ", localPosition)
-			print("Child object local rotation: ", localRotation)
-			print("Child object local scale: ", localScale)
 		# except AttributeError:
 		# 	print("New parent is not of type GameObject!!!")
 	
@@ -67,6 +63,16 @@ class GameObject():
 	def __autoTransformBaseParent(self, updateSelf):
 		if self.parent is None:
 			return
+		
+		position, rotation, scale = self.parent.transform.fromLocalToWorldTransform(self.transform)
+		self.transform.position = position
+		self.transform.rotation = rotation
+		self.transform.scale = scale
+
+		print("This child global transform is: \n")
+		print("Position: ", position)
+		print("Rotation: ", rotation)
+		print("Scale: ", scale)
 		
 
 		

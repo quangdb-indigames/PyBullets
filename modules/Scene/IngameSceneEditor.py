@@ -144,13 +144,13 @@ class IngameSceneEditor():
 		except:
 			pass
 
-		player = Player("asset/Sapphiart", "Sapphi-chan", rotation=[45.0, 90.0, 0.0])
+		player = Player("asset/cube_02", "Sapphi-chan", rotation=[45.0, 90.0, 0.0])
 		self.currentSceneObjects.append(player)
 		playerMesh = player.getComponent(Mesh)
 		self.showcase.add(playerMesh.mesh)
 
 		# player.addColider("asset/cube_02", self.showcase)
-		childObj = Player("asset/Sapphiart", "ChildObj", [1.0, 1.0, 0.0])
+		childObj = Player("asset/cube_02", "ChildObj", [1.0, 1.0, 0.0])
 		self.currentSceneObjects.append(childObj)
 		childMesh = childObj.getComponent(Mesh)
 		self.showcase.add(childMesh.mesh)
