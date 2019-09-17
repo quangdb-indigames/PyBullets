@@ -79,7 +79,7 @@ class IngameSceneEditor():
 
 #region HIERACHY
 		imgui.set_next_window_size(100, 150)
-		imgui.begin("Hierachy")
+		imgui.begin("Hierarchy")
 		for obj in self.currentSceneObjects:
 			self.displayGameObjectOnHierarchy(imgui, obj)
 		imgui.end()
@@ -122,12 +122,9 @@ class IngameSceneEditor():
 
 	def displayGameObjectOnHierarchy(self, imgui, obj):
 		if len(obj.childs) <= 0:
-			imgui.indent(5)
 			if imgui.selectable(obj.name)[1]:
 				self.currentControlObject = obj
-			imgui.unindent(5)
-		elif len(obj.childs) > 0:
-			imgui.unindent(5)
+		else:
 			object_layer = imgui.tree_node(obj.name, flags= imgui.TREE_NODE_OPEN_ON_ARROW)
 			clicked = imgui.is_item_clicked()
 			if clicked:
@@ -170,16 +167,22 @@ class IngameSceneEditor():
 		childObj = Player("asset/cube_02", "ChildObj", [1.0, 1.0, 0.0])
 		childMesh = childObj.getComponent(Mesh)
 		self.showcase.add(childMesh.mesh)
-		childObj.setParent(player)
+		childObj.transform.setParent(player)
 
 		# Testing
 		childObj2 = Player("asset/cube_02", "ChildObj_2")
-		childObj2.setParent(player)
+		childObj2.transform.setParent(player)
 
 		child_depth2 = Player("asset/cube_02", "Child_depth2_01")
-		child_depth2.setParent(childObj2)
+		child_depth2.transform.setParent(childObj2)
 		child_depth2 = Player("asset/cube_02", "Child_depth2_02")
-		child_depth2.setParent(childObj2)
+		child_depth2.transform.setParent(childObj2)
+
+		# Testing #3
+		childObj3 = Player("asset/cube_02", "ChildObj_3")
+		childObj3.transform.setParent(player)
+		child_depth2_03 = Player("asset/cube_02", "Child_depth2_03")
+		child_depth2_03.transform.setParent(childObj3)
 		return player
 
 

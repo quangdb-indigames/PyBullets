@@ -21,6 +21,37 @@ class Transform(Component):
 	
 	def update(self):
 		super().update()
+		self.__autoTransformBaseParent()
+	
+	def setParent(self, newParent):
+		try:
+			newParent.childs.append(self.gameObject)
+			self.gameObject.parent = newParent
+
+			localPosition, localRotation, localScale = newParent.transform.fromWorldToLocalTransform(self)
+			self.localPosition = localPosition
+			self.localRotation = localRotation
+			self.localScale = localScale
+		except AttributeError:
+			print("New parent is not of type GameObject!!!")
+
+	def removeParent(self):
+		self.gameObject.parent.childs.remove(self.gameObject)
+		self.gameObject.parent = None
+
+		# Local transform
+		self.localPosition = self.position
+		self.localScale = self.scale
+		self.localRotation = self.rotation
+
+	def __autoTransformBaseParent(self):
+		if self.gameObject.parent is None:
+			return
+
+		position, rotation, scale = self.gameObject.parent.transform.fromLocalToWorldTransform(self)
+		self.position = position
+		self.rotation = rotation
+		self.scale = scale
 	
 	def fromWorldToLocalTransform(self, childTransform):
 		"""
