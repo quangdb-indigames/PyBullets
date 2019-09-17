@@ -14,6 +14,10 @@ from modules.Object.game_object import GameObject
 from modules.Player.player import Player
 from modules.Object.mesh import Mesh
 from os import walk
+import os
+import pickle
+import dill
+from modules.Scene.HierarchyWindow import HierarchyWindow
 
 class IngameSceneEditor():
 	def __init__(self):
@@ -33,13 +37,14 @@ class IngameSceneEditor():
 		self.model.position = vmath.vec3(0,0,0)
 		self.showcase.add(self.model)
 		self.currentControlObject = None
-		self.openInspector = False
+
+		self.hierarchy = HierarchyWindow()
 
 		f = []
-		for (dirpath, dirnames, filenames) in walk("modules"):
-			f.extend(dirnames)
-			f.extend(filenames)
-			break
+		for (dirpath, dirnames, filenames) in walk("asset"):
+			for file in filenames:
+				if file.endswith(".pyxf"):
+					print(os.path.join(dirpath, file))
 
 	def update(self, touch):
 		curX, curY, press = self.__processCursorInformation(touch)
@@ -78,14 +83,7 @@ class IngameSceneEditor():
 #endregion
 
 #region HIERACHY
-		imgui.set_next_window_size(100, 150)
-		imgui.begin("Hierarchy")
-		for obj in self.currentSceneObjects:
-			self.displayGameObjectOnHierarchy(imgui, obj)
-		imgui.end()
-
-		if self.currentControlObject != None and isinstance(self.currentControlObject, GameObject):
-			self.displayObjectInspector(self.currentControlObject, imgui)
+		self.hierarchy.update(self.currentSceneObjects)
 #endregion
 
 #region TEST WINDOW
@@ -96,45 +94,6 @@ class IngameSceneEditor():
 		imgui.render()
 		self.impl.render(imgui.get_draw_data())
 		self.cam.shoot(self.showcase, clearColor=False)
-
-#region INSPECTOR
-	def displayObjectInspector(self, obj, imgui):
-		imgui.set_next_window_size(150, 100)
-		imgui.set_next_window_position(5, 160)
-		expanded, opened = imgui.begin("Inspector", True)
-		if opened:
-			imgui.begin_group()
-			imgui.bullet_text(obj.name)
-
-			transform_layer, visible = imgui.collapsing_header("Transform", True)
-			if transform_layer:
-				HELPER.displayGameObjectTransformSetting(obj, imgui)
-			imgui.end_group()
-
-			for component in obj.components:
-				HELPER.displayComponentSetting(imgui, component, obj)
-		else:
-			self.openInspector = False
-		imgui.end()
-#endregion
-
-#region HIERARCHY implement
-
-	def displayGameObjectOnHierarchy(self, imgui, obj):
-		if len(obj.childs) <= 0:
-			if imgui.selectable(obj.name)[1]:
-				self.currentControlObject = obj
-		else:
-			object_layer = imgui.tree_node(obj.name, flags= imgui.TREE_NODE_OPEN_ON_ARROW)
-			clicked = imgui.is_item_clicked()
-			if clicked:
-				self.currentControlObject = obj
-			
-			if object_layer:			
-				for childObj in obj.childs:
-					self.displayGameObjectOnHierarchy(imgui, childObj)
-				imgui.tree_pop()
-#endregion
 	
 #region Player Setting implement
 	def playerSetting(self):
@@ -144,7 +103,6 @@ class IngameSceneEditor():
 			player = HELPER.getObjectOfType(Player, self.currentSceneObjects)
 			self.currentControlObject = player
 			if imgui.button("Create"):
-				print(imgui.core.get_style())
 				player = self.createNewPlayer()
 				self.currentControlObject = player
 		imgui.end_group()
@@ -170,21 +128,24 @@ class IngameSceneEditor():
 		childObj.transform.setParent(player)
 
 		# Testing
-		childObj2 = Player("asset/cube_02", "ChildObj_2")
-		childObj2.transform.setParent(player)
+		childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
+		childObj2.transform.setParent(childObj)
+		childMesh2 = childObj2.getComponent(Mesh)
+		self.showcase.add(childMesh2.mesh)
 
-		child_depth2 = Player("asset/cube_02", "Child_depth2_01")
-		child_depth2.transform.setParent(childObj2)
-		child_depth2 = Player("asset/cube_02", "Child_depth2_02")
-		child_depth2.transform.setParent(childObj2)
+		# serializeObj = dill.dumps(Player)
+		# serializeObj_02 = dill.dumps(player)
+		# print(serializeObj)
+		# self.currentSceneObjects.remove(player)
+		# player.destroy()
 
-		# Testing #3
-		childObj3 = Player("asset/cube_02", "ChildObj_3")
-		childObj3.transform.setParent(player)
-		child_depth2_03 = Player("asset/cube_02", "Child_depth2_03")
-		child_depth2_03.transform.setParent(childObj3)
+		# # Demo testing #2
+		# className = dill.loads(serializeObj)
+		# secondPlayer = className("asset/cube_02", "ChildObj", [1.0, 1.0, 0.0])
+		# self.currentSceneObjects.append(secondPlayer)
+		# playerMesh = secondPlayer.getComponent(Mesh)
+		# self.showcase.add(playerMesh.mesh)
 		return player
-
 
 #endregion			
 

@@ -44,3 +44,15 @@ class GameObject():
 		else:
 			component.removeSelf()
 			self.components.remove(component)
+	
+	def destroy(self):
+		for component in self.components:
+			component.removeSelf()
+		del self.components
+
+		for child in self.childs:
+			child.destroy()
+		del self.childs
+		del self.transform
+		del self.parent
+		del self.name
