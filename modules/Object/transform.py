@@ -91,18 +91,27 @@ class Transform(Component):
 		"""
 		# From local -> global
 		# Global<T> = Global<T, parent> * Local<T, child>
-		childLocalMatrix = self.constructMatrixTransform(childTransform.localPosition, childTransform.localRotation, childTransform.localScale)
-		parentWorldMatrix = self.constructMatrixTransform(self.position, self.rotation, self.scale)
+		cMT, cMR, cMS = self.constructMatrixTransform(childTransform.localPosition, childTransform.localRotation, childTransform.localScale, 2)
+		MT, MR, MS = self.constructMatrixTransform(self.position, self.rotation, self.scale, 2)
 
-		childGlobalMatrix = vmath.mul(parentWorldMatrix, childLocalMatrix)
+		# Testing
+		parentMatrix = self.constructMatrixTransform(self.position, self.rotation, self.scale)
+		childTrans = vmath.mul(parentMatrix, cMT)
+
+		pTrans = vmath.mul(MT, MR)
+		cTrans = vmath.mul(cMT, cMR)
+		temp = vmath.mul(MS, cMS)
+		childGlobalMatrix = vmath.mul(pTrans, cTrans)
+		childGlobalMatrix = vmath.mul(childGlobalMatrix, temp)
 
 		# Then decomposing the matrix transform into global position, global rotation, global scale
 		position, rotation, scale =  self.decomposeMatrixTransform(childGlobalMatrix)
+		position = self.decomposeMatrixTranslate(childTrans)
 
 		return position, rotation, scale
 
 
-	def constructMatrixTransform(self, position, rotation, scale):
+	def constructMatrixTransform(self, position, rotation, scale, result=1):
 		"""
 		Construct a 4x4 matrix transform from position, rotation, scale
 			Parameters
@@ -117,33 +126,22 @@ class Transform(Component):
 			-------
 			A 4x4 matrix transform (in vmath.mat44)
 		"""
-		# matrixScale = vmath.mat_scale(vmath.vec3(scale), 3)
-		matrixScale = vmath.mat44(
-			[
-				scale[0], 0, 0, 0,
-				0, scale[1], 0, 0,
-				0, 0, scale[2], 0
-			]
-		)
+		matrixScale = vmath.mat_scale(4, vmath.vec3(scale))
 
-		# matrixTranslation = vmath.mat_translation(vmath.vec3(position))
-		matrixTranslation = vmath.mat44(
-			[
-				1, 0, 0, 0,
-				0, 1, 0, 0,
-				0, 0, 1, 0,
-				position[0], position[1], position[2], 1
-			]
-		)
+		matrixTranslation = vmath.mat_translation(vmath.vec3(position))
+		
 		radX = math.radians(rotation[0] % 360)
 		radY = math.radians(rotation[1] % 360)
 		radZ = math.radians(rotation[2] % 360)
 		matrixRotation = vmath.mat_rotationZYX(4, [radX, radY, radZ])
 
-		matrixTransform = vmath.mul(matrixScale, matrixTranslation)
+		matrixTransform = vmath.mul(matrixTranslation, matrixRotation)
 
-		matrixTransform = vmath.mul(matrixTransform, matrixRotation)
-		return matrixTransform
+		matrixTransform = vmath.mul(matrixTransform, matrixScale)
+		if result==2:
+			return matrixTranslation, matrixRotation, matrixScale
+		else:
+			return matrixTransform
 
 	def decomposeMatrixTransform(self, matrixTransform):
 		"""
@@ -166,7 +164,6 @@ class Transform(Component):
 		# |m03  m13  m23  m33|
 
 		# position will be [m03, m13, m23]
-		row = matrixTransform.getRow(0)
 		position = [matrixTransform.m30, matrixTransform.m31, matrixTransform.m32]
 
 		# scale will be
@@ -200,4 +197,7 @@ class Transform(Component):
 
 		return position, rotation, scale
 
+	def decomposeMatrixTranslate(self, matrixTransform):
+		position = [matrixTransform.m30, matrixTransform.m31, matrixTransform.m32]
+		return position
 

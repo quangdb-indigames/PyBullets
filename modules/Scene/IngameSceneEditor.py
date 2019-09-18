@@ -25,7 +25,7 @@ class IngameSceneEditor():
 		
 		self.cam = pyxie.camera('ingame-editor-cam')
 		self.cam.lockon = False
-		self.cam.position = vmath.vec3(0.0, -3.0, 3)
+		self.cam.position = vmath.vec3(0.0, -6.0, 6)
 		# self.cam.target = vmath.vec3(0.0, 0.0, 0.0)
 		self.cam.farPlane = 100.0
 		self.camPreviousAngle = [0,0,0]
@@ -127,11 +127,11 @@ class IngameSceneEditor():
 		self.showcase.add(childMesh.mesh)
 		childObj.transform.setParent(player)
 
-		# Testing
-		childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
-		childObj2.transform.setParent(childObj)
-		childMesh2 = childObj2.getComponent(Mesh)
-		self.showcase.add(childMesh2.mesh)
+		# # Testing
+		# childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
+		# childObj2.transform.setParent(childObj)
+		# childMesh2 = childObj2.getComponent(Mesh)
+		# self.showcase.add(childMesh2.mesh)
 
 		# serializeObj = dill.dumps(Player)
 		# serializeObj_02 = dill.dumps(player)
