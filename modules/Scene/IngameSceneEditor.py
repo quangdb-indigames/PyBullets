@@ -37,6 +37,18 @@ class IngameSceneEditor():
 		self.model.position = vmath.vec3(0,0,0)
 		self.showcase.add(self.model)
 		self.currentControlObject = None
+		testMat = vmath.mat44([
+			1, 2, 3, 4,
+			5, 6, 7, 8,
+			9, 10, 11, 12,
+			13, 14, 15, 16
+		])
+		print(testMat)
+		print("Under here: ")
+		print(testMat.m00, testMat.m10, testMat.m20, testMat.m30)
+		print(testMat.m01, testMat.m11, testMat.m21, testMat.m31)
+		print(testMat.m02, testMat.m12, testMat.m22, testMat.m32)
+		print(testMat.m03, testMat.m13, testMat.m23, testMat.m33)
 
 		self.hierarchy = HierarchyWindow()
 
@@ -127,11 +139,11 @@ class IngameSceneEditor():
 		self.showcase.add(childMesh.mesh)
 		childObj.transform.setParent(player)
 
-		# # Testing
-		# childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
-		# childObj2.transform.setParent(childObj)
-		# childMesh2 = childObj2.getComponent(Mesh)
-		# self.showcase.add(childMesh2.mesh)
+		# Testing
+		childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
+		childObj2.transform.setParent(childObj)
+		childMesh2 = childObj2.getComponent(Mesh)
+		self.showcase.add(childMesh2.mesh)
 
 		# serializeObj = dill.dumps(Player)
 		# serializeObj_02 = dill.dumps(player)
