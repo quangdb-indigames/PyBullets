@@ -1,5 +1,5 @@
 [
-    [1, 7],
+    [1, 11],
 
     {
         "cellPath": "mapfiles/cell_01_01.json"
@@ -27,5 +27,21 @@
 
     {
         "cellPath": "mapfiles/cell_01_07.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_08.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_09.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_10.json"
+    },
+
+    {
+        "cellPath": "mapfiles/cell_01_11.json"
     }
 ]

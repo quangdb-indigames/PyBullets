@@ -34,10 +34,10 @@
             "name": "bulleye",
             "type": "CYLINDER",
             "local_pos": [0.0, 8.0, 0.5],
-            "local_scale": [1, 2.5, 1],
+            "local_scale": [2, 2.5, 2],
             "local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
             "col_pos": [0, 0, 0],
-            "col_radius": 0.6,
+            "col_radius": 2,
             "col_height": 1,
             "canCollider": "TRUE",
             "isStatic": 1

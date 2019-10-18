@@ -30,7 +30,7 @@ cam = pyxie.camera('maincam')
 cam.lockon = True
 cam.position = vmath.vec3(0.0, -3.0, 3)
 cam.target = vmath.vec3(0.0, 0.0, 0.0)
-cam.farPlane = 100.0
+cam.farPlane = 250.0
 cam.fieldOfView = 80
 
 showcase = pyxie.showcase("case01")
@@ -50,7 +50,24 @@ level = MapLevel('mapfiles/map.json', showcase, collision_objects)
 # plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
 
 p.setAdditionalSearchPath(pybullet_data.getDataPath())
-p.setGravity(0, 0, -50)
+p.setGravity(0, 0, -10)
+FPS = 60
+p.setPhysicsEngineParameter(
+	fixedTimeStep=1.0 / FPS,
+	numSolverIterations=12,
+	numSubSteps=3,  # 8 is smooth but not sure abt performance. Lowered substeps actually raise fps
+	contactBreakingThreshold=0.00000002,
+	useSplitImpulse=0,
+	splitImpulsePenetrationThreshold=9999999,
+	enableConeFriction=0,
+	deterministicOverlappingPairs=0,
+	solverResidualThreshold=0.1,
+)
+
+stepdt = 1 / FPS
+totalstepdt = 0
+p.setRealTimeSimulation(0)
+ddt = 1.0 / FPS
 
 cameraDistance = 10
 cameraYaw = 0
@@ -58,8 +75,14 @@ cameraPitch = -35
 
 isRotate = False
 while(1):
-	p.stepSimulation()
-	time.sleep(1. / 240.)
+	if totalstepdt > stepdt:
+		p.stepSimulation()
+		while totalstepdt > stepdt:
+			totalstepdt -= stepdt
+	
+	dt = pyxie.getElapsedTime()
+	totalstepdt += dt
+	
 	touch = pyxie.singleTouch()
 	player.update(touch, collision_objects)
 	cam.shoot(showcase)

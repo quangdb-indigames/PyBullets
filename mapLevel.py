@@ -26,7 +26,7 @@ class MapLevel():
 	
 	def __checkPlayerPosition(self, player):
 		curCell_Y = player.model.position.y / 30
-		if curCell_Y >= self.length[1] - 4:
+		if curCell_Y >= self.length[1] - 7:
 			# Auto spawn new map when player reach certain cell
 			base_pos = [0, self.length[1] * 30, 0]
 			for i in range(1, len(self.cell_list_data)):

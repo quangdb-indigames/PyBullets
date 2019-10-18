@@ -26,6 +26,7 @@ class Player():
 		self.col_scale = col_scale
 		self.col_local_pos = col_local_pos
 		self.lastContactId = -1
+		self.firstClick = False
 
 		# Create box collider		
 		self.camFollow = camfollow
@@ -36,7 +37,8 @@ class Player():
 		# Should this player have camera follow behind?
 		if self.camFollow:
 			self.cam = cam
-			self.camDis = [0.0, -3.0, 1]
+			self.camDis = [0.0, -2.0, 3]
+		print("Created")
 	
 	def update(self, touch, obj_list):
 		self.__autoRePosition()
@@ -50,9 +52,9 @@ class Player():
 
 	def __createColBox(self, mass):
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
-		self.colId = p.createCollisionShape(p.GEOM_CAPSULE)
+		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.2)
 		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
-		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=1, restitution=0.4)
+		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.4)
 
 	def __onClick(self, touch):
 		if touch:
@@ -81,9 +83,11 @@ class Player():
 			self.cam.target = vmath.vec3(pos)
 	
 	def __onClickExcute(self):
-		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 5000, 10000]
-		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+		if not self.firstClick:
+			self.firstClick = True
+			pos, orn = p.getBasePositionAndOrientation(self.colId)
+			force = [0, -self.camDis[1] * 10000 * 2, 20000 * 1.2]
+			p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
 
 	def __autoReRotation(self, rot_quat):
 		fin_quat = vmath.mul(vmath.quat(rot_quat), vmath.quat(self.base_rotate))
@@ -103,5 +107,5 @@ class Player():
 	def onContact(self, obj):
 		print("Contact with ", obj.colId)
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 10000, 50000]
+		force = [0, -self.camDis[1] * 2000, 8000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
