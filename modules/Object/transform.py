@@ -66,7 +66,7 @@ class Transform(Component):
 		self.position = position
 		self.rotation = rotation
 		self.scale = scale
-		self.shear - shear
+		self.shear = shear
 	
 	def fromWorldToLocalTransform(self, childTransform):
 		"""
@@ -130,6 +130,9 @@ class Transform(Component):
 
 		# Then decomposing the matrix transform into global position, global rotation, global scale
 		position, rotation, scale, shear =  self.decomposeMatrixTransformationType(childGlobalMatrix)
+
+		print(self.gameObject.name, "'s child rotation is: ", rotation)
+		print(self.gameObject.name, "'s child scale is: ", scale)
 		
 		# testPos, testRot, testScale = self.decomposeMatrixTransformationType(childGlobalMatrix)
 
@@ -260,6 +263,7 @@ class Transform(Component):
 
 		# Compute X scale and normalize first col
 		scaleX = vmath.length(vmath.vec3(col_0))
+
 		col_0 = vmath.normalize(vmath.vec3(col_0))
 		col_0 = [col_0.x, col_0.y, col_0.z]
 
@@ -285,13 +289,13 @@ class Transform(Component):
 		col_2 = [col_2.x, col_2.y, col_2.z]
 
 		# Check determinant
-		# if vmath.dot(col_0, vmath.cross(col_1, col_2)) < 0:
-		# 	scaleX *= -1
-		# 	scaleY *= -1
-		# 	scaleZ *= -1
-		# 	col_0 = [-col_0[0], -col_0[1], -col_0[2]]
-		# 	col_1 = [-col_1[0], -col_1[1], -col_1[2]]
-		# 	col_2 = [-col_2[0], -col_2[1], -col_2[2]]
+		if vmath.dot(vmath.vec3(col_0), vmath.cross(vmath.vec3(col_1) , vmath.vec3(col_2))) < 0:
+			scaleX *= -1
+			scaleY *= -1
+			scaleZ *= -1
+			col_0 = [-col_0[0], -col_0[1], -col_0[2]]
+			col_1 = [-col_1[0], -col_1[1], -col_1[2]]
+			col_2 = [-col_2[0], -col_2[1], -col_2[2]]
 		
 		scale = [scaleX, scaleY, scaleZ]
 
@@ -305,6 +309,30 @@ class Transform(Component):
 		
 		rotation = [math.degrees(rotationX), math.degrees(rotationY), math.degrees(rotationZ)]
 
+		# matrixShearXY = vmath.mat44([
+		# 	1, 0, 0, 0,
+		# 	shear_xy, 1, 0, 0,
+		# 	0, 0, 1, 0,
+		# 	0, 0, 0, 1
+		# ])
+		# matrixShearXZ = vmath.mat44([
+		# 	1, 0, 0, 0,
+		# 	0, 1, 0, 0,
+		# 	shear_xz, 0, 1, 0,
+		# 	0, 0, 0, 1
+		# ])
+
+		# matrixShearYZ = vmath.mat44([
+		# 	1, 0, 0, 0,
+		# 	0, 1, 0, 0,
+		# 	0, shear_yz, 1, 0,
+		# 	0, 0, 0, 1
+		# ])
+
+		# shear = vmath.mul(matrixShearYZ, matrixShearXZ)
+		# shear = vmath.mul(shear, matrixShearXY)
+		# shear = vmath.mul(shear, matrixShearXY)
+
 		shear = vmath.mat44([
 			1, 0, 0, 0,
 			shear_xy, 1, 0, 0,
@@ -312,6 +340,7 @@ class Transform(Component):
 			0, 0, 0, 1
 		])
 
+		print(self.gameObject.name, " pos is: ", position)
 		return position, rotation, scale, shear
 
 

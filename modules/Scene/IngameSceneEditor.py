@@ -140,7 +140,7 @@ class IngameSceneEditor():
 		childObj.transform.setParent(player)
 
 		# Testing
-		childObj2 = Player("asset/cube_02", "ChildObj_2", [1.0, 0.0, 0.0])
+		childObj2 = Player("asset/cube_02", "ChildObj_2", position=[1.0, 0.0, 1.0], rotation=[0.0, 30.0, 0.0])
 		childObj2.transform.setParent(childObj)
 		childMesh2 = childObj2.getComponent(Mesh)
 		self.showcase.add(childMesh2.mesh)
