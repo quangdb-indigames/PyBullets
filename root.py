@@ -34,11 +34,11 @@ cam.farPlane = 250.0
 cam.fieldOfView = 80
 
 showcase = pyxie.showcase("case01")
-scale = vmath.vec3(1, 1, 1)
+scale = vmath.vec3(10, 10, 10)
 position = vmath.vec3(0.0, -10.0, 3)
 player_col_scale = [0.1, 0.1, 1]
 player_col_local_pos = [0.0, 0.0, 1.1]
-player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Sapphiart', cam, player_col_scale, player_col_local_pos, True)
+player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/kuma_stand', cam, player_col_scale, player_col_local_pos, True)
 p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 showcase.add(player.model)
 collision_objects[str(player.colId)] = player

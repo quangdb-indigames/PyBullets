@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author/>
+      <authoring_tool>FBX COLLADA exporter</authoring_tool>
+      <comments/>
+    </contributor>
+    <created>2019-10-18T08:43:18Z</created>
+    <keywords/>
+    <modified>2019-10-18T08:43:18Z</modified>
+    <revision/>
+    <subject/>
+    <title/>
+    <unit meter="0.010000" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_images>
+    <image id="psdFileTex7-image" name="psdFileTex7">
+      <init_from>file://C:/Users/dinh.vu/Desktop/Kuma/Object/Coin.psd</init_from>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="Coin1" name="Coin1">
+      <instance_effect url="#Coin1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="Coin1-fx" name="Coin1">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <texture texture="psdFileTex7-image" texcoord="CHANNEL0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU sid="wrapU0">TRUE</wrapU>
+                    <wrapV sid="wrapV0">TRUE</wrapV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="Coin-lib" name="CoinMesh">
+      <mesh>
+        <source id="Coin-POSITION">
+          <float_array id="Coin-POSITION-array" count="24">
+-0.500000 -0.500000 0.500000
+0.500000 -0.500000 0.500000
+-0.500000 0.500000 0.500000
+0.500000 0.500000 0.500000
+-0.500000 0.500000 -0.500000
+0.500000 0.500000 -0.500000
+-0.500000 -0.500000 -0.500000
+0.500000 -0.500000 -0.500000
+</float_array>
+          <technique_common>
+            <accessor source="#Coin-POSITION-array" count="8" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Coin-Normal0">
+          <float_array id="Coin-Normal0-array" count="108">
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#Coin-Normal0-array" count="36" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Coin-UV0">
+          <float_array id="Coin-UV0-array" count="48">
+0.641642 0.341549
+0.491619 0.507391
+0.984375 0.974156
+0.851114 0.817543
+0.491619 0.015625
+0.508381 0.840895
+0.508381 0.186992
+0.015625 0.491619
+0.508381 0.320253
+0.984375 0.320253
+0.984375 0.341549
+0.984375 0.817543
+0.508381 0.341549
+0.508381 0.817543
+0.984375 0.186992
+0.851114 0.341549
+0.015625 0.015625
+0.015625 0.507391
+0.491619 0.491619
+0.984375 0.840895
+0.491619 0.983386
+0.508381 0.974156
+0.015625 0.983386
+0.641642 0.817543
+</float_array>
+          <technique_common>
+            <accessor source="#Coin-UV0-array" count="24" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Coin-VERTEX">
+          <input semantic="POSITION" source="#Coin-POSITION"/>
+        </vertices>
+        <triangles count="12" material="Coin1">
+          <input semantic="VERTEX" offset="0" source="#Coin-VERTEX"/>
+          <input semantic="NORMAL" offset="1" source="#Coin-Normal0"/>
+          <input semantic="TEXCOORD" offset="2" set="0" source="#Coin-UV0"/>
+          <p> 3 0 20 2 1 22 0 2 17 3 3 20 0 4 17 1 5 1 3 6 21 5 7 5 2 8 2 2 9 2 5 10 5 4 11 19 7 12 7 6 13 16 4 14 4 7 15 7 4 16 4 5 17 18 1 18 9 0 19 8 6 20 6 1 21 9 6 22 6 7 23 14 3 24 3 1 25 15 5 26 11 1 27 15 7 28 10 5 29 11 2 30 23 6 31 12 0 32 0 6 33 12 2 34 23 4 35 13</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="coin" name="coin">
+      <node name="Coin" id="Coin" layer="Coins" sid="Coin">
+        <matrix sid="matrix">0.707107 0.707107 0.000000 0.000000 -0.707107 0.707107 0.000000 6.155839 0.000000 0.000000 0.279964 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <instance_geometry url="#Coin-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Coin1" target="#Coin1"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra>
+          <technique profile="FCOLLADA">
+            <visibility>1.000000</visibility>
+          </technique>
+        </extra>
+      </node>
+      <extra>
+        <technique profile="MAX3D">
+          <frame_rate>24.000000</frame_rate>
+        </technique>
+        <technique profile="FCOLLADA">
+          <start_time>0.041667</start_time>
+          <end_time>8.333333</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#coin"/>
+  </scene>
+</COLLADA>

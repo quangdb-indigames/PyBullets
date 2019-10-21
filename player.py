@@ -19,8 +19,8 @@ class Player():
 		self.model.scale = scale
 		self.base_rotate = base_rotate
 		self.model.rotation = vmath.quat(self.base_rotate)
-		self.currentState = STATUS_STAY
-		self.model.connectAnimator(pyxie.ANIMETION_SLOT_A0, STATE_MOTION[self.currentState])
+		# self.currentState = STATUS_STAY
+		# self.model.connectAnimator(pyxie.ANIMETION_SLOT_A0, STATE_MOTION[self.currentState])
 		# Create collider box to simulate physics on bullet physics
 		self.colId = 0
 		self.col_scale = col_scale
@@ -33,7 +33,8 @@ class Player():
 
 		self.__createColBox(10)
 		self.tapped = False
-
+		self.dragged = False
+		
 		# Should this player have camera follow behind?
 		if self.camFollow:
 			self.cam = cam
@@ -42,7 +43,7 @@ class Player():
 	
 	def update(self, touch, obj_list):
 		self.__autoRePosition()
-		self.model.step()
+		# self.model.step()
 		if not self.camFollow:
 			return
 		self.__onClick(touch)
@@ -52,19 +53,23 @@ class Player():
 
 	def __createColBox(self, mass):
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
-		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.2)
+		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.3)
 		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
 		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.4)
 
 	def __onClick(self, touch):
 		if touch:
-			if touch['is_holded'] and not self.tapped:
+			if touch['is_holded'] and not self.tapped and not self.firstClick:
+				print("Tapped")
 				self.tapped = True
 				self.__onClickExcute()
+			elif touch['is_holded'] and self.firstClick and not self.dragged:
+				self.__onDragExcute(touch)
 			else:
 				self.tapped = False
 		else:
 			self.tapped = False
+			self.dragged = False
 	
 	def __autoRePosition(self):
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
@@ -88,6 +93,18 @@ class Player():
 			pos, orn = p.getBasePositionAndOrientation(self.colId)
 			force = [0, -self.camDis[1] * 10000 * 2, 20000 * 1.2]
 			p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+	
+	def __onDragExcute(self, touch):
+		direction = touch['cur_x'] - touch['org_x']
+		if abs(direction) < 1:
+			return
+		if direction < 0:
+			force = [-5000, 0, 0]
+		else:
+			force = [5000, 0, 0]
+		pos, orn = p.getBasePositionAndOrientation(self.colId)
+		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+		self.dragged = True
 
 	def __autoReRotation(self, rot_quat):
 		fin_quat = vmath.mul(vmath.quat(rot_quat), vmath.quat(self.base_rotate))
