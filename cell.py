@@ -67,9 +67,11 @@ class Cell():
 		obj_col_scale = obj['col_scale']
 		quat = obj['local_quaternion']
 		isStatic = obj['isStatic']
-		chair = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat, isStatic)
-		self.showcase.add(chair.model)
-		return chair
+		box = Cube(pos, scale, model_path, obj_col_scale, obj_col_pos, quat, isStatic)
+		if 'canCollider' in obj and obj['canCollider'] == "TRUE":
+			self.collision_objects[str(box.colId)] = box
+		self.showcase.add(box.model)
+		return box
 
 	def __spawnCylinderTypeObject(self, obj):
 		pos = [self.position[0] + obj['local_pos'][0], self.position[1] + obj['local_pos'][1], self.position[2] + obj['local_pos'][2]]
@@ -81,7 +83,7 @@ class Cell():
 		col_height = obj['col_height']
 		isStatic = obj['isStatic']
 		cylinder = Cylinder(pos, scale, model_path, col_rad, col_height, obj_col_pos, quat, isStatic)
-		if obj['canCollider'] == "TRUE":
+		if 'canCollider' in obj and obj['canCollider'] == "TRUE":
 			self.collision_objects[str(cylinder.colId)] = cylinder
 		self.showcase.add(cylinder.model)
 		return cylinder
