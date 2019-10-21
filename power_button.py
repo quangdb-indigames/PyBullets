@@ -1,6 +1,7 @@
 from pyxie.apputil import graphicsHelper
 import pyxie
 import pyvmath as vmath
+import json
 class PowerButton():
 	def __init__(self, pos, scale, filePath, showcase, camera, ui_manager):
 		self.position = pos
@@ -12,20 +13,33 @@ class PowerButton():
 		self.model.position = vmath.vec3(self.position)
 		self.ui_manager = ui_manager
 		
-		self.baseFarMultiply = 1.0
-		self.baseHighMultiply = 1.0
+		self.GetData()
 		self.tapped = False
 
 		self.showcase.add(self.model)
+	
+	def GetData(self):
+		data = None
+		try:
+			with open("data/player/data.json", "r") as f:
+				data = json.load(f)
+		except:
+			print("File not exist")
+		if data:
+			self.baseFarMultiply = data['baseFarMultiply']
+			self.baseHighMultiply = data['baseHighMultiply']
+		else:
+			self.baseFarMultiply = 1.0
+			self.baseHighMultiply = 1.0
 	
 	def Update(self, touch):
 		self.CheckOnClick(touch)
 	
 	def CheckOnClick(self, touch):
 		if touch:
-			if touch['is_holded'] and not self.tapped:
-				self.tapped = True
-				if self.CheckInside(touch):
+			if touch['is_holded']:			
+				if self.CheckInside(touch) and not self.tapped:
+					self.tapped = True
 					self.ui_manager.isTouchOnUI = True
 					self.OnClickExcute()
 			else:
@@ -41,7 +55,14 @@ class PowerButton():
 		return False
 	
 	def OnClickExcute(self):
-		pass
+		self.baseFarMultiply += 0.2
+		self.baseHighMultiply += 0.05
+		data = {
+			'baseFarMultiply': self.baseFarMultiply,
+			'baseHighMultiply': self.baseHighMultiply
+		}
+		with open("data/player/data.json", "w") as f:
+			json.dump(data, f, indent=4, separators=(',', ': '))
 
 	
 	def ConvertScreenToWorld(self, scrx, scry, worldz, cam, w=None, h=None):

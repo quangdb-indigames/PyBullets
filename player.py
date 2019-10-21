@@ -6,6 +6,7 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
+import json
 STATUS_STAY = 0
 STATUS_WALK = 1
 STATUS_RUN = 2
@@ -91,9 +92,24 @@ class Player():
 	def __onClickExcute(self):
 		if not self.firstClick:
 			self.firstClick = True
+			data = self.GetData()
+			if data:
+				farMul, highMul = data['baseFarMultiply'], data['baseHighMultiply']
+			else:
+				farMul, highMul = 1.0, 1.0
+			print("Multi: ", farMul)
 			pos, orn = p.getBasePositionAndOrientation(self.colId)
-			force = [0, -self.camDis[1] * 10000 * 2, 20000 * 1.2]
+			force = [0, -self.camDis[1] * 10000 * farMul, 20000 * highMul]
 			p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+		
+	def GetData(self):
+		data = None
+		try:
+			with open("data/player/data.json", "r") as f:
+				data = json.load(f)
+		except:
+			print("File not exist")
+		return data
 	
 	def __onDragExcute(self, touch):
 		direction = touch['cur_x'] - touch['org_x']
