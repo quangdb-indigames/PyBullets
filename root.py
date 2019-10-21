@@ -6,6 +6,8 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
+from power_button import PowerButton
+from ui_manager import UIManager
 
 from player import Player
 from mapLevel import MapLevel
@@ -43,6 +45,19 @@ p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, resti
 showcase.add(player.model)
 collision_objects[str(player.colId)] = player
 
+#UI showcase and camera
+UIshowcase = pyxie.showcase("UIcase")
+UIcam = pyxie.camera('UIcamera')
+UIcam.orthographicProjection = True
+UIcam.position = vmath.vec3(0.0, 0, 100)
+UIcam.target = vmath.vec3(0,0,0)
+UI_manager = UIManager()
+
+#Create button
+pos = [100,200,1]
+scale = [100, 50]
+powerUpButton = PowerButton(pos, scale, 'asset/cube_01', UIshowcase, UIcam, UI_manager)
+
 # Create map
 level = MapLevel('mapfiles/map.json', showcase, collision_objects)
 
@@ -75,6 +90,7 @@ cameraPitch = -35
 
 isRotate = False
 while(1):
+	
 	if totalstepdt > stepdt:
 		p.stepSimulation()
 		while totalstepdt > stepdt:
@@ -84,8 +100,13 @@ while(1):
 	totalstepdt += dt
 	
 	touch = pyxie.singleTouch()
-	player.update(touch, collision_objects)
+	if not touch or not touch['is_holded']:
+		UI_manager.isTouchOnUI = False
+	powerUpButton.Update(touch)
+	player.update(touch, collision_objects, UI_manager)
+	
 	cam.shoot(showcase)
+	UIcam.shoot(UIshowcase, clearColor=False)
 	level.update(touch, player)
 	pyxie.swap()
 

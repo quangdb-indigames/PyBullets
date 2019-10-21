@@ -41,12 +41,13 @@ class Player():
 			self.camDis = [0.0, -2.0, 3]
 		print("Created")
 	
-	def update(self, touch, obj_list):
+	def update(self, touch, obj_list, ui_manager=None):
 		self.__autoRePosition()
 		# self.model.step()
 		if not self.camFollow:
 			return
-		self.__onClick(touch)
+		if not ui_manager or ui_manager.isTouchOnUI == False:
+			self.__onClick(touch)
 		
 		self.checkContact(obj_list)
 
@@ -122,7 +123,7 @@ class Player():
 					self.onContact(obj)
 	
 	def onContact(self, obj):
-		print("Contact with ", obj.colId)
+		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 4000, 15000]
+		force = [0, -self.camDis[1] * 8000, 15000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
