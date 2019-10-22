@@ -40,7 +40,6 @@ class Player():
 		if self.camFollow:
 			self.cam = cam
 			self.camDis = [0.0, -2.0, 3]
-		print("Created")
 	
 	def update(self, touch, obj_list, ui_manager=None):
 		self.__autoRePosition()
@@ -141,5 +140,5 @@ class Player():
 	def onContact(self, obj):
 		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 8000, 15000]
+		force = [0, -self.camDis[1] * 8000, 5000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)

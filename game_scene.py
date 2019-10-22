@@ -7,6 +7,7 @@ import pyvmath as vmath
 import math
 import random
 from power_button import PowerButton
+from replay_button import ReplayButton
 from ui_manager import UIManager
 
 from player import Player
@@ -14,6 +15,9 @@ from mapLevel import MapLevel
 import json
 class GameScene:
 	def __init__(self):
+		self.Init()
+
+	def Init(self):
 		# Setting Pybullet
 		p.connect(p.DIRECT)
 		p.setGravity(0, 0, -10)
@@ -34,20 +38,24 @@ class GameScene:
 		self.totalstepdt = 0
 		p.setRealTimeSimulation(0)
 		ddt = 1.0 / FPS
+
+		#Init state
+		self.state = "Initing"
+		self.initDt = 0
 		
 		# Create dictionary to store collision
 		self.collision_objects = dict()
 
 		# PYXIE SETTING REGION
 		# =============================================================================================================
-		self.cam = pyxie.camera('maincam')
+		self.cam = pyxie.camera('maincam###' + str(random.randrange(1000)))
 		self.cam.lockon = True
 		self.cam.position = vmath.vec3(0.0, -3.0, 3)
 		self.cam.target = vmath.vec3(0.0, 0.0, 0.0)
 		self.cam.farPlane = 250.0
 		self.cam.fieldOfView = 80
 
-		self.showcase = pyxie.showcase("case01")
+		self.showcase = pyxie.showcase("case01##" + str(random.randrange(1000)))
 		scale = vmath.vec3(10, 10, 10)
 		position = vmath.vec3(0.0, -10.0, 3)
 		player_col_scale = [0.1, 0.1, 1]
@@ -58,8 +66,8 @@ class GameScene:
 		self.collision_objects[str(self.player.colId)] = self.player
 
 		#UI showcase and camera
-		self.UIshowcase = pyxie.showcase("UIcase")
-		self.UIcam = pyxie.camera('UIcamera')
+		self.UIshowcase = pyxie.showcase("UIcase##" + str(random.randrange(1000)))
+		self.UIcam = pyxie.camera('UIcamera##' + str(random.randrange(1000)))
 		self.UIcam.orthographicProjection = True
 		self.UIcam.position = vmath.vec3(0.0, 0, 100)
 		self.UIcam.target = vmath.vec3(0,0,0)
@@ -70,6 +78,11 @@ class GameScene:
 		scale = [100, 50]
 		self.powerUpButton = PowerButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
 
+		#Create button
+		pos = [-100,200,1]
+		scale = [100, 50]
+		self.replayButton = ReplayButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
+
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
 
@@ -79,6 +92,17 @@ class GameScene:
 		self.cameraPitch = -35
 	
 	def Update(self):
+		if self.state == "Reset":
+			self.ResetScene()
+			return
+
+		if self.state == "Initing":
+			self.initDt += 1
+			if self.initDt > 10:
+				self.initDt = 0
+				self.state = "Playing"
+			return
+
 		if self.totalstepdt > self.stepdt:
 			p.stepSimulation()
 		while self.totalstepdt > self.stepdt:
@@ -90,7 +114,12 @@ class GameScene:
 		touch = pyxie.singleTouch()
 		if not touch or not touch['is_holded']:
 			self.UI_manager.isTouchOnUI = False
+
+		#UI update
 		self.powerUpButton.Update(touch)
+		self.replayButton.Update(touch)
+
+		#Other objects update
 		self.player.update(touch, self.collision_objects, self.UI_manager)
 		
 		self.cam.shoot(self.showcase)
@@ -104,7 +133,15 @@ class GameScene:
 
 	def OnExit(self):
 		p.disconnect()
+		del self.cam
+		del self.showcase
+		del self.UIcam
+		del self.UIshowcase
+		self.__dict__.clear()
 
 	def ResetScene(self):
 		self.OnExit()
-		self.__init__()
+		self.Init()
+	
+	def SetState(self, state):
+		self.state = state
