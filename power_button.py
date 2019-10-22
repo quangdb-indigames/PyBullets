@@ -56,7 +56,7 @@ class PowerButton():
 	
 	def OnClickExcute(self):
 		self.baseFarMultiply += 0.2
-		self.baseHighMultiply += 0.05
+		self.baseHighMultiply += 0.01
 		data = {
 			'baseFarMultiply': self.baseFarMultiply,
 			'baseHighMultiply': self.baseHighMultiply

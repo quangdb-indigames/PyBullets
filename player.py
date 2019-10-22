@@ -113,7 +113,7 @@ class Player():
 	
 	def __onDragExcute(self, touch):
 		direction = touch['cur_x'] - touch['org_x']
-		if abs(direction) < 1:
+		if abs(direction) < 0.2:
 			return
 		if direction < 0:
 			force = [-5000, 0, 0]

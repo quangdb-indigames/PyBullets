@@ -63,8 +63,6 @@ level = MapLevel('mapfiles/map.json', showcase, collision_objects)
 
 # plane_colId = p.createCollisionShape(p.GEOM_PLANE)
 # plane_boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = plane_colId, basePosition= [0, 0, 0]);
-
-p.setAdditionalSearchPath(pybullet_data.getDataPath())
 p.setGravity(0, 0, -10)
 FPS = 60
 p.setPhysicsEngineParameter(

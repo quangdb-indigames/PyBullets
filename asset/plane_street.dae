@@ -6,9 +6,9 @@
       <authoring_tool>FBX COLLADA exporter</authoring_tool>
       <comments/>
     </contributor>
-    <created>2019-10-21T01:43:30Z</created>
+    <created>2019-10-21T10:10:33Z</created>
     <keywords/>
-    <modified>2019-10-21T01:43:30Z</modified>
+    <modified>2019-10-21T10:10:33Z</modified>
     <revision/>
     <subject/>
     <title/>
@@ -17,7 +17,7 @@
   </asset>
   <library_images>
     <image id="psdFileTex13-image" name="psdFileTex13">
-      <init_from>file://D:/Betakkuma/PyBullet/asset/Betakkuma/road_tex.png</init_from>
+      <init_from>file://D:\Betakkuma\PyBullet\asset\Betakkuma\road_tex.png</init_from>
     </image>
   </library_images>
   <library_materials>
