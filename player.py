@@ -8,9 +8,10 @@ import math
 import random
 import json
 STATUS_STAY = 0
-STATUS_WALK = 1
-STATUS_RUN = 2
-STATE_MOTION = {STATUS_STAY:"Sapphiart@idle", STATUS_WALK:"Sapphiart@walk", STATUS_RUN:"Sapphiart@running"}
+STATUS_FLY = 1
+STATE_MOTION = {STATUS_FLY:"asset/Betakkuma/Bettakuma@Fly"}
+TRANSIT_TIME = 0.2
+MOVING_DISTANCE = 0.5
 
 class Player():
 	def __init__(self, pos, scale, base_rotate, modelPath, cam, col_scale, col_local_pos = [0,0,0], camfollow = False):
@@ -20,7 +21,8 @@ class Player():
 		self.model.scale = scale
 		self.base_rotate = base_rotate
 		self.model.rotation = vmath.quat(self.base_rotate)
-		# self.currentState = STATUS_STAY
+		self.currentState = STATUS_STAY
+		self.nextState = STATUS_STAY
 		# self.model.connectAnimator(pyxie.ANIMETION_SLOT_A0, STATE_MOTION[self.currentState])
 		# Create collider box to simulate physics on bullet physics
 		self.colId = 0
@@ -28,6 +30,7 @@ class Player():
 		self.col_local_pos = col_local_pos
 		self.lastContactId = -1
 		self.firstClick = False
+		self.transitTime = 0.0
 
 		# Create box collider		
 		self.camFollow = camfollow
@@ -42,8 +45,9 @@ class Player():
 			self.camDis = [0.0, -2.0, 3]
 	
 	def update(self, touch, obj_list, ui_manager=None):
+		self.__TransitMotion()
 		self.__autoRePosition()
-		# self.model.step()
+		self.model.step()
 		if not self.camFollow:
 			return
 		if not ui_manager or ui_manager.isTouchOnUI == False:
@@ -90,6 +94,8 @@ class Player():
 	
 	def __onClickExcute(self):
 		if not self.firstClick:
+			self.__ChangeStatus(STATUS_FLY)	
+
 			self.firstClick = True
 			data = self.GetData()
 			if data:
@@ -142,3 +148,23 @@ class Player():
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
 		force = [0, -self.camDis[1] * 8000, 5000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+
+	def __ChangeStatus(self, status):
+		if status != self.currentState and status != self.nextState:
+			self.nextState = status
+			self.model.connectAnimator(pyxie.ANIMETION_SLOT_A1, STATE_MOTION[status])
+			self.transitTime = 0.0
+	
+	def __TransitMotion(self):
+		if self.currentState != self.nextState:
+			if self.transitTime >= TRANSIT_TIME:
+				self.currentState = self.nextState
+				self.model.connectAnimator(pyxie.ANIMETION_SLOT_A0, STATE_MOTION[self.currentState])
+				self.model.connectAnimator(pyxie.ANIMETION_SLOT_A1)
+				return
+
+			self.transitTime += pyxie.getElapsedTime()
+			if self.transitTime > TRANSIT_TIME:
+				self.transitTime = TRANSIT_TIME
+			self.model.setBlendingWeight(pyxie.ANIMETION_PART_A, self.transitTime / TRANSIT_TIME)
+			print("Transit")
