@@ -53,7 +53,7 @@ class GameScene:
 		player_col_scale = [0.1, 0.1, 1]
 		player_col_local_pos = [0.0, 0.0, 1.1]
 		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/kuma_stand', self.cam, player_col_scale, player_col_local_pos, True)
-		p.changeDynamics(player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
+		p.changeDynamics(self.player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 		self.showcase.add(self.player.model)
 		self.collision_objects[str(self.player.colId)] = self.player
 
@@ -68,7 +68,7 @@ class GameScene:
 		#Create button
 		pos = [100,200,1]
 		scale = [100, 50]
-		powerUpButton = PowerButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
+		self.powerUpButton = PowerButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
