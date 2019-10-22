@@ -42,7 +42,7 @@ class Player():
 		# Should this player have camera follow behind?
 		if self.camFollow:
 			self.cam = cam
-			self.camDis = [0.0, -2.0, 3]
+			self.camDis = [0.0, -3.0, 2]
 	
 	def update(self, dt, touch, obj_list, ui_manager=None):
 		self.__TransitMotion(dt)
@@ -148,7 +148,7 @@ class Player():
 	def onContact(self, obj):
 		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 10000, 8000]
+		force = [0, -self.camDis[1] * 10000, 12000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
 
 	def __ChangeStatus(self, status):

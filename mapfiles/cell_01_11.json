@@ -28,19 +28,41 @@
             "col_scale": [0.5, 0.5, 1],
             "isStatic": 0
         },
-
-        {
-            "path": "asset/bullseye",
-            "name": "bulleye",
-            "type": "CYLINDER",
-            "local_pos": [0.0, 8.0, 0.5],
-            "local_scale": [2, 2.5, 2],
-            "local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
-            "col_pos": [0, 0, 0],
-            "col_radius": 2,
-            "col_height": 1,
-            "canCollider": "TRUE",
-            "isStatic": 1
-        }
+		
+		{
+			"path": "asset/Trees_Object",
+			"name": "Trees",
+			"type": "BOX",
+			"local_pos": [-10, -10.0, 0.05],
+			"local_scale": [1.5, 1.5, 1.5],
+			"local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
+			"col_pos": [0, 0, 4.5],
+			"col_scale": [1.8, 1.8, 4.5],
+			"isStatic": 1
+		},
+		
+		{
+			"path": "asset/Trees_Object",
+			"name": "Trees",
+			"type": "BOX",
+			"local_pos": [10, 7.0, 0.05],
+			"local_scale": [1.5, 1.5, 1.5],
+			"local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
+			"col_pos": [0, 0, 4.5],
+			"col_scale": [1.8, 1.8, 4.5],
+			"isStatic": 1
+		},
+		
+		{
+			"path": "asset/Trees_Object",
+			"name": "Trees",
+			"type": "BOX",
+			"local_pos": [-12, 4.0, 0.05],
+			"local_scale": [1.5, 1.5, 1.5],
+			"local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
+			"col_pos": [0, 0, 4.5],
+			"col_scale": [1.8, 1.8, 4.5],
+			"isStatic": 1
+		}
     ]
 }

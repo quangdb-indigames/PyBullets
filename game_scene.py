@@ -9,6 +9,7 @@ import random
 from power_button import PowerButton
 from replay_button import ReplayButton
 from ui_manager import UIManager
+from cannon import Cannon
 
 from player import Player
 from mapLevel import MapLevel
@@ -57,7 +58,7 @@ class GameScene:
 
 		self.showcase = pyxie.showcase("case01##" + str(random.randrange(1000)))
 		scale = vmath.vec3(10, 10, 10)
-		position = vmath.vec3(0.0, -10.0, 0.1)
+		position = vmath.vec3(0.0, -10.0, 0.75)
 		player_col_scale = [0.1, 0.1, 1]
 		player_col_local_pos = [0.0, 0.0, 1.1]
 		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Betakkuma/betakkuma', self.cam, player_col_scale, player_col_local_pos, True)
@@ -86,10 +87,17 @@ class GameScene:
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
 
+		# Create cannon
+		pos = vmath.vec3(0,-11,0.5)
+		scale = vmath.vec3(1,1,1)
+		rotation = vmath.quat([ 0, 0.7071068, 0.7071068, 0 ])
+		self.cannon = Cannon(pos, scale, rotation, 'asset/Betakkuma/Canon_object', self.showcase)
+
 		#DEBUG ON GUI MODE
 		self.cameraDistance = 10
 		self.cameraYaw = 0
 		self.cameraPitch = -35
+		
 	
 	def Update(self):
 		if self.state == "Reset":
@@ -114,6 +122,12 @@ class GameScene:
 		touch = pyxie.singleTouch()
 		if not touch or not touch['is_holded']:
 			self.UI_manager.isTouchOnUI = False
+
+		#Cannon
+		# quat = self.cannon.model.rotation
+		# dQuat = vmath.quat_rotationZ(0.1)
+		# rotQuat = vmath.mul(quat, dQuat)
+		# self.cannon.model.rotation = rotQuat
 
 		#UI update
 		self.powerUpButton.Update(touch)
