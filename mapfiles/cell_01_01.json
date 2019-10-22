@@ -2,7 +2,7 @@
     "position" : [0,0,0],
     "scale": [30, 30, 0.1],
     "background" : {
-        "path": "asset/plane_with_street"
+        "path": "asset/Road_Object"
     },
     "objects": [
         {

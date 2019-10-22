@@ -6,9 +6,9 @@
       <authoring_tool>FBX COLLADA exporter</authoring_tool>
       <comments/>
     </contributor>
-    <created>2019-10-22T02:53:40Z</created>
+    <created>2019-10-22T07:52:14Z</created>
     <keywords/>
-    <modified>2019-10-22T02:53:40Z</modified>
+    <modified>2019-10-22T07:52:14Z</modified>
     <revision/>
     <subject/>
     <title/>
@@ -17,7 +17,7 @@
   </asset>
   <library_images>
     <image id="psdFileTex12-image" name="psdFileTex12">
-      <init_from>file://C:/Users/dinh.vu/Desktop/Kuma/Object/Tree_2.psd</init_from>
+      <init_from>file://D:/Betakkuma/PyBullet/asset/Tree_Tex.png</init_from>
     </image>
   </library_images>
   <library_materials>
@@ -59,10 +59,10 @@
     </effect>
   </library_effects>
   <library_geometries>
-    <geometry id="polySurface2-lib" name="polySurface2Mesh">
+    <geometry id="Tree_node-lib" name="Tree_nodeMesh">
       <mesh>
-        <source id="polySurface2-POSITION">
-          <float_array id="polySurface2-POSITION-array" count="87">
+        <source id="Tree_node-POSITION">
+          <float_array id="Tree_node-POSITION-array" count="87">
 -1.312774 1.821261 1.312774
 1.312775 1.821261 1.312774
 1.312775 1.821261 -1.312774
@@ -81,7 +81,7 @@
 -0.903401 3.582692 -0.904441
 0.543023 4.865483 0.544926
 -0.543021 4.865483 0.544926
-0.000000 6.424875 -0.000000
+0.000000 6.424875 0.000000
 0.543023 4.865483 -0.544926
 -0.543021 4.865483 -0.544926
 -0.250000 -0.001754 0.250000
@@ -94,21 +94,21 @@
 -0.250000 1.799716 -0.250000
 </float_array>
           <technique_common>
-            <accessor source="#polySurface2-POSITION-array" count="29" stride="3">
+            <accessor source="#Tree_node-POSITION-array" count="29" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="polySurface2-Normal0">
-          <float_array id="polySurface2-Normal0-array" count="414">
--0.000000 -1.000000 -0.000000
--0.000000 -1.000000 -0.000000
--0.000000 -1.000000 -0.000000
--0.000000 -1.000000 -0.000000
--0.000000 -1.000000 -0.000000
--0.000000 -1.000000 -0.000000
+        <source id="Tree_node-Normal0">
+          <float_array id="Tree_node-Normal0-array" count="414">
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
+0.000000 -1.000000 0.000000
 0.000000 0.327851 0.944730
 0.000000 0.327851 0.944729
 0.000000 0.327851 0.944730
@@ -187,11 +187,11 @@
 0.000000 -0.880036 -0.474907
 0.000000 -0.880036 -0.474907
 0.000000 -0.880036 -0.474907
--0.477995 -0.878362 0.000000
 -0.477995 -0.878363 0.000000
 -0.477995 -0.878363 0.000000
--0.477995 -0.878362 0.000000
--0.477995 -0.878362 0.000000
+-0.477995 -0.878363 0.000000
+-0.477995 -0.878363 0.000000
+-0.477995 -0.878363 0.000000
 -0.477995 -0.878363 0.000000
 0.000000 -0.769375 0.638797
 0.000000 -0.769375 0.638797
@@ -243,15 +243,15 @@
 -1.000000 0.000000 0.000000
 </float_array>
           <technique_common>
-            <accessor source="#polySurface2-Normal0-array" count="138" stride="3">
+            <accessor source="#Tree_node-Normal0-array" count="138" stride="3">
               <param name="X" type="float"/>
               <param name="Y" type="float"/>
               <param name="Z" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <source id="polySurface2-UV0">
-          <float_array id="polySurface2-UV0-array" count="192">
+        <source id="Tree_node-UV0">
+          <float_array id="Tree_node-UV0-array" count="192">
 0.472281 0.850900
 0.472281 0.616312
 0.706869 0.616312
@@ -350,19 +350,19 @@
 0.491617 0.006070
 </float_array>
           <technique_common>
-            <accessor source="#polySurface2-UV0-array" count="96" stride="2">
+            <accessor source="#Tree_node-UV0-array" count="96" stride="2">
               <param name="S" type="float"/>
               <param name="T" type="float"/>
             </accessor>
           </technique_common>
         </source>
-        <vertices id="polySurface2-VERTEX">
-          <input semantic="POSITION" source="#polySurface2-POSITION"/>
+        <vertices id="Tree_node-VERTEX">
+          <input semantic="POSITION" source="#Tree_node-POSITION"/>
         </vertices>
         <triangles count="46" material="Tree2">
-          <input semantic="VERTEX" offset="0" source="#polySurface2-VERTEX"/>
-          <input semantic="NORMAL" offset="1" source="#polySurface2-Normal0"/>
-          <input semantic="TEXCOORD" offset="2" set="0" source="#polySurface2-UV0"/>
+          <input semantic="VERTEX" offset="0" source="#Tree_node-VERTEX"/>
+          <input semantic="NORMAL" offset="1" source="#Tree_node-Normal0"/>
+          <input semantic="TEXCOORD" offset="2" set="0" source="#Tree_node-UV0"/>
           <p> 0 0 2 2 1 0 1 2 1 2 3 0 0 4 2 3 5 3 9 6 5 10 7 6 8 8 4 8 9 4 10 10 6 11 11 7 1 12 9 4 13 11 0 14 8 4 15 11 1 16 9 5 17 10 5 18 15 1 19 12 6 20 14 1 21 12 2 22 13 6 23 14 7 24 93 2 25 16 3 26 95 2 27 16 7 28 93 6 29 19 4 30 21 3 31 17 0 32 20 3 33 17 4 34 21 7 35 18 17 36 22 16 37 23 18 38 69 16 39 68 19 40 25 18 41 24 19 42 26 20 43 27 18 44 28 20 45 87 17 46 29 18 47 88 11 48 32 12 49 30 8 50 31 12 51 30 11 52 32 14 53 33 15 54 37 12 55 35 14 56 36 12 57 35 15 58 37 13 59 89 10 60 38 9 61 39 13 62 34 10 63 38 13 64 34 15 65 92 10 66 43 5 67 41 11 68 42 5 69 41 10 70 43 4 71 40 14 72 46 11 73 47 5 74 44 14 75 46 5 76 44 6 77 45 6 78 48 7 79 94 15 80 91 6 81 48 15 82 91 14 83 51 10 84 53 7 85 49 4 86 52 10 87 53 15 88 50 7 89 49 17 90 57 8 91 55 16 92 56 8 93 55 17 94 57 9 95 54 19 96 60 16 97 61 8 98 58 19 99 60 8 100 58 12 101 59 12 102 62 13 103 90 20 104 86 12 105 62 20 106 86 19 107 65 17 108 67 13 109 63 9 110 66 17 111 67 20 112 64 13 113 63 25 114 73 21 115 70 26 116 83 26 117 83 21 118 70 22 119 71 23 120 77 28 121 84 24 122 76 24 123 76 28 124 84 27 125 75 24 126 78 27 127 79 22 128 82 26 129 72 22 130 82 27 131 79 25 132 81 23 133 85 21 134 80 23 135 85 25 136 81 28 137 74</p>
         </triangles>
       </mesh>
@@ -370,9 +370,9 @@
   </library_geometries>
   <library_visual_scenes>
     <visual_scene id="Trees_Object" name="Trees_Object">
-      <node name="polySurface2" id="polySurface2" layer="Tree_2" sid="polySurface2">
-        <matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
-        <instance_geometry url="#polySurface2-lib">
+      <node name="Tree_node" id="Tree_node" layer="Tree_2" sid="Tree_node">
+        <matrix sid="matrix">100.000000 0.000000 0.000000 0.000000 0.000000 100.000000 0.000000 0.000000 0.000000 0.000000 100.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <instance_geometry url="#Tree_node-lib">
           <bind_material>
             <technique_common>
               <instance_material symbol="Tree2" target="#Tree2"/>

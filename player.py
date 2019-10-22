@@ -9,7 +9,7 @@ import random
 import json
 STATUS_STAY = 0
 STATUS_FLY = 1
-STATE_MOTION = {STATUS_FLY:"asset/Betakkume/betakkuma@fly01"}
+STATE_MOTION = {STATUS_FLY:"betakkuma@fly02"}
 TRANSIT_TIME = 0.2
 MOVING_DISTANCE = 0.5
 
@@ -59,7 +59,8 @@ class Player():
 	def __createColBox(self, mass):
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
 		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.3)
-		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
+		# start euler = (-45, 0, 0)
+		boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = self.colId, basePosition= col_pos, baseOrientation=[ 0.4871745, 0, 0, -0.8733046 ]);
 		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.4)
 
 	def __onClick(self, touch):
@@ -94,6 +95,7 @@ class Player():
 	
 	def __onClickExcute(self):
 		if not self.firstClick:
+			p.changeDynamics(self.colId, -1, 10)
 			self.__ChangeStatus(STATUS_FLY)	
 
 			self.firstClick = True
@@ -146,7 +148,7 @@ class Player():
 	def onContact(self, obj):
 		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 8000, 5000]
+		force = [0, -self.camDis[1] * 10000, 8000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
 
 	def __ChangeStatus(self, status):
@@ -167,4 +169,3 @@ class Player():
 			if self.transitTime > TRANSIT_TIME:
 				self.transitTime = TRANSIT_TIME
 			self.model.setBlendingWeight(pyxie.ANIMETION_PART_A, self.transitTime / TRANSIT_TIME)
-			print("Transit")

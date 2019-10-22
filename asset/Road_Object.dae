@@ -6,9 +6,9 @@
       <authoring_tool>FBX COLLADA exporter</authoring_tool>
       <comments/>
     </contributor>
-    <created>2019-10-22T02:50:19Z</created>
+    <created>2019-10-22T07:17:16Z</created>
     <keywords/>
-    <modified>2019-10-22T02:50:19Z</modified>
+    <modified>2019-10-22T07:17:16Z</modified>
     <revision/>
     <subject/>
     <title/>
@@ -17,7 +17,7 @@
   </asset>
   <library_images>
     <image id="psdFileTex13-image" name="psdFileTex13">
-      <init_from>file://C:/Users/dinh.vu/Desktop/Kuma/Object/road.psd</init_from>
+      <init_from>file://D:/Betakkuma/PyBullet/asset/road_tex.png</init_from>
     </image>
   </library_images>
   <library_materials>
@@ -140,7 +140,7 @@
   <library_visual_scenes>
     <visual_scene id="Road_Object" name="Road_Object">
       <node name="Road1" id="Road1" sid="Road1">
-        <matrix sid="matrix">1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <matrix sid="matrix">3.350000 0.000000 0.000000 0.000000 0.000000 0.000000 -1.090000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
         <instance_geometry url="#Road1-lib">
           <bind_material>
             <technique_common>
