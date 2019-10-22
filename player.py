@@ -9,7 +9,7 @@ import random
 import json
 STATUS_STAY = 0
 STATUS_FLY = 1
-STATE_MOTION = {STATUS_FLY:"asset/Betakkuma/Bettakuma@Fly"}
+STATE_MOTION = {STATUS_FLY:"asset/Betakkume/betakkuma@fly01"}
 TRANSIT_TIME = 0.2
 MOVING_DISTANCE = 0.5
 
@@ -44,8 +44,8 @@ class Player():
 			self.cam = cam
 			self.camDis = [0.0, -2.0, 3]
 	
-	def update(self, touch, obj_list, ui_manager=None):
-		self.__TransitMotion()
+	def update(self, dt, touch, obj_list, ui_manager=None):
+		self.__TransitMotion(dt)
 		self.__autoRePosition()
 		self.model.step()
 		if not self.camFollow:
@@ -155,7 +155,7 @@ class Player():
 			self.model.connectAnimator(pyxie.ANIMETION_SLOT_A1, STATE_MOTION[status])
 			self.transitTime = 0.0
 	
-	def __TransitMotion(self):
+	def __TransitMotion(self, dt):
 		if self.currentState != self.nextState:
 			if self.transitTime >= TRANSIT_TIME:
 				self.currentState = self.nextState
@@ -163,7 +163,7 @@ class Player():
 				self.model.connectAnimator(pyxie.ANIMETION_SLOT_A1)
 				return
 
-			self.transitTime += pyxie.getElapsedTime()
+			self.transitTime += dt
 			if self.transitTime > TRANSIT_TIME:
 				self.transitTime = TRANSIT_TIME
 			self.model.setBlendingWeight(pyxie.ANIMETION_PART_A, self.transitTime / TRANSIT_TIME)

@@ -60,7 +60,7 @@ class GameScene:
 		position = vmath.vec3(0.0, -10.0, 3)
 		player_col_scale = [0.1, 0.1, 1]
 		player_col_local_pos = [0.0, 0.0, 1.1]
-		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/kuma_stand', self.cam, player_col_scale, player_col_local_pos, True)
+		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Betakkuma/betakkuma', self.cam, player_col_scale, player_col_local_pos, True)
 		p.changeDynamics(self.player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 		self.showcase.add(self.player.model)
 		self.collision_objects[str(self.player.colId)] = self.player
@@ -120,7 +120,7 @@ class GameScene:
 		self.replayButton.Update(touch)
 
 		#Other objects update
-		self.player.update(touch, self.collision_objects, self.UI_manager)
+		self.player.update(dt, touch, self.collision_objects, self.UI_manager)
 		
 		self.cam.shoot(self.showcase)
 		self.UIcam.shoot(self.UIshowcase, clearColor=False)
