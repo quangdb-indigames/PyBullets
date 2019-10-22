@@ -74,14 +74,14 @@ class GameScene:
 		self.UI_manager = UIManager()
 
 		#Create button
-		pos = [100,200,1]
-		scale = [100, 50]
-		self.powerUpButton = PowerButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
+		pos = [140,220,1]
+		scale = [50, 50]
+		self.powerUpButton = PowerButton(pos, scale, 'asset/power_up_button', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		#Create button
-		pos = [-100,200,1]
-		scale = [100, 50]
-		self.replayButton = ReplayButton(pos, scale, 'asset/cube_01', self.UIshowcase, self.UIcam, self.UI_manager)
+		pos = [-120,220,1]
+		scale = [100, 30]
+		self.replayButton = ReplayButton(pos, scale, 'asset/reset_button', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
