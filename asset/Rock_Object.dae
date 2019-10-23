@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+  <asset>
+    <contributor>
+      <author/>
+      <authoring_tool>FBX COLLADA exporter</authoring_tool>
+      <comments/>
+    </contributor>
+    <created>2019-10-23T02:38:40Z</created>
+    <keywords/>
+    <modified>2019-10-23T02:38:40Z</modified>
+    <revision/>
+    <subject/>
+    <title/>
+    <unit meter="0.010000" name="centimeter"/>
+    <up_axis>Y_UP</up_axis>
+  </asset>
+  <library_images>
+    <image id="psdFileTex4-image" name="psdFileTex4">
+      <init_from>file://D:/Betakkuma/PyBullet/asset/Rock_tex.png</init_from>
+    </image>
+  </library_images>
+  <library_materials>
+    <material id="Rock1" name="Rock1">
+      <instance_effect url="#Rock1-fx"/>
+    </material>
+  </library_materials>
+  <library_effects>
+    <effect id="Rock1-fx" name="Rock1">
+      <profile_COMMON>
+        <technique sid="standard">
+          <lambert>
+            <emission>
+              <color sid="emission">0.000000  0.000000 0.000000 1.000000</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0.000000  0.000000 0.000000 1.000000</color>
+            </ambient>
+            <diffuse>
+              <texture texture="psdFileTex4-image" texcoord="CHANNEL0">
+                <extra>
+                  <technique profile="MAYA">
+                    <wrapU sid="wrapU0">TRUE</wrapU>
+                    <wrapV sid="wrapV0">TRUE</wrapV>
+                    <blend_mode>NONE</blend_mode>
+                  </technique>
+                </extra>
+              </texture>
+            </diffuse>
+            <transparent opaque="RGB_ZERO">
+              <color sid="transparent">0.000000  0.000000 0.000000 1.000000</color>
+            </transparent>
+            <transparency>
+              <float sid="transparency">1.000000</float>
+            </transparency>
+          </lambert>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_geometries>
+    <geometry id="Rock_Object-lib" name="Rock_ObjectMesh">
+      <mesh>
+        <source id="Rock_Object-POSITION">
+          <float_array id="Rock_Object-POSITION-array" count="57">
+-0.500000 -0.500000 0.500000
+0.500000 -0.500000 0.500000
+0.500000 0.123267 0.500000
+-0.500000 0.123267 -0.500000
+0.500000 -0.500000 -0.500000
+-0.500000 -0.500000 -0.500000
+-0.500000 0.123267 0.000000
+0.500000 0.123267 0.000000
+0.000000 0.123267 -0.500000
+0.000000 0.123267 0.000000
+0.000000 0.123267 0.500000
+0.000000 0.279272 -0.500000
+0.000000 0.279272 0.000000
+0.500000 0.279272 0.000000
+0.500000 0.279272 -0.500000
+-0.500000 0.279272 0.500000
+0.000000 0.279272 0.500000
+0.000000 0.279272 0.000000
+-0.500000 0.279272 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#Rock_Object-POSITION-array" count="19" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Object-Normal0">
+          <float_array id="Rock_Object-Normal0-array" count="288">
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+0.000000 1.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+0.000000 0.000000 1.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+1.000000 0.000000 0.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+0.000000 0.000000 -1.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+-1.000000 0.000000 0.000000
+</float_array>
+          <technique_common>
+            <accessor source="#Rock_Object-Normal0-array" count="96" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Rock_Object-UV0">
+          <float_array id="Rock_Object-UV0-array" count="112">
+0.945415 0.015625
+0.431390 0.355700
+0.863855 0.015625
+0.693541 0.695784
+0.449482 0.903668
+0.945414 0.447482
+0.223523 0.339613
+0.863856 0.355715
+0.448089 0.679697
+0.223498 0.614845
+0.015625 0.614845
+0.945415 0.463569
+0.223523 0.274767
+0.431397 0.015625
+0.984375 0.687540
+0.467569 0.695784
+0.880553 0.015625
+0.880553 0.463569
+0.223498 0.679688
+0.448089 0.339628
+0.431390 0.679688
+0.880553 0.671453
+0.467569 0.903668
+0.880553 0.223509
+0.675454 0.903668
+0.015625 0.903659
+0.945415 0.671453
+0.655982 0.339628
+0.675454 0.695784
+0.015625 0.695775
+0.984375 0.895424
+0.880553 0.447482
+0.901425 0.903668
+0.945415 0.223509
+0.693541 0.903668
+0.655982 0.274753
+0.448089 0.015625
+0.919513 0.687540
+0.655972 0.355715
+0.431397 0.339613
+0.449482 0.695784
+0.945414 0.239596
+0.241597 0.695784
+0.863856 0.679697
+0.919513 0.895424
+0.241597 0.903668
+0.901425 0.695784
+0.880553 0.239596
+0.223509 0.695775
+0.655972 0.420545
+0.015625 0.274767
+0.863855 0.274753
+0.015625 0.015625
+0.448089 0.420545
+0.223509 0.903659
+0.015625 0.355700
+</float_array>
+          <technique_common>
+            <accessor source="#Rock_Object-UV0-array" count="56" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Rock_Object-VERTEX">
+          <input semantic="POSITION" source="#Rock_Object-POSITION"/>
+        </vertices>
+        <triangles count="32" material="Rock1">
+          <input semantic="VERTEX" offset="0" source="#Rock_Object-VERTEX"/>
+          <input semantic="NORMAL" offset="1" source="#Rock_Object-Normal0"/>
+          <input semantic="TEXCOORD" offset="2" set="0" source="#Rock_Object-UV0"/>
+          <p> 2 0 51 10 1 35 1 2 2 10 3 35 0 4 36 1 5 2 13 6 42 11 7 4 12 8 45 11 9 4 13 10 42 14 11 40 5 12 55 0 13 1 6 14 9 5 15 55 6 16 9 3 17 10 2 18 3 9 19 32 10 20 34 9 21 32 2 22 3 7 23 46 2 24 50 1 25 52 7 26 12 1 27 52 4 28 13 7 29 12 5 30 8 8 31 49 4 32 43 8 33 49 5 34 8 3 35 53 9 36 29 8 37 48 6 38 25 6 39 25 8 40 48 3 41 54 16 42 28 17 43 24 15 44 15 15 45 15 17 46 24 18 47 22 12 48 44 8 49 14 9 50 30 8 51 14 12 52 44 11 53 37 13 54 41 12 55 5 9 56 31 13 57 41 9 58 31 7 59 47 14 60 39 13 61 6 7 62 12 7 63 12 4 64 13 14 65 39 14 66 7 8 67 49 11 68 38 8 69 49 14 70 7 4 71 43 15 72 19 10 73 35 16 74 27 10 75 35 15 76 19 0 77 36 17 78 23 16 79 16 10 80 0 10 81 0 9 82 33 17 83 23 18 84 21 9 85 11 6 86 26 9 87 11 18 88 21 17 89 17 0 90 1 15 91 20 6 92 9 6 93 9 15 94 20 18 95 18</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_visual_scenes>
+    <visual_scene id="Rock_Object" name="Rock_Object">
+      <node name="Rock_Object" id="Rock_Object" layer="Rocks" sid="Rock_Object">
+        <matrix sid="matrix">50.000000 0.000000 0.000000 0.000000 0.000000 50.000000 0.000000 0.000000 0.000000 0.000000 50.000000 0.000000 0.000000 0.000000 0.000000 1.000000</matrix>
+        <instance_geometry url="#Rock_Object-lib">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="Rock1" target="#Rock1"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+        <extra>
+          <technique profile="FCOLLADA">
+            <visibility>1.000000</visibility>
+          </technique>
+        </extra>
+      </node>
+      <extra>
+        <technique profile="MAX3D">
+          <frame_rate>24.000000</frame_rate>
+        </technique>
+        <technique profile="FCOLLADA">
+          <start_time>0.041667</start_time>
+          <end_time>8.333333</end_time>
+        </technique>
+      </extra>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Rock_Object"/>
+  </scene>
+</COLLADA>
