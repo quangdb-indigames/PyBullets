@@ -18,22 +18,10 @@
 		},
 
         {
-            "path": "asset/chair_02",
-            "name": "chair",
-            "type": "BOX",
-            "local_pos": [2, 0, 0.5],
-            "local_scale": [1, 1, 1],
-            "local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
-            "col_pos": [0, 0, 1],
-            "col_scale": [0.5, 0.5, 1],
-            "isStatic": 0
-        },
-
-        {
             "path": "asset/bullseye",
             "name": "bulleye",
             "type": "CYLINDER",
-            "local_pos": [0.0, 8.0, 0.5],
+            "local_pos": [2.0, 8.0, 0.5],
             "local_scale": [2, 2.5, 2],
             "local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
             "col_pos": [0, 0, 0],
