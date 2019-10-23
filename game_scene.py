@@ -10,6 +10,7 @@ from power_button import PowerButton
 from replay_button import ReplayButton
 from ui_manager import UIManager
 from cannon import Cannon
+from finalScene import FinalScene
 
 from player import Player
 from mapLevel import MapLevel
@@ -20,7 +21,7 @@ class GameScene:
 
 	def Init(self):
 		# Setting Pybullet
-		p.connect(p.DIRECT)
+		p.connect(p.GUI)
 		p.setGravity(0, 0, -10)
 		FPS = 60
 		p.setPhysicsEngineParameter(
@@ -85,13 +86,16 @@ class GameScene:
 		self.replayButton = ReplayButton(pos, scale, 'asset/reset_button', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create map
-		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
+		# self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
 
 		# Create cannon
 		pos = vmath.vec3(0,-11,0.5)
 		scale = vmath.vec3(1,1,1)
 		rotation = vmath.quat([ 0, 0.7071068, 0.7071068, 0 ])
 		self.cannon = Cannon(pos, scale, rotation, 'asset/Betakkuma/Canon_object', self.showcase)
+
+		# Create final scene
+		self.finalScene = FinalScene()
 
 		#DEBUG ON GUI MODE
 		self.cameraDistance = 10
@@ -138,12 +142,12 @@ class GameScene:
 		
 		self.cam.shoot(self.showcase)
 		self.UIcam.shoot(self.UIshowcase, clearColor=False)
-		self.level.update(touch, self.player)
+		# self.level.update(touch, self.player)
 
 		playerPos, orn = p.getBasePositionAndOrientation(self.player.colId)
 
 		cameraTargetPosition = playerPos
-		p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
+		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
 
 	def OnExit(self):
 		p.disconnect()
