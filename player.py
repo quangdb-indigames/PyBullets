@@ -42,7 +42,7 @@ class Player():
 		# Should this player have camera follow behind?
 		if self.camFollow:
 			self.cam = cam
-			self.camDis = [0.0, -3.0, 2]
+			self.camDis = [0.0, -3.0, 2.0]
 	
 	def update(self, dt, touch, obj_list, ui_manager=None):
 		self.__TransitMotion(dt)
