@@ -19,6 +19,8 @@ class MapLevel():
 		self.finalScene = FinalScene(self.showcase)
 		self.activatedBodies = []
 		self.activeRange = 2
+		self.firstFinalContact = False
+		self.reduceVelocity = False
 
 	def update(self, touch, player):
 		for cell in self.cell_list:
@@ -44,10 +46,13 @@ class MapLevel():
 			self.collision_objects = []
 			self.finalScene.ToActivateState()
 			self.ResetPlayer(player)
+			player.abortCheckContact = True
 
 		if self.state == STATE_FINAL:
 			self.CheckInsideActiveRange(player)
 			self.finalScene.Update()
+			self.CheckContact(player)
+			self.CheckReduceVelocity(player)
 			# self.StaticMoveOnFinal(player)
 			return
 			
@@ -59,6 +64,13 @@ class MapLevel():
 				cell = Cell(self.cell_list_data[i]['cellPath'], self.showcase, self.collision_objects, base_pos)
 				self.cell_list.append(cell)
 			self.length = [self.length[0], self.length[1] + self.base_length[1]]
+
+	def CheckReduceVelocity(self, player):
+		if self.firstFinalContact and self.reduceVelocity == False:
+			self.reduceVelocity = True
+			linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
+			newVelocity = [linearVelocity[0] / 2, linearVelocity[1] / 2, linearVelocity[2] / 2]
+			p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
 
 	def CheckInsideActiveRange(self, player):
 		player_pos, player_orn = p.getBasePositionAndOrientation(player.colId)
@@ -74,7 +86,15 @@ class MapLevel():
 				p.changeDynamics(bodyUniqueId=bd, linkIndex=-1, mass=1)
 				self.activatedBodies.append(bd)
 				
-			
+	def CheckContact(self, player):
+		aabbMin, aabbMax = p.getAABB(player.colId, -1)
+		collision_list = p.getOverlappingObjects(aabbMin, aabbMax)
+		if collision_list is not None and len(collision_list) != 0:		
+			for objId in collision_list:
+				colId = objId[0]
+				if colId != 0 and colId in self.activatedBodies:
+					self.firstFinalContact = True
+					break
 
 	
 	def CreateACell(self, cellPath, pos):

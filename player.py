@@ -38,6 +38,7 @@ class Player():
 		self.__createColBox(10)
 		self.tapped = False
 		self.dragged = False
+		self.abortCheckContact = False
 		
 		# Should this player have camera follow behind?
 		if self.camFollow:
@@ -53,7 +54,8 @@ class Player():
 		if not ui_manager or ui_manager.isTouchOnUI == False:
 			self.__onClick(touch)
 		
-		self.checkContact(obj_list)
+		if not self.abortCheckContact:
+			self.checkContact(obj_list)
 
 
 	def __createColBox(self, mass):
@@ -61,12 +63,11 @@ class Player():
 		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.3)
 		# start euler = (-45, 0, 0)
 		boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = self.colId, basePosition= col_pos, baseOrientation=[ 0.4871745, 0, 0, -0.8733046 ]);
-		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.9)
+		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.01)
 
 	def __onClick(self, touch):
 		if touch:
 			if touch['is_holded'] and not self.tapped and not self.firstClick:
-				print("Tapped")
 				self.tapped = True
 				self.__onClickExcute()
 			elif touch['is_holded'] and self.firstClick and not self.dragged:
@@ -104,7 +105,6 @@ class Player():
 				farMul, highMul = data['baseFarMultiply'], data['baseHighMultiply']
 			else:
 				farMul, highMul = 1.0, 1.0
-			print("Multi: ", farMul)
 			pos, orn = p.getBasePositionAndOrientation(self.colId)
 			force = [0, -self.camDis[1] * 10000 * farMul, 20000 * highMul]
 			p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
