@@ -61,7 +61,7 @@ class Player():
 		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.3)
 		# start euler = (-45, 0, 0)
 		boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = self.colId, basePosition= col_pos, baseOrientation=[ 0.4871745, 0, 0, -0.8733046 ]);
-		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.4)
+		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.9)
 
 	def __onClick(self, touch):
 		if touch:
