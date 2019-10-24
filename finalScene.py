@@ -8,22 +8,43 @@ import os
 INIT_STATE = "INIT_STATE"
 ACTIVE_STATE = "ACTIVE_STATE"
 class FinalScene:
-	def __init__(self):
+	def __init__(self, showcase):
+		# Variable
 		self.state = INIT_STATE
+		self.showcase = showcase
+		self.sizeMulti = 50
+
+		#Init process
 		self.VoxelModelProcess()
 		self.ConstructPybulletProcess()
+
+		#Activate process
+		self.state = ACTIVE_STATE
+		self.PyxieDisplayProcess()
+		
 
 	def Update(self):
 		if self.state == INIT_STATE:
 			return
+		self.SimulateProcess()
 		
-		
+	def PyxieDisplayProcess(self):
+		self.model = pyxie.figure("TestVoxel/Lion_Enemy")
+		# self.model.scale = vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti)
+		self.showcase.add(self.model)
+	
+	def SimulateProcess(self):
+		index = 1
+		for bd in self.bodies:
+			pos, rot = p.getBasePositionAndOrientation(bd)
+			self.model.setJoint(index, position=vmath.vec3(pos), rotation=vmath.quat(rot), scale=vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti ))
+			index += 1
 
 	def VoxelModelProcess(self):
 		# ------------------------------------------------------------
 		# --pre process
 
-		FILENAME = "TestVoxel/Lion_Voxel_340_02.dae"
+		FILENAME = "TestVoxel/Lion_Voxel_340_03.dae"
 
 		if os.path.exists("TestVoxel/boxinfo.pickle"):
 			os.remove("TestVoxel/boxinfo.pickle")
@@ -70,11 +91,16 @@ class FinalScene:
 
 		# Min x
 		minX = boxData[0][0][0]
+		# Max x
+		maxX = boxData[0][0][0]
 		# Min y
 		minY = boxData[0][0][1]
+		# Max y
+		maxY = boxData[0][0][1]
 		# Min z
 		minZ = boxData[0][0][2]
-
+		# Max z
+		maxZ = boxData[0][0][2]
 		for point in boxData:
 			if point[0][0] < minX:
 				minX = point[0][0]
@@ -82,12 +108,23 @@ class FinalScene:
 				minY = point[0][1]
 			if point[0][2] < minZ:
 				minZ = point[0][2]
+
+			if point[0][0] > maxX:
+				maxX = point[0][0]
+			if point[0][1] > maxY:
+				maxY = point[0][1]
+			if point[0][2] > maxZ:
+				maxZ = point[0][2]
 		
-		root = [minX, minY, minZ]
+		root =  [(maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2]
 
 		matrixList = self.Matrilization(root, self.size, boxData)
-		self.size *= 5
-		newBoxData = self.CalculatePositionWithNewSize(root, matrixList, self.size)
+		# Handle pos and scale
+		translate = [0, 30, 3.6]
+		self.size *= self.sizeMulti
+		newRoot = [root[0] + translate[0], root[1] + translate[1], root[2] + translate[2]]
+		self.center = newRoot
+		newBoxData = self.CalculatePositionWithNewSize(newRoot, matrixList, self.size)
 		return newBoxData
 
 	def CalculatePositionWithNewSize(self, root, matrixList, newSize):
@@ -123,14 +160,17 @@ class FinalScene:
 		)
 
 		for data in self.newBoxData:
-			pos = (data[0], data[1], data[2] + 0.1)
+			quat = [ 0.7071068, 0, 0, 0.7071068 ]
+			vec = [data[0] - self.center[0], data[1] - self.center[1], data[2] - self.center[2]]
+			newVec = vmath.rotate(vmath.vec3(vec), vmath.quat(quat))
+			newPos = [newVec.x + self.center[0], newVec.y + self.center[1], newVec.z + self.center[2]]
 			body = p.createMultiBody(
-				baseMass=0, baseCollisionShapeIndex=shape, basePosition=pos
+				baseMass=0, baseCollisionShapeIndex=shape, basePosition=newPos
 			)
 			p.changeDynamics(
 				bodyUniqueId=body,
 				linkIndex=-1,
-				mass=0,
+				mass=1,
 				linearDamping=0.4,
 				angularDamping=1,
 				restitution=0.8,

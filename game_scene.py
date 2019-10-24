@@ -21,7 +21,7 @@ class GameScene:
 
 	def Init(self):
 		# Setting Pybullet
-		p.connect(p.GUI)
+		p.connect(p.DIRECT)
 		p.setGravity(0, 0, -10)
 		FPS = 60
 		p.setPhysicsEngineParameter(
@@ -62,7 +62,7 @@ class GameScene:
 		position = vmath.vec3(0.0, -10.0, 0.75)
 		player_col_scale = [0.1, 0.1, 1]
 		player_col_local_pos = [0.0, 0.0, 1.1]
-		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/Betakkuma/betakkuma', self.cam, player_col_scale, player_col_local_pos, True)
+		self.player = Player(position, scale, [ 0, 0.7071068, 0.7071068, 0 ], 'asset/betakkuma/betakkuma', self.cam, player_col_scale, player_col_local_pos, True)
 		p.changeDynamics(self.player.colId, -1, linearDamping=100.0, lateralFriction=1, restitution=0.0)
 		self.showcase.add(self.player.model)
 		self.collision_objects[str(self.player.colId)] = self.player
@@ -86,16 +86,17 @@ class GameScene:
 		self.replayButton = ReplayButton(pos, scale, 'asset/reset_button', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create map
-		# self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
+		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
+		self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
 
 		# Create cannon
 		pos = vmath.vec3(0,-11,0.5)
 		scale = vmath.vec3(1,1,1)
 		rotation = vmath.quat([ 0, 0.7071068, 0.7071068, 0 ])
-		self.cannon = Cannon(pos, scale, rotation, 'asset/Betakkuma/Canon_object', self.showcase)
+		self.cannon = Cannon(pos, scale, rotation, 'asset/betakkuma/Canon_object', self.showcase)
 
 		# Create final scene
-		self.finalScene = FinalScene()
+		self.finalScene = FinalScene(self.showcase)
 
 		#DEBUG ON GUI MODE
 		self.cameraDistance = 10
@@ -145,6 +146,7 @@ class GameScene:
 		# self.level.update(touch, self.player)
 
 		playerPos, orn = p.getBasePositionAndOrientation(self.player.colId)
+		self.finalScene.Update()
 
 		cameraTargetPosition = playerPos
 		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
