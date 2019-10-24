@@ -142,7 +142,6 @@ class Player():
 				obj = obj_list.get(str(objId[0]))
 				if objId[0] != self.colId and objId[0] != self.lastContactId and obj is not None:
 					self.lastContactId = objId[0]
-					print("Have a contact")
 					self.onContact(obj)
 	
 	def onContact(self, obj):

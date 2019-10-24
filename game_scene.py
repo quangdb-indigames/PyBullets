@@ -96,7 +96,7 @@ class GameScene:
 		self.cannon = Cannon(pos, scale, rotation, 'asset/betakkuma/Canon_object', self.showcase)
 
 		# Create final scene
-		self.finalScene = FinalScene(self.showcase)
+		# self.finalScene = FinalScene(self.showcase)
 
 		#DEBUG ON GUI MODE
 		self.cameraDistance = 10
@@ -143,10 +143,10 @@ class GameScene:
 		
 		self.cam.shoot(self.showcase)
 		self.UIcam.shoot(self.UIshowcase, clearColor=False)
-		# self.level.update(touch, self.player)
+		self.level.update(touch, self.player)
 
 		playerPos, orn = p.getBasePositionAndOrientation(self.player.colId)
-		self.finalScene.Update()
+		# self.finalScene.Update()
 
 		cameraTargetPosition = playerPos
 		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)

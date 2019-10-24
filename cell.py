@@ -46,7 +46,7 @@ class Cell():
 		# Create col box for background for check, will delete this part later
 		col_scale = [self.scale[0] / 2, self.scale[1] / 2, self.scale[2] / 2]
 		colId = p.createCollisionShape(p.GEOM_BOX, halfExtents=col_scale)
-		p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= self.position);
+		self.multiId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= self.position);
 
 	# Spawn region
 	def __spawnDependOnObjectType(self, obj):
@@ -87,6 +87,13 @@ class Cell():
 			self.collision_objects[str(cylinder.colId)] = cylinder
 		self.showcase.add(cylinder.model)
 		return cylinder
+	
+	def Destroy(self):
+		for obj in self.objects:
+			self.showcase.remove(obj.model)
+			p.removeBody(obj.colId)
+		self.showcase.remove(self.background)
+		p.removeBody(self.multiId)
 
 	# End Region
 			

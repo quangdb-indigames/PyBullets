@@ -16,6 +16,9 @@ class FinalScene:
 
 		#Init process
 		self.VoxelModelProcess()
+
+	def ToActivateState(self):
+		#When to state
 		self.ConstructPybulletProcess()
 
 		#Activate process
@@ -170,7 +173,7 @@ class FinalScene:
 			p.changeDynamics(
 				bodyUniqueId=body,
 				linkIndex=-1,
-				mass=1,
+				mass=0,
 				linearDamping=0.4,
 				angularDamping=1,
 				restitution=0.8,
