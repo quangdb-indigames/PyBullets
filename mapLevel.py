@@ -38,7 +38,7 @@ class MapLevel():
 			self.cell_list.append(cell)
 	
 	def __checkPlayerPosition(self, player):
-		if player.model.position.y >= 700 and self.state == STATE_PLAY:
+		if player.model.position.y >= 1200 and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
 			for cell in self.cell_list:
 				cell.Destroy()
@@ -107,12 +107,12 @@ class MapLevel():
 	def ResetPlayer(self, player):
 		pos, orn = p.getBasePositionAndOrientation(player.colId)
 		linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
-		newPos = [pos[0], 0, pos[2]]
+		newPos = [0, 0, pos[2]]
 		p.resetBasePositionAndOrientation(player.colId, newPos, orn)
 
 		#Target
 		target = [0, 30, 2]
 		direction = [target[0] - newPos[0], target[1] - newPos[1], target[2] - newPos[2]]
 		multiVelocity = vmath.length(vmath.vec3(linearVelocity))
-		self.finalVelocity = newVelocity = [direction[0] * multiVelocity * 0.01, direction[1] * multiVelocity * 0.01, direction[2] * multiVelocity * 0.01]
+		self.finalVelocity = newVelocity = [direction[0] * multiVelocity * 0.05, direction[1] * multiVelocity * 0.05, direction[2] * multiVelocity * 0.05]
 		p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)

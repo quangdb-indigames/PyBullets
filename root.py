@@ -9,8 +9,8 @@ import random
 from game_scene import GameScene
 from scene_manager import SceneManager
 
-SCREEN_WIDTH = 480
-SCREEN_HEIGHT = 640
+SCREEN_WIDTH = 520
+SCREEN_HEIGHT = 900
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
 
 gameScene = GameScene()

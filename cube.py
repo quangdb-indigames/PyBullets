@@ -52,7 +52,7 @@ class Cube():
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
 		self.colId = p.createCollisionShape(p.GEOM_BOX,
 								  halfExtents=self.col_scale)
-		boxId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
+		self.colId = p.createMultiBody(baseMass = mass, baseCollisionShapeIndex = self.colId, basePosition= col_pos);
 		p.changeDynamics(self.colId, -1, linearDamping=5.0, lateralFriction=1, restitution=0.0)
 
 	def __onClick(self, touch):

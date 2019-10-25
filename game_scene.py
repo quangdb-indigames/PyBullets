@@ -11,6 +11,7 @@ from replay_button import ReplayButton
 from ui_manager import UIManager
 from cannon import Cannon
 from finalScene import FinalScene
+from speed_button import SpeedButton
 
 from player import Player
 from mapLevel import MapLevel
@@ -75,15 +76,21 @@ class GameScene:
 		self.UIcam.target = vmath.vec3(0,0,0)
 		self.UI_manager = UIManager()
 
-		#Create button
-		pos = [140,220,1]
-		scale = [50, 50]
-		self.powerUpButton = PowerButton(pos, scale, 'asset/power_up_button', self.UIshowcase, self.UIcam, self.UI_manager)
+		# #Create button
+		# pos = [140,220,1]
+		# scale = [50, 50]
+		# self.powerUpButton = PowerButton(pos, scale, 'asset/power_up_button', self.UIshowcase, self.UIcam, self.UI_manager)
+
+		# Create speed button
+		pos = [120, 70, 1]
+		scale = [20, 300]
+		tickScale = [20, 10]
+		self.speedButton = SpeedButton(pos, scale, tickScale, 'asset/bar right 01', 'asset/bar right 02', self.UIshowcase, 2.0)
 
 		#Create button
-		pos = [-120,220,1]
-		scale = [100, 30]
-		self.replayButton = ReplayButton(pos, scale, 'asset/reset_button', self.UIshowcase, self.UIcam, self.UI_manager)
+		pos = [-100,220,1]
+		scale = [50, 30]
+		self.replayButton = ReplayButton(pos, scale, 'asset/button_replay', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
@@ -135,7 +142,8 @@ class GameScene:
 		# self.cannon.model.rotation = rotQuat
 
 		#UI update
-		self.powerUpButton.Update(touch)
+		# self.powerUpButton.Update(touch)
+		self.speedButton.Update()
 		self.replayButton.Update(touch)
 
 		#Other objects update

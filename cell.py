@@ -20,8 +20,12 @@ class Cell():
 		self.collision_objects = collision_objects
 		self.base_position = base_position
 		self.__initialize()
+		self.isDestroy = False
 		
 	def update(self, touch):
+		if self.isDestroy:
+			return
+
 		if len(self.objects) > 0:
 			for obj in self.objects:
 				obj.update(touch)
@@ -104,6 +108,7 @@ class Cell():
 		self.obstacles.append(obstacle)
 
 	def Destroy(self):
+		self.isDestroy = True
 		for obj in self.objects:
 			self.showcase.remove(obj.model)
 			p.removeBody(obj.colId)

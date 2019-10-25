@@ -3,6 +3,7 @@ import time
 import pybullet_data
 from pyxie.apputil import graphicsHelper
 import pyxie
+from scene_manager import SceneManager
 import pyvmath as vmath
 import math
 import random
@@ -98,13 +99,16 @@ class Player():
 		if not self.firstClick:
 			p.changeDynamics(self.colId, -1, 10)
 			self.__ChangeStatus(STATUS_FLY)	
-
+			currentScene = SceneManager.GetCurrentScene()
+			multi = currentScene.speedButton.GetCurrentTickZone()
 			self.firstClick = True
 			data = self.GetData()
 			if data:
 				farMul, highMul = data['baseFarMultiply'], data['baseHighMultiply']
 			else:
 				farMul, highMul = 1.0, 1.0
+			farMul = farMul * multi
+			highMul = highMul * 0.5 * multi
 			pos, orn = p.getBasePositionAndOrientation(self.colId)
 			force = [0, -self.camDis[1] * 10000 * farMul, 20000 * highMul]
 			p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
@@ -147,7 +151,7 @@ class Player():
 	def onContact(self, obj):
 		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 10000, 12000]
+		force = [0, -self.camDis[1] * 12000, 12000]
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
 
 	def __ChangeStatus(self, status):
