@@ -18,6 +18,22 @@
 		},
 
 		{
+			"path": "asset/Object_Obstacle_Big_Beetle",
+			"name": "Rock",
+			"type": "BOX",
+			"local_pos": [-2.0, 0.7, 20.0],
+			"local_scale": [2.0, 2.0, 2.0],
+			"local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
+			"col_pos": [0, 0, 0],
+			"col_scale": [1.0, 1.0, 1.0],
+			"isStatic": 0,
+			"isObstacle": true,
+			"move_speed": 10,
+			"local_start_pos": [-5.0, 0.8, 20.0],
+			"local_end_pos": [4.0, -2.0, 15.0]
+		},
+
+		{
 			"path": "asset/Rock_Object",
 			"name": "Rock",
 			"type": "BOX",

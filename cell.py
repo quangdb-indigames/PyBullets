@@ -6,6 +6,8 @@ import pyvmath as vmath
 import json
 from cube import Cube
 from cylinder import Cylinder
+from obstacle import Obstacle
+
 
 class Cell():
 	def __init__(self, filePath, showcase, collision_objects, base_position = [0, 0, 0]):
@@ -14,6 +16,7 @@ class Cell():
 		self.position = [0,0,0]
 		self.scale = [1,1,1]
 		self.objects = []
+		self.obstacles = []
 		self.collision_objects = collision_objects
 		self.base_position = base_position
 		self.__initialize()
@@ -22,6 +25,8 @@ class Cell():
 		if len(self.objects) > 0:
 			for obj in self.objects:
 				obj.update(touch)
+		for obstacle in self.obstacles:
+			obstacle.Update()
 
 	def __initialize(self):
 		# Load self.mapData from json file
@@ -71,6 +76,10 @@ class Cell():
 		if 'canCollider' in obj and obj['canCollider'] == "TRUE":
 			self.collision_objects[str(box.colId)] = box
 		self.showcase.add(box.model)
+
+		if 'isObstacle' in obj and obj['isObstacle']:
+			self.CreateObstacle(box, obj)
+
 		return box
 
 	def __spawnCylinderTypeObject(self, obj):
@@ -88,12 +97,19 @@ class Cell():
 		self.showcase.add(cylinder.model)
 		return cylinder
 	
+	def CreateObstacle(self, obj, objData):
+		start_pos = [self.position[0] + objData['local_start_pos'][0], self.position[1] + objData['local_start_pos'][1], self.position[2] + objData['local_start_pos'][2]]
+		end_pos = [self.position[0] + objData['local_end_pos'][0], self.position[1] + objData['local_end_pos'][1], self.position[2] + objData['local_end_pos'][2]]
+		obstacle = Obstacle(obj, objData['move_speed'], start_pos, end_pos)
+		self.obstacles.append(obstacle)
+
 	def Destroy(self):
 		for obj in self.objects:
 			self.showcase.remove(obj.model)
 			p.removeBody(obj.colId)
 		self.showcase.remove(self.background)
 		p.removeBody(self.multiId)
+		self.obstacles.clear()
 
 	# End Region
 			

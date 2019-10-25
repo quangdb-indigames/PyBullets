@@ -39,7 +39,6 @@ class MapLevel():
 	
 	def __checkPlayerPosition(self, player):
 		if player.model.position.y >= 700 and self.state == STATE_PLAY:
-			print("Finally!!!!")
 			self.state = STATE_FINAL
 			for cell in self.cell_list:
 				cell.Destroy()
