@@ -85,7 +85,7 @@ class GameScene:
 		pos = [120, 70, 1]
 		scale = [20, 300]
 		tickScale = [20, 10]
-		self.speedButton = SpeedButton(pos, scale, tickScale, 'asset/bar right 01', 'asset/bar right 02', self.UIshowcase, 2.0)
+		self.speedButton = SpeedButton(pos, scale, tickScale, 'asset/bar right 01', 'asset/bar right 02', self.UIshowcase, 5.0)
 
 		#Create button
 		pos = [-100,220,1]
