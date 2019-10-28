@@ -14,6 +14,8 @@ STATE_MOTION = {STATUS_FLY:"betakkuma@fly02"}
 TRANSIT_TIME = 0.2
 MOVING_DISTANCE = 0.5
 
+PLAYER_STATUS_DEATH = "PLAYER_STATUS_DEATH"
+
 class Player():
 	def __init__(self, pos, scale, base_rotate, modelPath, cam, col_scale, col_local_pos = [0,0,0], camfollow = False):
 		# Create model to display on pyxie
@@ -40,6 +42,8 @@ class Player():
 		self.tapped = False
 		self.dragged = False
 		self.abortCheckContact = False
+		self.kEpsilon = 1.0
+		self.isDeath = False
 		
 		# Should this player have camera follow behind?
 		if self.camFollow:
@@ -47,9 +51,16 @@ class Player():
 			self.camDis = [0.0, -3.0, 2.0]
 	
 	def update(self, dt, touch, obj_list, ui_manager=None):
-		self.__TransitMotion(dt)
-		self.__autoRePosition()
+		self.__TransitMotion(dt)	
 		self.model.step()
+
+		if self.firstClick and not self.isDeath:
+			self.CheckDeath()
+		if self.isDeath:
+			self.MoveCameraOnDeath()
+			return
+
+		self.__autoRePosition()
 		if not self.camFollow:
 			return
 		if not ui_manager or ui_manager.isTouchOnUI == False:
@@ -58,13 +69,16 @@ class Player():
 		if not self.abortCheckContact:
 			self.checkContact(obj_list)
 
+	def MoveCameraOnDeath(self):
+		pass
+		
 
 	def __createColBox(self, mass):
 		col_pos = [self.model.position.x + self.col_local_pos[0], self.model.position.y + self.col_local_pos[1], self.model.position.z + self.col_local_pos[2]]
 		self.colId = p.createCollisionShape(p.GEOM_CAPSULE, radius=0.3)
 		# start euler = (-45, 0, 0)
-		boxId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = self.colId, basePosition= col_pos, baseOrientation=[ 0.4871745, 0, 0, -0.8733046 ]);
-		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0.01)
+		self.colId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = self.colId, basePosition= col_pos, baseOrientation=[ 0.4871745, 0, 0, -0.8733046 ]);
+		p.changeDynamics(self.colId, -1, linearDamping=500.0, lateralFriction=0.1, restitution=0)
 
 	def __onClick(self, touch):
 		if touch:
@@ -72,7 +86,8 @@ class Player():
 				self.tapped = True
 				self.__onClickExcute()
 			elif touch['is_holded'] and self.firstClick and not self.dragged:
-				self.__onDragExcute(touch)
+				if self.model.position.z > 0.5:
+					self.__onDragExcute(touch)
 			else:
 				self.tapped = False
 		else:
@@ -172,3 +187,10 @@ class Player():
 			if self.transitTime > TRANSIT_TIME:
 				self.transitTime = TRANSIT_TIME
 			self.model.setBlendingWeight(pyxie.ANIMETION_PART_A, self.transitTime / TRANSIT_TIME)
+	
+	def CheckDeath(self):
+		linearVelocity, angularVelocity = p.getBaseVelocity(self.colId)
+		velocity = vmath.length(vmath.vec3(linearVelocity))
+		if velocity < self.kEpsilon:
+			self.isDeath = True
+			# p.changeDynamics(self.colId, -1, mass=0)

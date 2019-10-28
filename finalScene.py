@@ -17,6 +17,9 @@ class FinalScene:
 		#Init process
 		self.VoxelModelProcess()
 
+		#Load handled box data
+		self.LoadNewBoxData()
+
 	def ToActivateState(self):
 		#When to state
 		self.ConstructPybulletProcess()
@@ -49,10 +52,11 @@ class FinalScene:
 
 		FILENAME = "TestVoxel/Lion_Voxel_340_03.dae"
 
-		if os.path.exists("TestVoxel/boxinfo.pickle"):
-			os.remove("TestVoxel/boxinfo.pickle")
+		# if os.path.exists("TestVoxel/boxinfo.pickle"):
+		# 	os.remove("TestVoxel/boxinfo.pickle")
 
-		if not os.path.exists("TestVoxel/boxinfo.pickle"):
+		if not os.path.exists("TestVoxel/boxinfo.pickle") or not os.path.exists("TestVoxel/newConstructBoxData.pickle"):
+			print("Come here")
 			# if True:
 
 			efig = pyxie.editableFigure("efig")
@@ -79,14 +83,33 @@ class FinalScene:
 					(max.x, max.z, max.z),
 				)
 				boxinfo.append(data)
-			self.newBoxData = self.HandleBoxData(boxinfo)
+			newBoxData = self.HandleBoxData(boxinfo)
+			
+			newConstructBoxData = dict()
+			newConstructBoxData.update(
+				{
+					"size": self.size,
+					"center": self.center,
+					"newBoxData": newBoxData
+				}
+			)
 
 			with open("TestVoxel/boxinfo.pickle", "wb") as f:
 				pickle.dump(boxinfo, f)
+			with open("TestVoxel/newConstructBoxData.pickle", "wb") as f:
+				pickle.dump(newConstructBoxData, f)
 
 			efig.mergeMesh()
 			efig.saveFigure("TestVoxel/Lion_Enemy")
 		# ------------------------------------------------------------
+
+	def LoadNewBoxData(self):
+		with open("TestVoxel/newConstructBoxData.pickle", "rb") as f:
+			newConstructBoxData = pickle.load(f)
+		
+		self.size = newConstructBoxData['size']
+		self.center = newConstructBoxData['center']
+		self.newBoxData = newConstructBoxData['newBoxData']
 
 	def HandleBoxData(self, boxData):
 		# Size 
