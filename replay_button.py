@@ -41,7 +41,7 @@ class ReplayButton():
 		return False
 	
 	def OnClickExcute(self):
-		SceneManager.GetCurrentScene().SetState("Reset")
+		SceneManager.GetCurrentScene().SetState("STATE_RESET")
 
 	
 	def ConvertScreenToWorld(self, scrx, scry, worldz, cam, w=None, h=None):

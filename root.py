@@ -20,4 +20,5 @@ SceneManager.SetCurrentScene(gameScene)
 while(1):
 	
 	SceneManager.GetCurrentScene().Update()
+	SceneManager.GetCurrentScene().Render()
 	pyxie.swap()

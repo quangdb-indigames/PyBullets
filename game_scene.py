@@ -12,10 +12,15 @@ from ui_manager import UIManager
 from cannon import Cannon
 from finalScene import FinalScene
 from speed_button import SpeedButton
+from pause_button import PauseButton
 
 from player import Player
 from mapLevel import MapLevel
 import json
+STATE_RESET = "STATE_RESET"
+STATE_INITING = "STATE_INITING"
+STATE_PLAYING = "STATE_PLAYING"
+STATE_PAUSE = "STATE_PAUSE"
 class GameScene:
 	def __init__(self):
 		self.Init()
@@ -43,7 +48,7 @@ class GameScene:
 		ddt = 1.0 / FPS
 
 		#Init state
-		self.state = "Initing"
+		self.state = STATE_INITING
 		self.initDt = 0
 		
 		# Create dictionary to store collision
@@ -92,6 +97,11 @@ class GameScene:
 		scale = [50, 30]
 		self.replayButton = ReplayButton(pos, scale, 'asset/button_replay', self.UIshowcase, self.UIcam, self.UI_manager)
 
+		# Create pause button
+		pos = [100,220,1]
+		scale = [30, 30]
+		self.pauseButton = PauseButton(pos, scale, 'asset/button_pause', self.UIshowcase, self.UIcam, self.UI_manager)
+
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
 		self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
@@ -112,15 +122,22 @@ class GameScene:
 		
 	
 	def Update(self):
-		if self.state == "Reset":
+		if self.state == STATE_RESET:
 			self.ResetScene()
 			return
 
-		if self.state == "Initing":
+		if self.state == STATE_INITING:
 			self.initDt += 1
 			if self.initDt > 10:
 				self.initDt = 0
-				self.state = "Playing"
+				self.state = STATE_PLAYING
+			return
+			
+		touch = pyxie.singleTouch()
+		if not touch or not touch['is_holded']:
+			self.UI_manager.isTouchOnUI = False
+		self.pauseButton.Update(touch)
+		if self.state == STATE_PAUSE:
 			return
 
 		if self.totalstepdt > self.stepdt:
@@ -131,9 +148,7 @@ class GameScene:
 		dt = pyxie.getElapsedTime()
 		self.totalstepdt += dt
 		
-		touch = pyxie.singleTouch()
-		if not touch or not touch['is_holded']:
-			self.UI_manager.isTouchOnUI = False
+
 
 		#Cannon
 		# quat = self.cannon.model.rotation
@@ -145,12 +160,11 @@ class GameScene:
 		# self.powerUpButton.Update(touch)
 		self.speedButton.Update()
 		self.replayButton.Update(touch)
+		
 
 		#Other objects update
 		self.player.update(dt, touch, self.collision_objects, self.UI_manager)
-		
-		self.cam.shoot(self.showcase)
-		self.UIcam.shoot(self.UIshowcase, clearColor=False)
+
 		self.level.update(touch, self.player)
 
 		playerPos, orn = p.getBasePositionAndOrientation(self.player.colId)
@@ -158,6 +172,10 @@ class GameScene:
 
 		cameraTargetPosition = playerPos
 		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
+	
+	def Render(self): 			
+		self.cam.shoot(self.showcase)
+		self.UIcam.shoot(self.UIshowcase, clearColor=False)
 
 	def OnExit(self):
 		p.disconnect()

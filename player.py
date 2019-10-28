@@ -116,6 +116,8 @@ class Player():
 			self.__ChangeStatus(STATUS_FLY)	
 			currentScene = SceneManager.GetCurrentScene()
 			multi = currentScene.speedButton.GetCurrentTickZone()
+			currentScene.SetState("STATE_PLAYING")
+			currentScene.pauseButton.Display()
 			self.firstClick = True
 			data = self.GetData()
 			if data:
