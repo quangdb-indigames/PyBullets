@@ -55,7 +55,8 @@ class Cell():
 		# Create col box for background for check, will delete this part later
 		col_scale = [self.scale[0] / 2, self.scale[1] / 2, self.scale[2] / 2]
 		colId = p.createCollisionShape(p.GEOM_BOX, halfExtents=col_scale)
-		self.multiId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= self.position);
+		background_col_position = [self.position[0], self.position[1], self.position[2] - self.scale[2] / 2]
+		self.multiId = p.createMultiBody(baseMass = 0, baseCollisionShapeIndex = colId, basePosition= background_col_position);
 
 	# Spawn region
 	def __spawnDependOnObjectType(self, obj):

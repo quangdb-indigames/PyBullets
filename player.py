@@ -86,8 +86,8 @@ class Player():
 				self.tapped = True
 				self.__onClickExcute()
 			elif touch['is_holded'] and self.firstClick and not self.dragged:
-				if self.model.position.z > 0.5:
-					self.__onDragExcute(touch)
+				# if self.model.position.z > 0.5:
+				self.__onDragExcute(touch)
 			else:
 				self.tapped = False
 		else:
