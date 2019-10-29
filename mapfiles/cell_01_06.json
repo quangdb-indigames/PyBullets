@@ -5,18 +5,6 @@
         "path": "asset/Road_Object"
     },
     "objects": [
-		{
-			"path": "asset/Rock_Object",
-			"name": "Rock",
-			"type": "BOX",
-			"local_pos": [0, 0.7, 1.2],
-			"local_scale": [5, 5, 5],
-			"local_quaternion": [ 0.5, 0.5, 0.5, 0.5 ],
-			"col_pos": [0, 0, 0],
-			"col_scale": [1.2, 1.2, 1.2],
-			"isStatic": 1
-		},
-
         {
             "path": "asset/bullseye",
             "name": "bulleye",

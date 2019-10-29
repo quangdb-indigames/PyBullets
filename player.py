@@ -171,8 +171,10 @@ class Player():
 	def onContact(self, obj):
 		p.resetBaseVelocity(self.colId, [0,0,0])
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
-		force = [0, -self.camDis[1] * 12000, 12000]
-		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
+		newPos = [pos[0], pos[1] + 0.5, pos[2]]
+		p.resetBasePositionAndOrientation(self.colId, newPos, orn)
+		force = [0, -self.camDis[1] * 15000, 10000]
+		p.applyExternalForce(self.colId, -1, force, newPos, flags = p.WORLD_FRAME)
 
 	def __ChangeStatus(self, status):
 		if status != self.currentState and status != self.nextState:

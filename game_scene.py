@@ -43,6 +43,7 @@ class GameScene:
 			deterministicOverlappingPairs=0,
 			solverResidualThreshold=0.1,
 		)
+
 		#Setting IMGUI
 		if not hasattr(self, "impl"):
 			self.impl = ImgiPyxieRenderer()

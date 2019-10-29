@@ -12,7 +12,9 @@ class FinalScene:
 		# Variable
 		self.state = INIT_STATE
 		self.showcase = showcase
-		self.sizeMulti = 50
+		self.sizeMulti = 100
+		self.activatedBodies = list()
+		self.firstTimeActive = True
 
 		#Init process
 		self.VoxelModelProcess()
@@ -42,9 +44,14 @@ class FinalScene:
 	def SimulateProcess(self):
 		index = 1
 		for bd in self.bodies:
+			if not self.firstTimeActive and bd not in self.activatedBodies:
+				continue
 			pos, rot = p.getBasePositionAndOrientation(bd)
 			self.model.setJoint(index, position=vmath.vec3(pos), rotation=vmath.quat(rot), scale=vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti ))
 			index += 1
+		
+		if self.firstTimeActive:
+			self.firstTimeActive = False
 
 	def VoxelModelProcess(self):
 		# ------------------------------------------------------------
@@ -146,7 +153,7 @@ class FinalScene:
 
 		matrixList = self.Matrilization(root, self.size, boxData)
 		# Handle pos and scale
-		translate = [0, 30, 3.6]
+		translate = [0, 1200, 7.0]
 		self.size *= self.sizeMulti
 		newRoot = [root[0] + translate[0], root[1] + translate[1], root[2] + translate[2]]
 		self.center = newRoot

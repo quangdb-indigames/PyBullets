@@ -17,8 +17,8 @@ class MapLevel():
 
 		# For final scene
 		self.finalScene = FinalScene(self.showcase)
-		self.activatedBodies = []
-		self.activeRange = 2
+		# self.finalScene.center[1] = 1100
+		self.activeRange = 3
 		self.firstFinalContact = False
 		self.reduceVelocity = False
 
@@ -38,15 +38,15 @@ class MapLevel():
 			self.cell_list.append(cell)
 	
 	def __checkPlayerPosition(self, player):
-		if player.model.position.y >= 1200 and self.state == STATE_PLAY:
+		if player.model.position.y >= 1000 and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
-			for cell in self.cell_list:
-				cell.Destroy()
-			self.collision_objects = []
+			# for cell in self.cell_list:
+			# 	cell.Destroy()
+			# self.collision_objects = []
 			self.finalScene.ToActivateState()
-			self.CreateACell("mapfiles/final_cell.json", [0,0,0])
-			self.ResetPlayer(player)
-			player.abortCheckContact = True
+			# self.CreateACell("mapfiles/final_cell.json", [0,0,0])
+			# self.ResetPlayer(player)
+			# player.abortCheckContact = True
 
 		if self.state == STATE_FINAL:
 			self.CheckInsideActiveRange(player)
@@ -64,6 +64,10 @@ class MapLevel():
 				cell = Cell(self.cell_list_data[i]['cellPath'], self.showcase, self.collision_objects, base_pos)
 				self.cell_list.append(cell)
 			self.length = [self.length[0], self.length[1] + self.base_length[1]]
+			if len(self.cell_list) > 22:
+				for i in range(0, 10):
+					self.cell_list[0].Destroy()
+					self.cell_list.pop(0)
 
 	def CheckReduceVelocity(self, player):
 		if self.firstFinalContact and self.reduceVelocity == False:
@@ -75,7 +79,7 @@ class MapLevel():
 	def CheckInsideActiveRange(self, player):
 		player_pos, player_orn = p.getBasePositionAndOrientation(player.colId)
 		for bd in self.finalScene.bodies:
-			if bd in self.activatedBodies:
+			if bd in self.finalScene.activatedBodies:
 				continue
 			
 			pos, orn = p.getBasePositionAndOrientation(bd)
@@ -83,8 +87,8 @@ class MapLevel():
 			distance = vmath.length(vmath.vec3(distanceVec))
 			if distance < self.activeRange:
 				# Then activate bd
-				p.changeDynamics(bodyUniqueId=bd, linkIndex=-1, mass=1)
-				self.activatedBodies.append(bd)
+				p.changeDynamics(bodyUniqueId=bd, linkIndex=-1, mass=5)
+				self.finalScene.activatedBodies.append(bd)
 				
 	def CheckContact(self, player):
 		aabbMin, aabbMax = p.getAABB(player.colId, -1)
@@ -92,7 +96,7 @@ class MapLevel():
 		if collision_list is not None and len(collision_list) != 0:		
 			for objId in collision_list:
 				colId = objId[0]
-				if colId != 0 and colId in self.activatedBodies:
+				if colId != 0 and colId in self.finalScene.activatedBodies:
 					self.firstFinalContact = True
 					break
 
