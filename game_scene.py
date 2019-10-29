@@ -13,6 +13,8 @@ from cannon import Cannon
 from finalScene import FinalScene
 from speed_button import SpeedButton
 from pause_button import PauseButton
+import imgui
+from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 
 from player import Player
 from mapLevel import MapLevel
@@ -41,6 +43,10 @@ class GameScene:
 			deterministicOverlappingPairs=0,
 			solverResidualThreshold=0.1,
 		)
+		#Setting IMGUI
+		if not hasattr(self, "impl"):
+			self.impl = ImgiPyxieRenderer()
+			self.impl.io.font_global_scale = 1.0
 
 		self.stepdt = 1 / FPS
 		self.totalstepdt = 0
@@ -120,8 +126,20 @@ class GameScene:
 		self.cameraYaw = 0
 		self.cameraPitch = -35
 		
+	def DisplayFPS(self, elapsedTime):
+		imgui.set_next_window_size(70, 50) # 60, 100
+		imgui.set_next_window_position(120, 450) # 0, 15
+		fps = round(1/elapsedTime)
+		imgui.begin("FPS", flags=imgui.WINDOW_NO_COLLAPSE)
+		imgui.text(str(fps))
+		imgui.end()
+			
 	
 	def Update(self):
+		touch = pyxie.singleTouch()
+		self.impl.process_inputs()
+		imgui.new_frame()
+
 		if self.state == STATE_RESET:
 			self.ResetScene()
 			return
@@ -133,7 +151,6 @@ class GameScene:
 				self.state = STATE_PLAYING
 			return
 			
-		touch = pyxie.singleTouch()
 		if not touch or not touch['is_holded']:
 			self.UI_manager.isTouchOnUI = False
 		self.pauseButton.Update(touch)
@@ -147,9 +164,7 @@ class GameScene:
 	
 		dt = pyxie.getElapsedTime()
 		self.totalstepdt += dt
-		
-
-
+		self.DisplayFPS(dt)
 		#Cannon
 		# quat = self.cannon.model.rotation
 		# dQuat = vmath.quat_rotationZ(0.1)
@@ -173,9 +188,13 @@ class GameScene:
 		cameraTargetPosition = playerPos
 		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
 	
-	def Render(self): 			
+	def Render(self):
 		self.cam.shoot(self.showcase)
 		self.UIcam.shoot(self.UIshowcase, clearColor=False)
+		imgui.render()
+		self.impl.render(imgui.get_draw_data(), False)
+
+
 
 	def OnExit(self):
 		p.disconnect()
@@ -183,7 +202,7 @@ class GameScene:
 		del self.showcase
 		del self.UIcam
 		del self.UIshowcase
-		self.__dict__.clear()
+		# self.__dict__.clear()
 
 	def ResetScene(self):
 		self.OnExit()
