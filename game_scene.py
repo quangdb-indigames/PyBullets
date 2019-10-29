@@ -48,6 +48,11 @@ class GameScene:
 			self.impl = ImgiPyxieRenderer()
 			self.impl.io.font_global_scale = 1.0
 
+		self.averageFPS = 60
+		self.listFPS = list()
+		self.updateFpsRate = 10
+		self.currentFpsCount = 0
+		
 		self.stepdt = 1 / FPS
 		self.totalstepdt = 0
 		p.setRealTimeSimulation(0)
@@ -110,7 +115,7 @@ class GameScene:
 
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
-		self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
+		# self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
 
 		# Create cannon
 		pos = vmath.vec3(0,-11,0.5)
@@ -131,10 +136,14 @@ class GameScene:
 		imgui.set_next_window_position(120, 450) # 0, 15
 		fps = round(1/elapsedTime)
 		imgui.begin("FPS", flags=imgui.WINDOW_NO_COLLAPSE)
-		imgui.text(str(fps))
+		imgui.text(str(self.averageFPS))
 		imgui.end()
-			
 	
+	def UpdateFPS(self):
+		avg_FPS = sum(self.listFPS) / len(self.listFPS)
+		self.averageFPS = round(avg_FPS)
+		self.listFPS.clear()
+			
 	def Update(self):
 		touch = pyxie.singleTouch()
 		self.impl.process_inputs()
@@ -163,6 +172,13 @@ class GameScene:
 			self.totalstepdt -= self.stepdt
 	
 		dt = pyxie.getElapsedTime()
+		self.currentFpsCount += 1
+		self.listFPS.append(1/dt)
+		if self.currentFpsCount >= self.updateFpsRate:
+			self.currentFpsCount = 0
+			self.UpdateFPS()
+
+
 		self.totalstepdt += dt
 		self.DisplayFPS(dt)
 		#Cannon
