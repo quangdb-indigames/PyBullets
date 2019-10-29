@@ -49,13 +49,16 @@ class Player():
 		if self.camFollow:
 			self.cam = cam
 			self.camDis = [0.0, -3.0, 2.0]
+		
+		# Previous touch
+		self.previousTouchX = 0
 	
 	def update(self, dt, touch, obj_list, ui_manager=None):
 		self.__TransitMotion(dt)	
 		self.model.step()
 
-		if self.firstClick and not self.isDeath:
-			self.CheckDeath()
+		# if self.firstClick and not self.isDeath:
+		# 	self.CheckDeath()
 		if self.isDeath:
 			self.MoveCameraOnDeath()
 			return
@@ -85,7 +88,7 @@ class Player():
 			if touch['is_holded'] and not self.tapped and not self.firstClick:
 				self.tapped = True
 				self.__onClickExcute()
-			elif touch['is_holded'] and self.firstClick and not self.dragged:
+			elif touch['delta_x'] != 0 and self.firstClick:
 				# if self.model.position.z > 0.5:
 				self.__onDragExcute(touch)
 			else:
@@ -113,6 +116,8 @@ class Player():
 	def __onClickExcute(self):
 		if not self.firstClick:
 			p.changeDynamics(self.colId, -1, 10)
+			self.base_rotate = [0,0,1,0]
+			self.col_local_pos = [0,0,0]
 			self.__ChangeStatus(STATUS_FLY)	
 			currentScene = SceneManager.GetCurrentScene()
 			multi = currentScene.speedButton.GetCurrentTickZone()
@@ -140,13 +145,11 @@ class Player():
 		return data
 	
 	def __onDragExcute(self, touch):
-		direction = touch['cur_x'] - touch['org_x']
-		if abs(direction) < 0.2:
-			return
+		direction = touch['delta_x']
 		if direction < 0:
-			force = [-5000, 0, 0]
+			force = [-2000, 0, 0]
 		else:
-			force = [5000, 0, 0]
+			force = [2000, 0, 0]
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
 		p.applyExternalForce(self.colId, -1, force, pos, flags = p.WORLD_FRAME)
 		self.dragged = True
