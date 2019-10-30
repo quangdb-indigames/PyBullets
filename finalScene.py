@@ -46,10 +46,11 @@ class FinalScene:
 		index = 1
 		for bd in self.bodies:
 			if not self.firstTimeActive and bd not in self.activatedBodies:
+				index += 1
 				continue
 			pos, rot = p.getBasePositionAndOrientation(bd)
 			self.model.setJoint(index, position=vmath.vec3(pos), rotation=vmath.quat(rot), scale=vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti ))
-			index += 1
+			index += 1			
 		
 		if self.firstTimeActive:
 			self.firstTimeActive = False
