@@ -3,6 +3,7 @@ import pybullet as p
 from cell import Cell
 import pyvmath as vmath
 from finalScene import FinalScene
+import pyxie
 STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
 class MapLevel():
@@ -96,7 +97,11 @@ class MapLevel():
 		if self.firstFinalContact and self.reduceVelocity == False:
 			self.reduceVelocity = True
 			linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
-			newVelocity = [linearVelocity[0] / 2, linearVelocity[1] / 2, linearVelocity[2] / 2]
+			platform = pyxie.getPlatform()
+			if platform == pyxie.TARGET_PLATFORM_ANDROID:
+				newVelocity = [linearVelocity[0] / 5, linearVelocity[1] / 5, linearVelocity[2] / 5]
+			else:
+				newVelocity = [linearVelocity[0] / 2, linearVelocity[1] / 2, linearVelocity[2] / 2]
 			p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
 
 	def CheckInsideActiveRange(self, player):

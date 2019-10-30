@@ -47,12 +47,14 @@ class GameScene:
 		#Setting IMGUI
 		if not hasattr(self, "impl"):
 			self.impl = ImgiPyxieRenderer()
-			self.impl.io.font_global_scale = 1.0
+			self.impl.io.font_global_scale = 0.5
 
 		self.averageFPS = 60
 		self.listFPS = list()
+		self.listRecentAverageFPS = list()
 		self.updateFpsRate = 10
 		self.currentFpsCount = 0
+		self.log = list()
 		
 		self.stepdt = 1 / FPS
 		self.totalstepdt = 0
@@ -140,6 +142,27 @@ class GameScene:
 		imgui.text(str(self.averageFPS))
 		imgui.end()
 	
+	def DisplayLog(self):
+		imgui.set_next_window_size(70, 50) # 60, 100
+		imgui.set_next_window_position(10, 50) # 0, 15
+		imgui.begin("Log", flags=imgui.WINDOW_NO_COLLAPSE)
+		for log in self.log:
+			imgui.text(log)
+		imgui.end()
+
+	def CheckPhysicStep(self):
+		if len(self.listRecentAverageFPS) > 5:
+			average = sum(self.listRecentAverageFPS) / len(self.listRecentAverageFPS)
+			if average <= 30:
+				self.stepdt = 1/ 120
+			elif average <= 40:
+				self.stepdt = 1/100
+			elif average <= 50:
+				self.stepdt = 1/80
+			else:
+				self.stepdt = 1/60
+			self.listRecentAverageFPS.clear()
+	
 	def UpdateFPS(self):
 		avg_FPS = sum(self.listFPS) / len(self.listFPS)
 		self.averageFPS = round(avg_FPS)
@@ -178,10 +201,14 @@ class GameScene:
 		if self.currentFpsCount >= self.updateFpsRate:
 			self.currentFpsCount = 0
 			self.UpdateFPS()
+			self.listRecentAverageFPS.append(self.averageFPS)
+			self.CheckPhysicStep()
 
 
 		self.totalstepdt += dt
 		self.DisplayFPS(dt)
+		# self.DisplayLog()
+		
 		#Cannon
 		# quat = self.cannon.model.rotation
 		# dQuat = vmath.quat_rotationZ(0.1)
