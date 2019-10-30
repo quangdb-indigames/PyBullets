@@ -4,6 +4,7 @@ import pickle
 import pyvmath as vmath
 import pybullet as p
 import os
+import glob
 
 INIT_STATE = "INIT_STATE"
 ACTIVE_STATE = "ACTIVE_STATE"
@@ -57,12 +58,14 @@ class FinalScene:
 		# ------------------------------------------------------------
 		# --pre process
 
-		FILENAME = "TestVoxel/Lion_Voxel_340_03.dae"
+		FILENAME = "TestVoxel/Lion_Voxel_340_04.dae"
+		BOXINFOR_PATH = "TestVoxel/boxinfo.pickle"
+		CONSTRUCT_BOXDATA_PATH = "TestVoxel/newConstructBoxData.pickle"
 
 		# if os.path.exists("TestVoxel/boxinfo.pickle"):
 		# 	os.remove("TestVoxel/boxinfo.pickle")
 
-		if not os.path.exists("TestVoxel/boxinfo.pickle") or not os.path.exists("TestVoxel/newConstructBoxData.pickle"):
+		if not os.path.exists(BOXINFOR_PATH) or not os.path.exists(CONSTRUCT_BOXDATA_PATH):
 			print("Come here")
 			# if True:
 
@@ -101,9 +104,23 @@ class FinalScene:
 				}
 			)
 
-			with open("TestVoxel/boxinfo.pickle", "wb") as f:
+			src = efig.getTextureSource()
+			for tex in src:
+				texfilename = os.path.basename(tex['path'])
+				name, _ = os.path.splitext(texfilename)
+				newtex = tex.copy()
+				newtex['path'] = "TestVoxel/" +  name
+				print("New text path: ", newtex['path'])
+				efig.replaceTextureSource(tex, newtex)
+				filepath = glob.glob('**/'+texfilename, recursive=True)
+				print("File path: ", filepath)
+				if len(filepath) is not 0:
+					devtool.convertTextureToPlatform(filepath[0], os.path.join(".", "TestVoxel\\" + name), pyxie.TARGET_PLATFORM_PC, tex['normal'], tex['wrap'])
+					print("Path joining: ", os.path.join(".", name))
+
+			with open(BOXINFOR_PATH, "wb") as f:
 				pickle.dump(boxinfo, f)
-			with open("TestVoxel/newConstructBoxData.pickle", "wb") as f:
+			with open(CONSTRUCT_BOXDATA_PATH, "wb") as f:
 				pickle.dump(newConstructBoxData, f)
 
 			efig.mergeMesh()
