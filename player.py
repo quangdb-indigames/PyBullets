@@ -64,13 +64,16 @@ class Player():
 			return
 
 		self.__autoRePosition()
-		if not self.camFollow:
-			return
+
 		if not ui_manager or ui_manager.isTouchOnUI == False:
 			self.__onClick(touch)
 		
 		if not self.abortCheckContact:
 			self.checkContact(obj_list)
+
+		if not self.camFollow:
+			return
+		self.CameraFollow()
 
 	def MoveCameraOnDeath(self):
 		pass
@@ -107,11 +110,12 @@ class Player():
 		pos_z = pos[2] - local_v.z
 		model_pos = (pos_x, pos_y, pos_z)
 		self.model.position = vmath.vec3(model_pos)
-
+	
+	def CameraFollow(self):
 		# If this character have camfollow, make camera follow it
 		if self.camFollow:
-			self.cam.position = vmath.vec3(pos) + vmath.vec3(self.camDis)
-			self.cam.target = vmath.vec3(pos)
+			self.cam.position = self.model.position + vmath.vec3(self.camDis)
+			self.cam.target = self.model.position
 	
 	def __onClickExcute(self):
 		if not self.firstClick:

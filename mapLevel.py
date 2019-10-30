@@ -22,21 +22,30 @@ class MapLevel():
 		self.firstFinalContact = False
 		self.reduceVelocity = False
 
+		# For moving camera on final
+		self.isOnFinalCam = False
+		self.minFarCam = 1175
+		self.maxHighCam = 25
+		self.finalCamTarget = [0, 1200, 10]
+
 	def update(self, touch, player):
 		for cell in self.cell_list:
 			cell.update(touch)
 		self.__checkPlayerPosition(player)
 
+		if self.isOnFinalCam:
+			self.CameraOnFinal(player)
+
 	def __initialize(self):
 		with open(self.filePath) as f:
 			self.cell_list_data = json.load(f)
-		
+
 		self.length = self.cell_list_data[0]
 		self.base_length = self.cell_list_data[0]
 		for i in range(1, len(self.cell_list_data)):
 			cell = Cell(self.cell_list_data[i]['cellPath'], self.showcase, self.collision_objects)
 			self.cell_list.append(cell)
-	
+
 	def __checkPlayerPosition(self, player):
 		if player.model.position.y >= 1000 and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
@@ -47,6 +56,10 @@ class MapLevel():
 			# self.CreateACell("mapfiles/final_cell.json", [0,0,0])
 			# self.ResetPlayer(player)
 			# player.abortCheckContact = True
+		
+		if player.model.position.y >= 1190:
+			player.camFollow = False
+			self.isOnFinalCam = True
 
 		if self.state == STATE_FINAL:
 			self.CheckInsideActiveRange(player)
@@ -55,7 +68,7 @@ class MapLevel():
 			self.CheckReduceVelocity(player)
 			# self.StaticMoveOnFinal(player)
 			return
-			
+
 		curCell_Y = player.model.position.y / 30
 		if curCell_Y >= self.length[1] - 9:
 			# Auto spawn new map when player reach certain cell
@@ -69,6 +82,16 @@ class MapLevel():
 					self.cell_list[0].Destroy()
 					self.cell_list.pop(0)
 
+	def CameraOnFinal(self, player):
+		if player.cam.position.z < self.maxHighCam:
+			newPos = [player.cam.position.x, player.cam.position.y, player.cam.position.z + 0.1]
+			player.cam.position = vmath.vec3(newPos)
+		if player.cam.position.y > self.minFarCam:
+			newPos = [player.cam.position.x, player.cam.position.y - 0.2, player.cam.position.z]
+			player.cam.position = vmath.vec3(newPos)
+		player.cam.target = vmath.vec3(self.finalCamTarget)
+
+
 	def CheckReduceVelocity(self, player):
 		if self.firstFinalContact and self.reduceVelocity == False:
 			self.reduceVelocity = True
@@ -81,7 +104,7 @@ class MapLevel():
 		for bd in self.finalScene.bodies:
 			if bd in self.finalScene.activatedBodies:
 				continue
-			
+
 			pos, orn = p.getBasePositionAndOrientation(bd)
 			distanceVec = [player_pos[0] - pos[0], player_pos[1] - pos[1], player_pos[2] - pos[2]]
 			distance = vmath.length(vmath.vec3(distanceVec))
@@ -89,26 +112,26 @@ class MapLevel():
 				# Then activate bd
 				p.changeDynamics(bodyUniqueId=bd, linkIndex=-1, mass=5)
 				self.finalScene.activatedBodies.append(bd)
-				
+
 	def CheckContact(self, player):
 		aabbMin, aabbMax = p.getAABB(player.colId, -1)
 		collision_list = p.getOverlappingObjects(aabbMin, aabbMax)
-		if collision_list is not None and len(collision_list) != 0:		
+		if collision_list is not None and len(collision_list) != 0:
 			for objId in collision_list:
 				colId = objId[0]
 				if colId != 0 and colId in self.finalScene.activatedBodies:
 					self.firstFinalContact = True
 					break
 
-	
+
 	def CreateACell(self, cellPath, pos):
 		cell = Cell(cellPath, self.showcase, self.collision_objects, pos)
 		# self.cell_list.append(cell)
-	
+
 	def StaticMoveOnFinal(self, player):
 		linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
 		p.resetBaseVelocity(player.colId, self.finalVelocity, angularVelocity)
-		
+
 	def ResetPlayer(self, player):
 		pos, orn = p.getBasePositionAndOrientation(player.colId)
 		linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
