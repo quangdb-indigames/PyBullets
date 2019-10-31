@@ -15,7 +15,7 @@ from speed_button import SpeedButton
 from pause_button import PauseButton
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
-
+from progress_bar import ProgressBar
 from player import Player
 from mapLevel import MapLevel
 import json
@@ -112,12 +112,16 @@ class GameScene:
 		self.replayButton = ReplayButton(pos, scale, 'asset/button_replay', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create pause button
-		pos = [100,220,1]
-		scale = [30, 30]
+		pos = [120,220,1]
+		scale = [20, 26]
 		self.pauseButton = PauseButton(pos, scale, 'asset/button_pause', self.UIshowcase, self.UIcam, self.UI_manager)
 
+		# Create progress bar
+		progress_bar = ProgressBar([15, 220, 1], [150, 17], [142, 7], [23, 19], 'asset/progress_bar_background_bar', 'asset/progress_bar_slider_bar', 'asset/progress_bar_slider_normal', 'asset/progress_bar_slider_alert', self.UIshowcase)
+
+
 		# Create map
-		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects)
+		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar)
 		# self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
 
 		# Create cannon

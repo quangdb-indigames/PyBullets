@@ -6,8 +6,9 @@ from finalScene import FinalScene
 import pyxie
 STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
+
 class MapLevel():
-	def __init__(self, filePath, showcase, collision_objects):
+	def __init__(self, filePath, showcase, collision_objects, progress_bar):
 		self.showcase = showcase
 		self.filePath = filePath
 		self.collision_objects = collision_objects
@@ -29,13 +30,34 @@ class MapLevel():
 		self.maxHighCam = 25
 		self.finalCamTarget = [0, 1200, 10]
 
+		# For progress bar supporting
+		self.progress_bar = progress_bar
+		self.startProgressPos = -10
+		self.finalProgressPos = 1000
+		self.totalProgressDis = self.finalProgressPos - self.startProgressPos
+		self.currentProgress = 0.01
+
+
 	def update(self, touch, player):
 		for cell in self.cell_list:
 			cell.update(touch)
 		self.__checkPlayerPosition(player)
+		if self.state == STATE_PLAY:
+			self.CalculateCurrentProgress(player)
+
+		self.progress_bar.Update(self.currentProgress)
 
 		if self.isOnFinalCam:
 			self.CameraOnFinal(player)
+
+	def CalculateCurrentProgress(self, player):
+		flyedDis = player.model.position.y - self.startProgressPos
+		percentProgress = round(flyedDis / self.totalProgressDis, 5)
+		if percentProgress < 0.01:
+			percentProgress = 0.01
+		elif percentProgress > 1.0:
+			percentProgress = 1.0
+		self.currentProgress = percentProgress
 
 	def __initialize(self):
 		with open(self.filePath) as f:
@@ -48,7 +70,7 @@ class MapLevel():
 			self.cell_list.append(cell)
 
 	def __checkPlayerPosition(self, player):
-		if player.model.position.y >= 1000 and self.state == STATE_PLAY:
+		if player.model.position.y >= self.finalProgressPos and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
 			# for cell in self.cell_list:
 			# 	cell.Destroy()
