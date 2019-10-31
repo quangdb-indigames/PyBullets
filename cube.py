@@ -33,8 +33,12 @@ class Cube():
 		# Depend on cube type should be iteractable or not
 		if self.isIteractable:
 			self.tapped = False
+		
+		self.isDestroy = False
 	
 	def update(self, touch):
+		if self.isDestroy:
+			return
 		# if is plane, object will be static
 		if self.isPlane:
 			return
