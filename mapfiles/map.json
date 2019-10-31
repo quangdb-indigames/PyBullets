@@ -1,47 +1,46 @@
 [
-    [1, 11],
+    [
+        "mapfiles/cell_01/cell_01_01.json", "mapfiles/cell_01/cell_01_02.json", "mapfiles/cell_01/cell_01_03.json", "mapfiles/cell_01/cell_01_04.json", "mapfiles/cell_01/cell_01_05.json", "mapfiles/cell_01/cell_01_06.json",
+        "mapfiles/cell_01/cell_01_07.json", "mapfiles/cell_01/cell_01_08.json", "mapfiles/cell_01/cell_01_09.json", "mapfiles/cell_01/cell_01_10.json", "mapfiles/cell_01/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_01.json"
-    },
-    
-    {
-        "cellPath": "mapfiles/cell_01_02.json"
-    },
+    [
+        "mapfiles/cell_02/cell_01_01.json", "mapfiles/cell_02/cell_01_02.json", "mapfiles/cell_02/cell_01_03.json", "mapfiles/cell_02/cell_01_04.json", "mapfiles/cell_02/cell_01_05.json", "mapfiles/cell_02/cell_01_06.json",
+        "mapfiles/cell_02/cell_01_07.json", "mapfiles/cell_02/cell_01_08.json", "mapfiles/cell_02/cell_01_09.json", "mapfiles/cell_02/cell_01_10.json", "mapfiles/cell_02/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_03.json"
-    },
+    [
+        "mapfiles/cell_03/cell_01_01.json", "mapfiles/cell_03/cell_01_02.json", "mapfiles/cell_03/cell_01_03.json", "mapfiles/cell_03/cell_01_04.json", "mapfiles/cell_03/cell_01_05.json", "mapfiles/cell_03/cell_01_06.json",
+        "mapfiles/cell_03/cell_01_07.json", "mapfiles/cell_03/cell_01_08.json", "mapfiles/cell_03/cell_01_09.json", "mapfiles/cell_03/cell_01_10.json", "mapfiles/cell_03/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_04.json"
-    },
+    [
+        "mapfiles/cell_04/cell_01_01.json", "mapfiles/cell_04/cell_01_02.json", "mapfiles/cell_04/cell_01_03.json", "mapfiles/cell_04/cell_01_04.json", "mapfiles/cell_04/cell_01_05.json", "mapfiles/cell_04/cell_01_06.json",
+        "mapfiles/cell_04/cell_01_07.json", "mapfiles/cell_04/cell_01_08.json", "mapfiles/cell_04/cell_01_09.json", "mapfiles/cell_04/cell_01_10.json", "mapfiles/cell_04/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_05.json"
-    },
+    [
+        "mapfiles/cell_05/cell_01_01.json", "mapfiles/cell_05/cell_01_02.json", "mapfiles/cell_05/cell_01_03.json", "mapfiles/cell_05/cell_01_04.json", "mapfiles/cell_05/cell_01_05.json", "mapfiles/cell_05/cell_01_06.json",
+        "mapfiles/cell_05/cell_01_07.json", "mapfiles/cell_05/cell_01_08.json", "mapfiles/cell_05/cell_01_09.json", "mapfiles/cell_05/cell_01_10.json", "mapfiles/cell_05/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_06.json"
-    },
+    [
+        "mapfiles/cell_-02/cell_01_01.json", "mapfiles/cell_-02/cell_01_02.json", "mapfiles/cell_-02/cell_01_03.json", "mapfiles/cell_-02/cell_01_04.json", "mapfiles/cell_-02/cell_01_05.json", "mapfiles/cell_-02/cell_01_06.json",
+        "mapfiles/cell_-02/cell_01_07.json", "mapfiles/cell_-02/cell_01_08.json", "mapfiles/cell_-02/cell_01_09.json", "mapfiles/cell_-02/cell_01_10.json", "mapfiles/cell_-02/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_07.json"
-    },
+    [
+        "mapfiles/cell_-03/cell_01_01.json", "mapfiles/cell_-03/cell_01_02.json", "mapfiles/cell_-03/cell_01_03.json", "mapfiles/cell_-03/cell_01_04.json", "mapfiles/cell_-03/cell_01_05.json", "mapfiles/cell_-03/cell_01_06.json",
+        "mapfiles/cell_-03/cell_01_07.json", "mapfiles/cell_-03/cell_01_08.json", "mapfiles/cell_-03/cell_01_09.json", "mapfiles/cell_-03/cell_01_10.json", "mapfiles/cell_-03/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_08.json"
-    },
+    [
+        "mapfiles/cell_-04/cell_01_01.json", "mapfiles/cell_-04/cell_01_02.json", "mapfiles/cell_-04/cell_01_03.json", "mapfiles/cell_-04/cell_01_04.json", "mapfiles/cell_-04/cell_01_05.json", "mapfiles/cell_-04/cell_01_06.json",
+        "mapfiles/cell_-04/cell_01_07.json", "mapfiles/cell_-04/cell_01_08.json", "mapfiles/cell_-04/cell_01_09.json", "mapfiles/cell_-04/cell_01_10.json", "mapfiles/cell_-04/cell_01_11.json"
+    ],
 
-    {
-        "cellPath": "mapfiles/cell_01_09.json"
-    },
-
-    {
-        "cellPath": "mapfiles/cell_01_10.json"
-    },
-
-    {
-        "cellPath": "mapfiles/cell_01_11.json"
-    }
+    [
+        "mapfiles/cell_-05/cell_01_01.json", "mapfiles/cell_-05/cell_01_02.json", "mapfiles/cell_-05/cell_01_03.json", "mapfiles/cell_-05/cell_01_04.json", "mapfiles/cell_-05/cell_01_05.json", "mapfiles/cell_-05/cell_01_06.json",
+        "mapfiles/cell_-05/cell_01_07.json", "mapfiles/cell_-05/cell_01_08.json", "mapfiles/cell_-05/cell_01_09.json", "mapfiles/cell_-05/cell_01_10.json", "mapfiles/cell_-05/cell_01_11.json"
+    ]
 ]

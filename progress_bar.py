@@ -12,7 +12,7 @@ class ProgressBar():
 		self.currentSlider = NORMAL_SLIDER
 		self.numberAlertTimes = 5
 		self.currentAlertTimes = 0
-		self.changeSliderRate = 10
+		self.changeSliderRate = 6
 		self.currentCount = 0
 		
 		# Background bar

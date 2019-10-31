@@ -33,7 +33,7 @@ class MapLevel():
 		# For progress bar supporting
 		self.progress_bar = progress_bar
 		self.startProgressPos = -10
-		self.finalProgressPos = 1000
+		self.finalProgressPos = 980
 		self.totalProgressDis = self.finalProgressPos - self.startProgressPos
 		self.currentProgress = 0.01
 
@@ -63,23 +63,15 @@ class MapLevel():
 		with open(self.filePath) as f:
 			self.cell_list_data = json.load(f)
 
-		self.length = self.cell_list_data[0]
-		self.base_length = self.cell_list_data[0]
-		for i in range(1, len(self.cell_list_data)):
-			cell = Cell(self.cell_list_data[i]['cellPath'], self.showcase, self.collision_objects)
-			self.cell_list.append(cell)
+		self.length = len(self.cell_list_data[0])
+		self.base_length = len(self.cell_list_data[0])
+		self.ConstructCellFromData([0,0,0])
 
 	def __checkPlayerPosition(self, player):
 		if player.model.position.y >= self.finalProgressPos and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
-			# for cell in self.cell_list:
-			# 	cell.Destroy()
-			# self.collision_objects = []
 			self.finalScene.ToActivateState()
 			self.progress_bar.onAlert = True
-			# self.CreateACell("mapfiles/final_cell.json", [0,0,0])
-			# self.ResetPlayer(player)
-			# player.abortCheckContact = True
 		
 		if player.model.position.y >= 1190:
 			player.camFollow = False
@@ -94,17 +86,25 @@ class MapLevel():
 			return
 
 		curCell_Y = player.model.position.y / 30
-		if curCell_Y >= self.length[1] - 9:
+		if curCell_Y >= self.length - 9:
 			# Auto spawn new map when player reach certain cell
-			base_pos = [0, self.length[1] * 30, 0]
-			for i in range(1, len(self.cell_list_data)):
-				cell = Cell(self.cell_list_data[i]['cellPath'], self.showcase, self.collision_objects, base_pos)
-				self.cell_list.append(cell)
-			self.length = [self.length[0], self.length[1] + self.base_length[1]]
+			base_pos = [0, self.length * 30, 0]
+			self.ConstructCellFromData(base_pos)
+			self.length = self.length + self.base_length
 			if len(self.cell_list) > 22:
-				for i in range(0, 10):
-					self.cell_list[0].Destroy()
-					self.cell_list.pop(0)
+				new_list = list()
+				for cell in self.cell_list:
+					if player.model.position.y - 80 > cell.position[1]:
+						cell.Destroy()
+					else:
+						new_list.append(cell)
+				self.cell_list = new_list
+	
+	def ConstructCellFromData(self, base_pos):
+		for cell_col in self.cell_list_data:
+			for cell_data in cell_col:
+				cell = Cell(cell_data, self.showcase, self.collision_objects, base_pos)
+				self.cell_list.append(cell)
 
 	def CameraOnFinal(self, player):
 		if player.cam.position.z < self.maxHighCam:
