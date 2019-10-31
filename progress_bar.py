@@ -2,11 +2,18 @@ from pyxie.apputil import graphicsHelper
 import pyxie
 import pyvmath as vmath
 from scene_manager import SceneManager
+NORMAL_SLIDER = "NORMAL_SLIDER"
+ALERT_SLIDER = "ALERT_SLIDER"
 class ProgressBar():
 	def __init__(self, pos, backgroundBarScale, sliderBarScale, sliderScale, backgroundBarPath, sliderBarPath, sliderNormalPath, sliderAlertPath, showcase):
 		# Supporting attribute
 		self.percentComplete = 0.05
-		self.onFlying = True
+		self.onAlert = False
+		self.currentSlider = NORMAL_SLIDER
+		self.numberAlertTimes = 5
+		self.currentAlertTimes = 0
+		self.changeSliderRate = 10
+		self.currentCount = 0
 		
 		# Background bar
 		self.backgroundBarPos = pos
@@ -41,11 +48,41 @@ class ProgressBar():
 		self.DisplayCurrentCompleteProgress()
 	
 	def Update(self, currentProgress):
-		if self.onFlying:
+		if not self.onAlert:
 			self.percentComplete = currentProgress
 			# if self.percentComplete < 1.0:
 			# 	self.percentComplete += 0.01
 			self.DisplayCurrentCompleteProgress()
+		else:
+			self.OnAlert()
+
+	def OnAlert(self):
+		if self.currentAlertTimes > self.numberAlertTimes:
+			if self.currentSlider == ALERT_SLIDER:
+				self.showcase.remove(self.slider)
+				self.slider = graphicsHelper.createSprite(self.sliderScale[0], self.sliderScale[1], self.sliderNormalPath)
+				self.currentSlider = NORMAL_SLIDER
+				self.slider.position = vmath.vec3(self.sliderPos)
+				self.showcase.add(self.slider)
+			return
+		
+		self.currentCount += 1
+		if self.currentCount > self.changeSliderRate:
+			self.currentCount = 0
+			self.ChangeSlider()
+
+	def ChangeSlider(self):
+		self.showcase.remove(self.slider)
+		if self.currentSlider == NORMAL_SLIDER:
+			self.slider = graphicsHelper.createSprite(self.sliderScale[0], self.sliderScale[1], self.sliderAlertPath)
+			self.currentSlider = ALERT_SLIDER
+			self.currentAlertTimes += 1
+		else:
+			self.slider = graphicsHelper.createSprite(self.sliderScale[0], self.sliderScale[1], self.sliderNormalPath)
+			self.currentSlider = NORMAL_SLIDER
+			
+		self.slider.position = vmath.vec3(self.sliderPos)
+		self.showcase.add(self.slider)
 
 	def DisplayCurrentCompleteProgress(self):
 		self.sliderBarPos = [1.4 + self.backgroundBarPos[0] - self.backgroundBarScale[0] / 2 + (self.sliderBarScale[0] * self.percentComplete) / 2, self.backgroundBarPos[1] - 0.7, self.backgroundBarPos[2] + 1.0]

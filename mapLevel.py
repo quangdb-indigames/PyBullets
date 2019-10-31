@@ -76,6 +76,7 @@ class MapLevel():
 			# 	cell.Destroy()
 			# self.collision_objects = []
 			self.finalScene.ToActivateState()
+			self.progress_bar.onAlert = True
 			# self.CreateACell("mapfiles/final_cell.json", [0,0,0])
 			# self.ResetPlayer(player)
 			# player.abortCheckContact = True
