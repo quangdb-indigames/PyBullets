@@ -18,6 +18,7 @@ from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from progress_bar import ProgressBar
 from player import Player
 from mapLevel import MapLevel
+from skybox import Skybox
 import json
 STATE_RESET = "STATE_RESET"
 STATE_INITING = "STATE_INITING"
@@ -78,6 +79,13 @@ class GameScene:
 		self.cam.fieldOfView = 80
 
 		self.showcase = pyxie.showcase("case01##" + str(random.randrange(1000)))
+
+		#SKYBOX REGION
+		self.skyboxCamera = pyxie.camera('skyboxCam###' + str(random.randrange(1000)))
+		self.skyboxCase = pyxie.showcase("skyboxCase##" + str(random.randrange(1000)))
+		self.skyboxCamera.farPlane = 2000
+		self.skybox = Skybox('asset/skybox/sphere_skybox_object', self.cam, self.skyboxCamera, self.skyboxCase)
+
 		scale = vmath.vec3(10, 10, 10)
 		position = vmath.vec3(0.0, -10.0, 0.75)
 		player_col_scale = [0.1, 0.1, 1]
@@ -223,6 +231,7 @@ class GameScene:
 		# self.powerUpButton.Update(touch)
 		self.speedButton.Update()
 		self.replayButton.Update(touch)
+		self.skybox.Update()
 		
 
 		#Other objects update
@@ -237,7 +246,9 @@ class GameScene:
 		# p.resetDebugVisualizerCamera(self.cameraDistance, self.cameraYaw, self.cameraPitch, cameraTargetPosition)
 	
 	def Render(self):
-		self.cam.shoot(self.showcase)
+		self.skyboxCamera.shoot(self.skyboxCase)
+		self.cam.farPlane = 200
+		self.cam.shoot(self.showcase, clearColor=False)
 		self.UIcam.shoot(self.UIshowcase, clearColor=False)
 		imgui.render()
 		self.impl.render(imgui.get_draw_data(), False)
