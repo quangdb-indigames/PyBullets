@@ -26,14 +26,14 @@ class MapLevel():
 
 		# For moving camera on final
 		self.isOnFinalCam = False
-		self.minFarCam = 1175
+		self.minFarCam = 1475
 		self.maxHighCam = 25
-		self.finalCamTarget = [0, 1200, 10]
+		self.finalCamTarget = [0, 1500, 10]
 
 		# For progress bar supporting
 		self.progress_bar = progress_bar
 		self.startProgressPos = -10
-		self.finalProgressPos = 980
+		self.finalProgressPos = 1400
 		self.totalProgressDis = self.finalProgressPos - self.startProgressPos
 		self.currentProgress = 0.01
 
@@ -73,7 +73,7 @@ class MapLevel():
 			self.finalScene.ToActivateState()
 			self.progress_bar.onAlert = True
 		
-		if player.model.position.y >= 1190:
+		if player.model.position.y >= 1490:
 			player.camFollow = False
 			self.isOnFinalCam = True
 

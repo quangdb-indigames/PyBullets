@@ -9,7 +9,7 @@
             "path": "asset/bullseye",
             "name": "bulleye",
             "type": "CYLINDER",
-            "local_pos": [2.0, 8.0, 0.1],
+            "local_pos": [2.0, 4.0, 0.1],
 			"local_scale": [2, 0.5, 2],
 			"local_quaternion": [ 0.7071068, 0, 0, 0.7071068 ],
 			"col_pos": [0, 0, 0],

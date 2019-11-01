@@ -177,7 +177,7 @@ class Player():
 		pos, orn = p.getBasePositionAndOrientation(self.colId)
 		newPos = [pos[0], pos[1] + 0.5, pos[2]]
 		p.resetBasePositionAndOrientation(self.colId, newPos, orn)
-		force = [0, -self.camDis[1] * 15000, 10000]
+		force = [0, -self.camDis[1] * 12000, 8000]
 		p.applyExternalForce(self.colId, -1, force, newPos, flags = p.WORLD_FRAME)
 
 	def __ChangeStatus(self, status):

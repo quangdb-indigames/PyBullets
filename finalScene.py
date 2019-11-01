@@ -171,7 +171,7 @@ class FinalScene:
 
 		matrixList = self.Matrilization(root, self.size, boxData)
 		# Handle pos and scale
-		translate = [0, 1200, 7.0]
+		translate = [0, 1500, 7.0]
 		self.size *= self.sizeMulti
 		newRoot = [root[0] + translate[0], root[1] + translate[1], root[2] + translate[2]]
 		self.center = newRoot
