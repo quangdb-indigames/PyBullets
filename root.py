@@ -9,22 +9,16 @@ import random
 from game_scene import GameScene
 from scene_manager import SceneManager
 import imgui
-import cProfile, pstats
 import sys
 SCREEN_WIDTH = 520
 SCREEN_HEIGHT = 900
 pyxie.window(True, SCREEN_WIDTH , SCREEN_HEIGHT)
 imgui.create_context()
 gameScene = GameScene()
-
 SceneManager.SetCurrentScene(gameScene)
 while(1):
-	pr = cProfile.Profile()
-	pr.enable()
 	SceneManager.GetCurrentScene().Update()
 	SceneManager.GetCurrentScene().Render()
 	pyxie.swap()
-	pr.disable()
-	pr.dump_stats('root.prof')
 	
 # game loop

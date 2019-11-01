@@ -4,7 +4,7 @@ class Skybox:
 	def __init__(self, skyboxPath, gameCamera, skyboxCamera, skyboxShowcase):
 		self.skyboxPath = skyboxPath
 		self.skybox = pyxie.figure(self.skyboxPath)
-		self.skybox.scale = vmath.vec3([900.0, 900.0, 900.0])
+		self.skybox.scale = vmath.vec3([600.0, 600.0, 600.0])
 		self.skybox.position = vmath.vec3([0.0, -300, 100.0])
 		# self.skybox.rotation = vmath.quat([ 0.7071068, 0, 0, 0.7071068 ])
 		self.skyboxShowcase = skyboxShowcase

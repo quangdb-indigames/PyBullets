@@ -54,10 +54,11 @@ class SpeedButton():
 
 		#If currentTick 
 		zone = currentTick / self.scale[1]
+		print(zone)
 
-		if zone < 0.61:
+		if zone < 0.8:
 			return self.normalZone
-		elif zone < 0.9:
+		elif zone < 0.95:
 			return self.goodZone
 		else:
 			return self.perfectZone

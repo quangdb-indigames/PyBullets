@@ -11,6 +11,7 @@ class Cube():
 	def __init__(self, pos, scale,  modelPath, col_scale, col_local_pos = [0,0,0], base_quaternion = [0, 0, 0, 1],isPlane = False, camfollow = False, isIteractable = False):
 		# Create model to display on pyxie
 		self.model = pyxie.figure(modelPath)
+		# self.model.setMaterialRenderState()
 		self.model.position = pos
 		self.model.scale = scale
 		self.base_rotate = base_quaternion
