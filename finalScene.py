@@ -15,6 +15,7 @@ class FinalScene:
 		self.showcase = showcase
 		self.sizeMulti = 100
 		self.activatedBodies = list()
+		self.removedBodies = list()
 		self.firstTimeActive = True
 
 		#Init process
@@ -30,7 +31,9 @@ class FinalScene:
 		#Activate process
 		self.state = ACTIVE_STATE
 		self.PyxieDisplayProcess()
-		
+
+		# Handle removed body
+		self.HandleRemovedBodies()
 
 	def Update(self):
 		if self.state == INIT_STATE:
@@ -45,6 +48,10 @@ class FinalScene:
 	def SimulateProcess(self):
 		index = 1
 		for bd in self.bodies:
+			if not bd:
+				index += 1
+				continue
+
 			if not self.firstTimeActive and bd not in self.activatedBodies:
 				index += 1
 				continue
@@ -227,3 +234,40 @@ class FinalScene:
 				restitution=0.8,
 			)
 			self.bodies.append(body)
+	
+	def SaveResult(self):
+		"""
+		This will save all activated body into a file.\n
+		In next game loop, this final scene will read data from it and won't update\n
+		any body in it.
+		"""
+		activated = list()
+		activated.extend(self.removedBodies)
+		for activatedBody in self.activatedBodies:
+			if activatedBody in self.bodies:
+				index = self.bodies.index(activatedBody)
+				if index not in activated:
+					activated.append(index)
+
+		with open("TestVoxel/activatedBodies.pickle", "wb") as f:
+			pickle.dump(activated, f)
+	
+	
+	def HandleRemovedBodies(self):
+		if not os.path.exists("TestVoxel/activatedBodies.pickle"):
+			return
+
+		with open("TestVoxel/activatedBodies.pickle", "rb") as f:
+			removedIndex = pickle.load(f)
+		self.removedBodies = removedIndex
+		
+		for removedBody in removedIndex:
+			body = self.bodies[removedBody]
+			p.removeBody(body)
+			self.bodies[removedBody] = None
+			self.model.setJoint(removedBody + 1, position=vmath.vec3(0,0,0))
+			self.activatedBodies.append(body)
+	
+	def Destroy(self):
+		self.showcase.remove(self.model)
+		self.model = None

@@ -48,7 +48,7 @@ class GameScene:
 		#Setting IMGUI
 		if not hasattr(self, "impl"):
 			self.impl = ImgiPyxieRenderer()
-			self.impl.io.font_global_scale = 0.5
+			self.impl.io.font_global_scale = 1.0
 
 		self.averageFPS = 60
 		self.listFPS = list()
@@ -147,10 +147,10 @@ class GameScene:
 		self.cameraPitch = -35
 		
 	def DisplayFPS(self, elapsedTime):
-		imgui.set_next_window_size(70, 50) # 60, 100
-		imgui.set_next_window_position(120, 450) # 0, 15
+		imgui.set_next_window_size(70, 50, imgui.ONCE) # 60, 100
+		imgui.set_next_window_position(120, 450, imgui.ONCE) # 0, 15
 		fps = round(1/elapsedTime)
-		imgui.begin("FPS", flags=imgui.WINDOW_NO_COLLAPSE)
+		imgui.begin("", flags=imgui.WINDOW_NO_COLLAPSE|imgui.WINDOW_NO_TITLE_BAR|imgui.WINDOW_NO_SCROLLBAR|imgui.WINDOW_NO_RESIZE|imgui.WINDOW_ALWAYS_AUTO_RESIZE)
 		imgui.text(str(self.averageFPS))
 		imgui.end()
 	
@@ -257,13 +257,17 @@ class GameScene:
 
 	def OnExit(self):
 		p.disconnect()
+		self.level.Destroy()
 		del self.cam
+		self.showcase.clear()
 		del self.showcase
 		del self.UIcam
-		del self.UIshowcase
+		self.UIshowcase.clear()
+		del self.UIshowcase		
 		# self.__dict__.clear()
 
 	def ResetScene(self):
+		self.level.SaveResult()
 		self.OnExit()
 		self.Init()
 	

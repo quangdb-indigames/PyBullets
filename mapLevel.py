@@ -130,7 +130,7 @@ class MapLevel():
 	def CheckInsideActiveRange(self, player):
 		player_pos, player_orn = p.getBasePositionAndOrientation(player.colId)
 		for bd in self.finalScene.bodies:
-			if bd in self.finalScene.activatedBodies:
+			if not bd or bd in self.finalScene.activatedBodies:
 				continue
 
 			pos, orn = p.getBasePositionAndOrientation(bd)
@@ -172,3 +172,17 @@ class MapLevel():
 		multiVelocity = vmath.length(vmath.vec3(linearVelocity))
 		self.finalVelocity = newVelocity = [direction[0] * multiVelocity * 0.05, direction[1] * multiVelocity * 0.05, direction[2] * multiVelocity * 0.05]
 		p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
+	
+	def SaveResult(self):
+		"""
+		This will save all activated body into a file.\n
+		In next game loop, this final scene will read data from it and won't update\n
+		any body in it.
+		"""
+		if self.state == STATE_FINAL:
+			self.finalScene.SaveResult()
+	
+	def Destroy(self):
+		if self.state == STATE_FINAL:
+			self.finalScene.Destroy()
+
