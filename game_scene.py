@@ -13,6 +13,7 @@ from cannon import Cannon
 from finalScene import FinalScene
 from speed_button import SpeedButton
 from pause_button import PauseButton
+from reset_data_button import ResetDataButton
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from progress_bar import ProgressBar
@@ -114,10 +115,15 @@ class GameScene:
 		tickScale = [20, 10]
 		self.speedButton = SpeedButton(pos, scale, tickScale, 'asset/bar right 01', 'asset/bar right 02', self.UIshowcase, 5.0)
 
-		#Create button
+		#Create replay button
 		pos = [-100,220,1]
 		scale = [50, 30]
 		self.replayButton = ReplayButton(pos, scale, 'asset/button_replay', self.UIshowcase, self.UIcam, self.UI_manager)
+
+		#Create reset data button
+		pos = [-100,180,1]
+		scale = [40, 40]
+		self.resetDataButton = ResetDataButton(pos, scale, 'asset/reset_data_button', self.UIshowcase, self.UIcam, self.UI_manager)
 
 		# Create pause button
 		pos = [120,220,1]
@@ -231,6 +237,7 @@ class GameScene:
 		# self.powerUpButton.Update(touch)
 		self.speedButton.Update()
 		self.replayButton.Update(touch)
+		self.resetDataButton.Update(touch)
 		self.skybox.Update()
 		
 
