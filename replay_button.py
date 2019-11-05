@@ -17,8 +17,11 @@ class ReplayButton():
 		self.tapped = False
 
 		self.showcase.add(self.model)
+		self.isDisable = False
 	
 	def Update(self, touch):
+    	if self.isDisable:
+    		return
 		self.CheckOnClick(touch)
 	
 	def CheckOnClick(self, touch):
@@ -69,3 +72,7 @@ class ReplayButton():
 
 		dir = vmath.normalize(fpos - npos)
 		return npos + (dir * (npos.z - worldz))
+	
+	def Hide(self):
+		self.isDisable = True
+		self.showcase.remove(self.model)

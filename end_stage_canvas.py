@@ -21,10 +21,11 @@ class EndStageCanvas:
 		self.board.position = vmath.vec3(self.centerPos)
 
 		# Clear Stage Text
-		self.clearTextPos = [self.centerPos[0], self.centerPos[1] + 100, self.centerPos[2]]
+		self.clearTextPos = [self.centerPos[0], self.centerPos[1] + 170, self.centerPos[2]]
 		self.clearTextScale = clearStageTextScale
 		self.clearTextPath = clearStageTextPath
 		self.clearText = graphicsHelper.createSprite(self.clearTextScale[0], self.clearTextScale[1], self.clearTextPath)
+		self.clearText.position = vmath.vec3(self.clearTextPos)
 
 		# Star
 		self.starScale = starScale
@@ -33,16 +34,18 @@ class EndStageCanvas:
 		self.listStar = list()
 
 		# Next Button
-		self.nextButtonPos = [self.centerPos[0] + 30, self.centerPos[1] - 70, self.centerPos[2]]
+		self.nextButtonPos = [self.centerPos[0] + 60, self.centerPos[1] - 100, self.centerPos[2]]
 		self.nextButtonScale = buttonScale
 		self.nextButtonPath = nextButtonPath
 		self.nextButton = graphicsHelper.createSprite(self.nextButtonScale[0], self.nextButtonScale[1], self.nextButtonPath)
+		self.nextButton.position = vmath.vec3(self.nextButtonPos)
 
 		# Next Button
-		self.retryButtonPos = [self.centerPos[0] - 30, self.centerPos[1] - 70, self.centerPos[2]]
+		self.retryButtonPos = [self.centerPos[0] - 60, self.centerPos[1] - 100, self.centerPos[2]]
 		self.retryButtonScale = buttonScale
 		self.retryButtonPath = retryButtonPath
 		self.retryButton = graphicsHelper.createSprite(self.retryButtonScale[0], self.retryButtonScale[1], self.retryButtonPath)
+		self.retryButton.position = vmath.vec3(self.retryButtonPos)
 	
 	def Display(self, rateType):
 		self.isDisable = False
@@ -63,7 +66,7 @@ class EndStageCanvas:
 		self.listStar.clear()
 
 	def DisplayStarRate(self, rateType):
-		self.leftBasePos = [self.centerPos[0] - 60, self.centerPos[1] + 70, self.centerPos[2]]
+		self.leftBasePos = [self.centerPos[0] - 90, self.centerPos[1] + 102, self.centerPos[2]]
 		clearRate = -1
 		if rateType == UNCLEAR:
 			clearRate = -1
@@ -80,7 +83,7 @@ class EndStageCanvas:
 			else:
 				displayStar = self.yellowStarPath
 			star = graphicsHelper.createSprite(self.starScale[0], self.starScale[1], displayStar)
-			star.position = vmath.vec3([self.leftBasePos[0] + i * 30, self.leftBasePos[1], self.leftBasePos[2]])
+			star.position = vmath.vec3([self.leftBasePos[0] + i * 45, self.leftBasePos[1], self.leftBasePos[2]])
 			self.showcase.add(star)
 			self.listStar.append(star)
 		

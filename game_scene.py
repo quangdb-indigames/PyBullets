@@ -18,6 +18,7 @@ import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from destroy_bar import DestroyBar
 from progress_bar import ProgressBar
+from end_stage_canvas import EndStageCanvas
 from player import Player
 from mapLevel import MapLevel
 from skybox import Skybox
@@ -137,8 +138,16 @@ class GameScene:
 		# Create destroy bar
 		destroy_bar = DestroyBar([15, 220, 1], [150, 17], [142, 7], [1, 8.5], 'asset/progress_bar_background_bar', 'asset/destroy_bar_slider_bar', 'asset/destroy_bar_tick', self.UIshowcase)
 
+		# Create end stage canvas
+		end_stage_canvas = EndStageCanvas(
+			[0,-25,0], [185, 165], [120, 80], 
+			[38, 36], [100, 30], 
+			'asset/end_stage_board', 'asset/end_stage_clear_stage_text', 'asset/end_stage_star_white', 'asset/end_stage_star_yellow', 'asset/end_stage_next_button', 'asset/end_stage_retry_button',
+			self.UIshowcase, self.UIcam, self.UI_manager
+		)
+
 		# Create map
-		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar, destroy_bar)
+		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar, destroy_bar, end_stage_canvas)
 		# self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
 
 		# Create cannon
@@ -282,4 +291,8 @@ class GameScene:
 		self.Init()
 	
 	def SetState(self, state):
-		self.state = state
+		self.state = state'
+	
+	def HideUI(self):
+		self.replayButton.Hide()
+		self.resetDataButton.Hide()

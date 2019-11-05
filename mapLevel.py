@@ -4,11 +4,13 @@ from cell import Cell
 import pyvmath as vmath
 from finalScene import FinalScene
 import pyxie
+import pickle
+import os
 STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
 
 class MapLevel():
-	def __init__(self, filePath, showcase, collision_objects, progress_bar, destroy_bar):
+	def __init__(self, filePath, showcase, collision_objects, progress_bar, destroy_bar, end_stage_canvas):
 		self.showcase = showcase
 		self.filePath = filePath
 		self.collision_objects = collision_objects
@@ -39,8 +41,10 @@ class MapLevel():
 		self.currentProgress = 0.01
 
 		# Counting replay
+		self.endStageCanvas = end_stage_canvas
 		self.numberOfTry = 5
-		self.currentTry = 0
+		
+		self.LoadResult()
 
 
 	def update(self, touch, player):
@@ -143,6 +147,27 @@ class MapLevel():
 				newVelocity = [linearVelocity[0] / 2, linearVelocity[1] / 2, linearVelocity[2] / 2]
 			p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
 			player.isDeath = True
+			self.currentTry += 1
+			if self.currentTry > self.numberOfTry:
+				self.currentTry = 0
+				self.DisplayStageResult()
+	
+	def DisplayStageResult(self):
+		percentDestroy = self.finalScene.GetDestroyPercent()
+		if percentDestroy < 0.5:
+			rate = "UNCLEAR"
+		elif percentDestroy < 0.6:
+			rate = "ONE_STAR_RATE"
+		elif percentDestroy < 0.8:
+			rate = "TWO_STAR_RATE"
+		else:
+			rate = "THREE_STAR_RATE"
+		
+		self.endStageCanvas.Display(rate)
+		self.percentDestroy = 0
+
+		if os.path.exists("TestVoxel/currentStageResult.pickle"):
+			os.remove("TestVoxel/currentStageResult.pickle")
 
 	def CheckInsideActiveRange(self, player):
 		player_pos, player_orn = p.getBasePositionAndOrientation(player.colId)
@@ -197,7 +222,19 @@ class MapLevel():
 		any body in it.
 		"""
 		if self.state == STATE_FINAL:
-			self.finalScene.SaveResult()
+			self.finalScene.SaveResult(self.currentTry)
+	
+	def LoadResult(self):
+		if not os.path.exists("TestVoxel/currentStageResult.pickle"):
+			self.currentTry = 0
+			self.destroyPercent = 0
+			return
+		
+		with open("TestVoxel/currentStageResult.pickle", "rb") as f:
+			result = pickle.load(f)
+		
+		self.currentTry = result['currentTry']
+		self.destroyPercent = result['destroyPercent']
 	
 	def Destroy(self):
 		if self.state == STATE_FINAL:

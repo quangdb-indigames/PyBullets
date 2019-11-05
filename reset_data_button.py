@@ -18,8 +18,11 @@ class ResetDataButton():
 		self.tapped = False
 
 		self.showcase.add(self.model)
+		self.isDisable = False
 	
 	def Update(self, touch):
+		if self.isDisable:
+			return
 		self.CheckOnClick(touch)
 	
 	def CheckOnClick(self, touch):
@@ -44,6 +47,8 @@ class ResetDataButton():
 	def OnClickExcute(self):
 		if os.path.exists("TestVoxel/activatedBodies.pickle"):
 			os.remove("TestVoxel/activatedBodies.pickle")
+		if os.path.exists("TestVoxel/currentStageResult.pickle"):
+			os.remove("TestVoxel/currentStageResult.pickle")
 
 	
 	def ConvertScreenToWorld(self, scrx, scry, worldz, cam, w=None, h=None):
@@ -71,3 +76,7 @@ class ResetDataButton():
 
 		dir = vmath.normalize(fpos - npos)
 		return npos + (dir * (npos.z - worldz))
+		
+	def Hide(self):
+		self.isDisable = True
+		self.showcase.remove(self.model)

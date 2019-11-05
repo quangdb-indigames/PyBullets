@@ -61,4 +61,5 @@ class SpeedButton():
 			return self.goodZone
 		else:
 			return self.perfectZone
+
 	

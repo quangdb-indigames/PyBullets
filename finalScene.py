@@ -39,12 +39,12 @@ class FinalScene:
 		if self.state == INIT_STATE:
 			return
 		self.SimulateProcess()
-		
+
 	def PyxieDisplayProcess(self):
 		self.model = pyxie.figure("TestVoxel/Lion_Enemy")
 		# self.model.scale = vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti)
 		self.showcase.add(self.model)
-	
+
 	def SimulateProcess(self):
 		index = 1
 		for bd in self.bodies:
@@ -57,8 +57,8 @@ class FinalScene:
 				continue
 			pos, rot = p.getBasePositionAndOrientation(bd)
 			self.model.setJoint(index, position=vmath.vec3(pos), rotation=vmath.quat(rot), scale=vmath.vec3(self.sizeMulti, self.sizeMulti, self.sizeMulti ))
-			index += 1			
-		
+			index += 1
+
 		if self.firstTimeActive:
 			self.firstTimeActive = False
 
@@ -102,7 +102,7 @@ class FinalScene:
 				)
 				boxinfo.append(data)
 			newBoxData = self.HandleBoxData(boxinfo)
-			
+
 			newConstructBoxData = dict()
 			newConstructBoxData.update(
 				{
@@ -138,13 +138,13 @@ class FinalScene:
 	def LoadNewBoxData(self):
 		with open("TestVoxel/newConstructBoxData.pickle", "rb") as f:
 			newConstructBoxData = pickle.load(f)
-		
+
 		self.size = newConstructBoxData['size']
 		self.center = newConstructBoxData['center']
 		self.newBoxData = newConstructBoxData['newBoxData']
 
 	def HandleBoxData(self, boxData):
-		# Size 
+		# Size
 		self.size = boxData[0][3][0] - boxData[0][2][0]
 
 		# Min x
@@ -173,7 +173,7 @@ class FinalScene:
 				maxY = point[0][1]
 			if point[0][2] > maxZ:
 				maxZ = point[0][2]
-		
+
 		root =  [(maxX + minX) / 2, (maxY + minY) / 2, (maxZ + minZ) / 2]
 
 		matrixList = self.Matrilization(root, self.size, boxData)
@@ -203,7 +203,7 @@ class FinalScene:
 			k = (pos[2] - root[2]) / size
 			matrixList.append([i, j, k])
 		return matrixList
-	
+
 	def ConstructPybulletProcess(self):
 		boxinfo = []
 		with open("TestVoxel/boxinfo.pickle", "rb") as f:
@@ -234,8 +234,8 @@ class FinalScene:
 				restitution=0.8,
 			)
 			self.bodies.append(body)
-	
-	def SaveResult(self):
+
+	def SaveResult(self, currentTry):
 		"""
 		This will save all activated body into a file.\n
 		In next game loop, this final scene will read data from it and won't update\n
@@ -254,10 +254,17 @@ class FinalScene:
 
 		# Save destroy percent
 		destroyPercent = self.GetDestroyPercent()
-		with open("TestVoxel/destroyPercent.pickle", "wb") as f:
-			pickle.dump(destroyPercent, f)
-	
-	
+		currentStageResult = dict(
+			{
+				"destroyPercent": destroyPercent,
+				"currentTry": currentTry
+			}
+		)
+
+		with open("TestVoxel/currentStageResult.pickle", "wb") as f:
+			pickle.dump(currentStageResult, f)
+
+
 	def HandleRemovedBodies(self):
 		if not os.path.exists("TestVoxel/activatedBodies.pickle"):
 			return
@@ -265,16 +272,16 @@ class FinalScene:
 		with open("TestVoxel/activatedBodies.pickle", "rb") as f:
 			removedIndex = pickle.load(f)
 		self.removedBodies = removedIndex
-		
+
 		for removedBody in removedIndex:
 			body = self.bodies[removedBody]
 			p.removeBody(body)
 			self.bodies[removedBody] = None
 			self.model.setJoint(removedBody + 1, position=vmath.vec3(0,0,0))
 			self.activatedBodies.append(body)
-	
+
 	def GetDestroyPercent(self):
-		percent = len(self.activatedBodies) / len(self.bodies)
+		percent = len(self.activatedBodies) / len(self.bodies) + 0.02
 		return percent
 
 	def Destroy(self):
