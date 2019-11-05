@@ -34,7 +34,7 @@ class MapLevel():
 		self.progress_bar = progress_bar
 		self.startProgressPos = -10
 		self.finalProgressPos = 1400
-		self.totalProgressDis = self.finalProgressPos - self.startProgressPos
+		self.totalProgressDis = self.finalProgressPos - self.startProgressPos - 50
 		self.currentProgress = 0.01
 
 
@@ -45,7 +45,7 @@ class MapLevel():
 		if self.state == STATE_PLAY:
 			self.CalculateCurrentProgress(player)
 
-		self.progress_bar.Update(self.currentProgress)
+		self.progress_bar.Update(self.currentProgress, self)
 
 		if self.isOnFinalCam:
 			self.CameraOnFinal(player)
@@ -68,10 +68,12 @@ class MapLevel():
 		self.ConstructCellFromData([0,0,0])
 
 	def __checkPlayerPosition(self, player):
+		if player.model.position.y >= self.finalProgressPos - 50 and self.progress_bar.onAlert == False:
+			self.progress_bar.onAlert = True
+
 		if player.model.position.y >= self.finalProgressPos and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
-			self.finalScene.ToActivateState()
-			self.progress_bar.onAlert = True
+			self.finalScene.ToActivateState()	
 		
 		if player.model.position.y >= 1490:
 			player.camFollow = False

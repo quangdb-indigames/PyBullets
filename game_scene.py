@@ -16,6 +16,7 @@ from pause_button import PauseButton
 from reset_data_button import ResetDataButton
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
+from destroy_bar import DestroyBar
 from progress_bar import ProgressBar
 from player import Player
 from mapLevel import MapLevel
@@ -133,6 +134,8 @@ class GameScene:
 		# Create progress bar
 		progress_bar = ProgressBar([15, 220, 1], [150, 17], [142, 7], [23, 19], 'asset/progress_bar_background_bar', 'asset/progress_bar_slider_bar', 'asset/progress_bar_slider_normal', 'asset/progress_bar_slider_alert', self.UIshowcase)
 
+		# Create destroy bar
+		destroy_bar = DestroyBar([15, 220, 1], [150, 17], [142, 7], [1, 8.5], 'asset/progress_bar_background_bar', 'asset/destroy_bar_slider_bar', 'asset/destroy_bar_tick', self.UIshowcase)
 
 		# Create map
 		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar)

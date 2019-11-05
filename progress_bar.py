@@ -14,6 +14,7 @@ class ProgressBar():
 		self.currentAlertTimes = 0
 		self.changeSliderRate = 6
 		self.currentCount = 0
+		self.isDisable = False
 		
 		# Background bar
 		self.backgroundBarPos = pos
@@ -41,29 +42,37 @@ class ProgressBar():
 		self.showcase = showcase
 
 		# Add to showcase
-		self.showcase.add(self.backgroundBar)
-		self.showcase.add(self.sliderBar)
-		self.showcase.add(self.slider)
 
 		self.DisplayCurrentCompleteProgress()
 	
-	def Update(self, currentProgress):
+	def Update(self, currentProgress, mapLevel):
 		if not self.onAlert:
 			self.percentComplete = currentProgress
 			# if self.percentComplete < 1.0:
 			# 	self.percentComplete += 0.01
 			self.DisplayCurrentCompleteProgress()
 		else:
-			self.OnAlert()
+			self.OnAlert(mapLevel)
+	
+	def Hide(self):
+		self.isDisable = True
+		self.showcase.remove(self.backgroundBar)
+		self.showcase.remove(self.sliderBar)
+		self.showcase.remove(self.slider)
+	
+	def Display(self):
+		self.isDisable = False
+		self.showcase.add(self.backgroundBar)
+		self.showcase.add(self.sliderBar)
+		self.showcase.add(self.slider)
 
-	def OnAlert(self):
+	def OnAlert(self, mapLevel):
+		if self.isDisable:
+			return
+
 		if self.currentAlertTimes > self.numberAlertTimes:
-			if self.currentSlider == ALERT_SLIDER:
-				self.showcase.remove(self.slider)
-				self.slider = graphicsHelper.createSprite(self.sliderScale[0], self.sliderScale[1], self.sliderNormalPath)
-				self.currentSlider = NORMAL_SLIDER
-				self.slider.position = vmath.vec3(self.sliderPos)
-				self.showcase.add(self.slider)
+			self.Hide()
+			self.isDisable = True
 			return
 		
 		self.currentCount += 1
