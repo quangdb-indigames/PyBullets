@@ -24,6 +24,7 @@ from mapLevel import MapLevel
 from skybox import Skybox
 import json
 STATE_RESET = "STATE_RESET"
+STATE_RETRY = "STATE_RETRY"
 STATE_INITING = "STATE_INITING"
 STATE_PLAYING = "STATE_PLAYING"
 STATE_PAUSE = "STATE_PAUSE"
@@ -203,6 +204,10 @@ class GameScene:
 		self.impl.process_inputs()
 		imgui.new_frame()
 
+		if self.state == STATE_RETRY:
+			self.ResetScene(2)
+			return
+
 		if self.state == STATE_RESET:
 			self.ResetScene()
 			return
@@ -285,13 +290,14 @@ class GameScene:
 		del self.UIshowcase		
 		# self.__dict__.clear()
 
-	def ResetScene(self):
-		self.level.SaveResult()
+	def ResetScene(self, typeSave=1):
+		if typeSave == 1:
+			self.level.SaveResult()
 		self.OnExit()
 		self.Init()
 	
 	def SetState(self, state):
-		self.state = state'
+		self.state = state
 	
 	def HideUI(self):
 		self.replayButton.Hide()

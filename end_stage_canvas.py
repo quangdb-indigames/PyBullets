@@ -1,6 +1,7 @@
 from pyxie.apputil import graphicsHelper
 import pyxie
 import pyvmath as vmath
+from scene_manager import SceneManager
 THREE_STAR_RATE = "THREE_STAR_RATE"
 TWO_STAR_RATE = "TWO_STAR_RATE"
 ONE_STAR_RATE = "ONE_STAR_RATE"
@@ -12,7 +13,8 @@ class EndStageCanvas:
 		self.isDisable = True
 		self.showcase = showcase
 		self.camera = camera
-		self.UI_manager = ui_manager
+		self.ui_manager = ui_manager
+		self.tapped = False
 
 		# Board
 		self.boardScale = boardScale
@@ -46,6 +48,9 @@ class EndStageCanvas:
 		self.retryButtonPath = retryButtonPath
 		self.retryButton = graphicsHelper.createSprite(self.retryButtonScale[0], self.retryButtonScale[1], self.retryButtonPath)
 		self.retryButton.position = vmath.vec3(self.retryButtonPos)
+	
+	def Update(self, touch):
+		self.CheckOnClickRetryButton(touch)
 	
 	def Display(self, rateType):
 		self.isDisable = False
@@ -86,6 +91,56 @@ class EndStageCanvas:
 			star.position = vmath.vec3([self.leftBasePos[0] + i * 45, self.leftBasePos[1], self.leftBasePos[2]])
 			self.showcase.add(star)
 			self.listStar.append(star)
+
+	def CheckOnClickRetryButton(self, touch):
+		if touch:
+			if touch['is_holded']:			
+				if self.CheckInsideRetryButton(touch) and not self.tapped:
+					self.tapped = True
+					self.ui_manager.isTouchOnUI = True
+					self.OnClickRetryButtonExcute()
+			else:
+				self.tapped = False
+		else:
+			self.tapped = False
+	
+	def CheckInsideRetryButton(self, touch):
+		direction = self.ConvertScreenToWorld(touch['cur_x'], touch['cur_y'], 0, self.camera)
+		if direction.x <= self.retryButton.position.x + self.retryButtonScale[0] / 2 and direction.x >= self.retryButton.position.x - self.retryButtonScale[0] / 2 \
+			and direction.y <= self.retryButton.position.y + self.retryButtonScale[1] / 2 and direction.y >= self.retryButton.position.y - self.retryButtonScale[1] / 2:
+			return True
+		return False
+	
+	def OnClickRetryButtonExcute(self):
+		currentScene = SceneManager.GetCurrentScene()
+		currentScene.resetDataButton.OnClickExcute()
+		currentScene.SetState("STATE_RETRY")
+	
+	def ConvertScreenToWorld(self, scrx, scry, worldz, cam, w=None, h=None):
+		invproj = vmath.inverse(cam.projectionMatrix)
+		invview = cam.viewInverseMatrix
+		if not w or not h:
+			w, h = pyxie.viewSize()
+		x = scrx / w * 2
+		y = scry / h * 2
+
+		pos = vmath.vec4(x, y, 0.0, 1.0)
+		npos = invproj * pos
+		npos = invview * npos
+		npos.z /= npos.w
+		npos.x /= npos.w
+		npos.y /= npos.w
+		npos.w = 1.0
+		pos = vmath.vec4(x, y, 1.0, 1.0)
+		fpos = invproj * pos
+		fpos = invview * fpos
+		fpos.z /= fpos.w
+		fpos.x /= fpos.w
+		fpos.y /= fpos.w
+		fpos.w = 1.0
+
+		dir = vmath.normalize(fpos - npos)
+		return npos + (dir * (npos.z - worldz))
 		
 
 

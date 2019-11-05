@@ -20,8 +20,8 @@ class ReplayButton():
 		self.isDisable = False
 	
 	def Update(self, touch):
-    	if self.isDisable:
-    		return
+		if self.isDisable:
+			return
 		self.CheckOnClick(touch)
 	
 	def CheckOnClick(self, touch):

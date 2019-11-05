@@ -6,6 +6,7 @@ from finalScene import FinalScene
 import pyxie
 import pickle
 import os
+from scene_manager import SceneManager
 STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
 
@@ -42,7 +43,7 @@ class MapLevel():
 
 		# Counting replay
 		self.endStageCanvas = end_stage_canvas
-		self.numberOfTry = 5
+		self.numberOfTry = 3
 		
 		self.LoadResult()
 
@@ -58,7 +59,8 @@ class MapLevel():
 		if not self.destroy_bar.isDisable:
 			destroyPercent = self.CalculateDestroyProgress()
 			self.destroy_bar.Update(destroyPercent)
-
+		if not self.endStageCanvas.isDisable:
+			self.endStageCanvas.Update(touch)
 		if self.isOnFinalCam:
 			self.CameraOnFinal(player)
 
@@ -165,6 +167,8 @@ class MapLevel():
 		
 		self.endStageCanvas.Display(rate)
 		self.percentDestroy = 0
+		currentScene = SceneManager.GetCurrentScene()
+		currentScene.HideUI()
 
 		if os.path.exists("TestVoxel/currentStageResult.pickle"):
 			os.remove("TestVoxel/currentStageResult.pickle")
