@@ -59,11 +59,9 @@ class Player():
 
 		# if self.firstClick and not self.isDeath:
 		# 	self.CheckDeath()
-		if self.isDeath:
-			self.MoveCameraOnDeath()
-			return
-
 		self.__autoRePosition()
+		if self.isDeath:
+			return
 
 		if not ui_manager or ui_manager.isTouchOnUI == False:
 			self.__onClick(touch)

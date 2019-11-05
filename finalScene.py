@@ -251,6 +251,11 @@ class FinalScene:
 
 		with open("TestVoxel/activatedBodies.pickle", "wb") as f:
 			pickle.dump(activated, f)
+
+		# Save destroy percent
+		destroyPercent = self.GetDestroyPercent()
+		with open("TestVoxel/destroyPercent.pickle", "wb") as f:
+			pickle.dump(destroyPercent, f)
 	
 	
 	def HandleRemovedBodies(self):

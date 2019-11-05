@@ -38,6 +38,10 @@ class MapLevel():
 		self.totalProgressDis = self.finalProgressPos - self.startProgressPos - 50
 		self.currentProgress = 0.01
 
+		# Counting replay
+		self.numberOfTry = 5
+		self.currentTry = 0
+
 
 	def update(self, touch, player):
 		for cell in self.cell_list:
@@ -138,6 +142,7 @@ class MapLevel():
 			else:
 				newVelocity = [linearVelocity[0] / 2, linearVelocity[1] / 2, linearVelocity[2] / 2]
 			p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
+			player.isDeath = True
 
 	def CheckInsideActiveRange(self, player):
 		player_pos, player_orn = p.getBasePositionAndOrientation(player.colId)

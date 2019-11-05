@@ -1,7 +1,6 @@
 from pyxie.apputil import graphicsHelper
 import pyxie
 import pyvmath as vmath
-from scene_manager import SceneManager
 class DestroyBar():
 	def __init__(self, pos, backgroundBarScale, sliderBarScale, tickScale, backgroundBarPath, sliderBarPath, tickPath, showcase):
 		# Supporting attribute
