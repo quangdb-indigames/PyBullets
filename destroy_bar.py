@@ -5,7 +5,7 @@ from scene_manager import SceneManager
 class DestroyBar():
 	def __init__(self, pos, backgroundBarScale, sliderBarScale, tickScale, backgroundBarPath, sliderBarPath, tickPath, showcase):
 		# Supporting attribute
-		self.percentComplete = 0.95
+		self.percentComplete = 0.05
 		self.onAlert = False
 		self.oneStarPercent = 0.5
 		self.twoStarPercent = 0.6
@@ -42,11 +42,10 @@ class DestroyBar():
 
 		# UI parts
 		self.showcase = showcase
-		
-		self.DisplayCurrentCompleteProgress()
-		self.Display()
 	
 	def Update(self, currentProgress):
+		if self.isDisable:
+			return
 		self.percentComplete = currentProgress
 		self.DisplayCurrentCompleteProgress()
 

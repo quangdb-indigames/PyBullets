@@ -42,10 +42,12 @@ class ProgressBar():
 		self.showcase = showcase
 
 		# Add to showcase
-
+		self.Display()
 		self.DisplayCurrentCompleteProgress()
 	
 	def Update(self, currentProgress, mapLevel):
+		if self.isDisable:
+			return
 		if not self.onAlert:
 			self.percentComplete = currentProgress
 			# if self.percentComplete < 1.0:
@@ -73,6 +75,8 @@ class ProgressBar():
 		if self.currentAlertTimes > self.numberAlertTimes:
 			self.Hide()
 			self.isDisable = True
+			if mapLevel.state == "STATE_FINAL":
+				mapLevel.destroy_bar.Display()
 			return
 		
 		self.currentCount += 1

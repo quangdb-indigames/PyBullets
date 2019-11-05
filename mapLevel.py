@@ -8,7 +8,7 @@ STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
 
 class MapLevel():
-	def __init__(self, filePath, showcase, collision_objects, progress_bar):
+	def __init__(self, filePath, showcase, collision_objects, progress_bar, destroy_bar):
 		self.showcase = showcase
 		self.filePath = filePath
 		self.collision_objects = collision_objects
@@ -32,6 +32,7 @@ class MapLevel():
 
 		# For progress bar supporting
 		self.progress_bar = progress_bar
+		self.destroy_bar = destroy_bar
 		self.startProgressPos = -10
 		self.finalProgressPos = 1400
 		self.totalProgressDis = self.finalProgressPos - self.startProgressPos - 50
@@ -46,6 +47,9 @@ class MapLevel():
 			self.CalculateCurrentProgress(player)
 
 		self.progress_bar.Update(self.currentProgress, self)
+		if not self.destroy_bar.isDisable:
+			destroyPercent = self.CalculateDestroyProgress()
+			self.destroy_bar.Update(destroyPercent)
 
 		if self.isOnFinalCam:
 			self.CameraOnFinal(player)
@@ -58,6 +62,10 @@ class MapLevel():
 		elif percentProgress > 1.0:
 			percentProgress = 1.0
 		self.currentProgress = percentProgress
+	
+	def CalculateDestroyProgress(self):
+		percent = self.finalScene.GetDestroyPercent()
+		return round(percent, 5)
 
 	def __initialize(self):
 		with open(self.filePath) as f:
@@ -73,7 +81,9 @@ class MapLevel():
 
 		if player.model.position.y >= self.finalProgressPos and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
-			self.finalScene.ToActivateState()	
+			self.finalScene.ToActivateState()
+			if self.progress_bar.isDisable:
+				self.destroy_bar.Display()	
 		
 		if player.model.position.y >= 1490:
 			player.camFollow = False

@@ -268,6 +268,10 @@ class FinalScene:
 			self.model.setJoint(removedBody + 1, position=vmath.vec3(0,0,0))
 			self.activatedBodies.append(body)
 	
+	def GetDestroyPercent(self):
+		percent = len(self.activatedBodies) / len(self.bodies)
+		return percent
+
 	def Destroy(self):
 		self.showcase.remove(self.model)
 		self.model = None
