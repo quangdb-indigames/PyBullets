@@ -6,7 +6,6 @@ import pyxie
 import pyvmath as vmath
 import math
 import random
-from power_button import PowerButton
 from replay_button import ReplayButton
 from ui_manager import UIManager
 from cannon import Cannon
@@ -14,6 +13,7 @@ from finalScene import FinalScene
 from speed_button import SpeedButton
 from pause_button import PauseButton
 from reset_data_button import ResetDataButton
+from straight_boost_button import StraightBoostButton
 import imgui
 from pyxie.apputil.imguirenderer import ImgiPyxieRenderer
 from destroy_bar import DestroyBar
@@ -139,6 +139,11 @@ class GameScene:
 		# Create destroy bar
 		destroy_bar = DestroyBar([15, 220, 1], [150, 17], [142, 7], [1, 8.5], 'asset/progress_bar_background_bar', 'asset/destroy_bar_slider_bar', 'asset/destroy_bar_tick', self.UIshowcase)
 
+		#Create boost button
+		pos = [0, -120,1]
+		scale = [50, 50]
+		straightBoostButton = StraightBoostButton(pos, scale, 'asset/straight_boost_button', self.UIshowcase, self.UIcam, self.UI_manager)
+
 		# Create end stage canvas
 		end_stage_canvas = EndStageCanvas(
 			[0,-25,0], [185, 165], [120, 80], 
@@ -148,7 +153,7 @@ class GameScene:
 		)
 
 		# Create map
-		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar, destroy_bar, end_stage_canvas)
+		self.level = MapLevel('mapfiles/map.json', self.showcase, self.collision_objects, progress_bar, destroy_bar, end_stage_canvas, straightBoostButton)
 		# self.level.CreateACell("mapfiles/final_cell.json", [0,0,0])
 
 		# Create cannon

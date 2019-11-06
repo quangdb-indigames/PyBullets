@@ -1,8 +1,9 @@
 from pyxie.apputil import graphicsHelper
+import pybullet as p
 import pyxie
 import pyvmath as vmath
 import json
-class PowerButton():
+class StraightBoostButton():
 	def __init__(self, pos, scale, filePath, showcase, camera, ui_manager):
 		self.position = pos
 		self.scale = scale
@@ -12,36 +13,29 @@ class PowerButton():
 		self.model = graphicsHelper.createSprite(self.scale[0], self.scale[1], self.filePath)
 		self.model.position = vmath.vec3(self.position)
 		self.ui_manager = ui_manager
-		
-		self.GetData()
 		self.tapped = False
-
+		self.isDisable = True
+	
+	def Update(self, touch, player):
+		if self.isDisable:
+			return
+		self.CheckOnClick(touch, player)
+	
+	def Display(self):
+		self.isDisable = False
 		self.showcase.add(self.model)
 	
-	def GetData(self):
-		data = None
-		try:
-			with open("data/player/data.json", "r") as f:
-				data = json.load(f)
-		except:
-			print("File not exist")
-		if data:
-			self.baseFarMultiply = data['baseFarMultiply']
-			self.baseHighMultiply = data['baseHighMultiply']
-		else:
-			self.baseFarMultiply = 1.0
-			self.baseHighMultiply = 1.0
+	def Hide(self):
+		self.isDisable = True
+		self.showcase.remove(self.model)
 	
-	def Update(self, touch):
-		self.CheckOnClick(touch)
-	
-	def CheckOnClick(self, touch):
+	def CheckOnClick(self, touch, player):
 		if touch:
 			if touch['is_holded']:			
 				if self.CheckInside(touch) and not self.tapped:
 					self.tapped = True
 					self.ui_manager.isTouchOnUI = True
-					self.OnClickExcute()
+					self.OnClickExcute(player)
 			else:
 				self.tapped = False
 		else:
@@ -54,16 +48,14 @@ class PowerButton():
 			return True
 		return False
 	
-	def OnClickExcute(self):
-		self.baseFarMultiply += 0.2
-		self.baseHighMultiply += 0.01
-		data = {
-			'baseFarMultiply': self.baseFarMultiply,
-			'baseHighMultiply': self.baseHighMultiply
-		}
-		with open("data/player/data.json", "w") as f:
-			json.dump(data, f, indent=4, separators=(',', ': '))
-
+	def OnClickExcute(self, player):
+		linearVelocity, angularVelocity = p.getBaseVelocity(player.colId)
+		boostVelocity = vmath.length(vmath.vec3(linearVelocity))
+		if boostVelocity < 500:
+			boostVelocity = 500
+		newVelocity = [0, boostVelocity, 0]
+		p.resetBaseVelocity(player.colId, newVelocity, angularVelocity)
+		self.Hide()
 	
 	def ConvertScreenToWorld(self, scrx, scry, worldz, cam, w=None, h=None):
 		invproj = vmath.inverse(cam.projectionMatrix)

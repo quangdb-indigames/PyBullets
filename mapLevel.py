@@ -11,7 +11,7 @@ STATE_PLAY = "STATE_PLAY"
 STATE_FINAL = "STATE_FINAL"
 
 class MapLevel():
-	def __init__(self, filePath, showcase, collision_objects, progress_bar, destroy_bar, end_stage_canvas):
+	def __init__(self, filePath, showcase, collision_objects, progress_bar, destroy_bar, end_stage_canvas, straight_boost_button):
 		self.showcase = showcase
 		self.filePath = filePath
 		self.collision_objects = collision_objects
@@ -41,6 +41,9 @@ class MapLevel():
 		self.totalProgressDis = self.finalProgressPos - self.startProgressPos - 50
 		self.currentProgress = 0.01
 
+		# Boost button
+		self.straightBoostButton = straight_boost_button
+
 		# Counting replay
 		self.endStageCanvas = end_stage_canvas
 		self.numberOfTry = 3
@@ -51,7 +54,7 @@ class MapLevel():
 	def update(self, touch, player):
 		for cell in self.cell_list:
 			cell.update(touch)
-		self.__checkPlayerPosition(player)
+		self.__checkPlayerPosition(touch, player)
 		if self.state == STATE_PLAY:
 			self.CalculateCurrentProgress(player)
 
@@ -85,13 +88,14 @@ class MapLevel():
 		self.base_length = len(self.cell_list_data[0])
 		self.ConstructCellFromData([0,0,0])
 
-	def __checkPlayerPosition(self, player):
+	def __checkPlayerPosition(self, touch, player):
 		if player.model.position.y >= self.finalProgressPos - 50 and self.progress_bar.onAlert == False:
 			self.progress_bar.onAlert = True
 
 		if player.model.position.y >= self.finalProgressPos and self.state == STATE_PLAY:
 			self.state = STATE_FINAL
 			self.finalScene.ToActivateState()
+			self.straightBoostButton.Display()
 			if self.progress_bar.isDisable:
 				self.destroy_bar.Display()	
 		
@@ -104,6 +108,7 @@ class MapLevel():
 			self.finalScene.Update()
 			self.CheckContact(player)
 			self.CheckReduceVelocity(player)
+			self.straightBoostButton.Update(touch, player)
 			# self.StaticMoveOnFinal(player)
 			return
 
